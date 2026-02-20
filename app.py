@@ -6,7 +6,7 @@ app = Flask(__name__)
 app.secret_key = 'ECO_KIDS_ELITE_2026'
 
 # Configura tus llaves de Stripe aquí
-stripe.api_key = "TU_LLAVE_SECRETA_DE_STRIPE"
+stripe.api_key = "sk_test_51T2ydpEAXn9FETRf..."
 
 @app.route('/')
 def home():
