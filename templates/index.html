@@ -1,11 +1,19 @@
 {% extends "base.html" %}
-{% block title %}Imperio{% endblock %}
+{% block title %}Comando Central{% endblock %}
 {% block content %}
-<div class="card">
-    <h1>ECO KIDS</h1>
-    <h3 style="color: #888;">Ingeniería Sustentable de Nueva Generación</h3>
-    <p style="font-size: 1.2rem; line-height: 1.8;">Transformamos el futuro mediante sistemas de energía inteligente y optimización de recursos a escala global.</p>
-    <br><br>
-    <a href="/servicios" class="btn">VER PORTAFOLIO</a>
+<div class="glass-panel" style="animation: slideUp 1s ease;">
+    <p style="letter-spacing: 10px; color: #666;">ESTABLECIENDO CONEXIÓN...</p>
+    <h1>TERRENCE M</h1>
+    <h3 style="color: var(--bright-gold); letter-spacing: 5px; font-weight: 300;">INGENIERÍA DE ÉLITE SUSTENTABLE</h3>
+    <p style="max-width: 700px; margin: 30px auto; color: #bbb; line-height: 2;">
+        Dominio total en infraestructuras renovables y optimización cuántica de recursos energéticos. 
+        Bienvenido a la vanguardia del desarrollo global.
+    </p>
+    <br>
+    <a href="/servicios" class="btn-divine">ACCEDER AL SISTEMA</a>
 </div>
+
+<style>
+    @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+</style>
 {% endblock %}

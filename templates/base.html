@@ -3,58 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECO KIDS - {% block title %}{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>TERRENCE M - {% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --dark: #0a0a0a; --glass: rgba(255, 255, 255, 0.05); }
-        body { background: var(--dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; overflow-x: hidden; }
+        :root { --gold: #d4af37; --bright-gold: #f9e272; --dark: #050505; }
+        body { background: var(--dark); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; }
         
-        /* Fondo con gradiente animado */
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-            z-index: -1;
+        /* Fondo con malla tecnológica */
+        .bg-mesh {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(212, 175, 55, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px; z-index: -1;
         }
 
         nav { 
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
-            padding: 20px; border-bottom: 1px solid var(--gold);
-            display: flex; justify-content: center; position: sticky; top: 0; z-index: 1000;
+            background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--gold);
+            padding: 15px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
         }
-        nav a { color: var(--gold); text-decoration: none; margin: 0 20px; font-weight: bold; letter-spacing: 1px; transition: 0.3s; }
-        nav a:hover { text-shadow: 0 0 10px var(--gold); transform: translateY(-2px); }
+        nav a { color: var(--gold); text-decoration: none; margin: 0 25px; font-family: 'Orbitron', sans-serif; 
+                font-size: 0.9rem; letter-spacing: 2px; transition: 0.5s; }
+        nav a:hover { color: var(--bright-gold); text-shadow: 0 0 15px var(--gold); }
 
-        .container { padding: 60px 20px; max-width: 1200px; margin: auto; animation: fadeIn 1s ease-in; }
+        .container { padding: 80px 20px; max-width: 1300px; margin: auto; text-align: center; }
         
-        .card { 
-            background: var(--glass); border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 40px; border-radius: 20px; backdrop-filter: blur(15px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 50px; border-radius: 5px; backdrop-filter: blur(10px);
+            box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1);
         }
 
-        .btn { 
-            background: var(--gold); color: black; padding: 15px 40px; 
-            text-decoration: none; font-weight: 700; border-radius: 50px;
-            display: inline-block; transition: 0.4s; border: 2px solid var(--gold);
+        .btn-divine { 
+            background: transparent; color: var(--gold); padding: 18px 45px; 
+            text-decoration: none; font-weight: 700; font-family: 'Orbitron', sans-serif;
+            border: 2px solid var(--gold); clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+            transition: 0.4s; display: inline-block; cursor: pointer;
         }
-        .btn:hover { background: transparent; color: var(--gold); box-shadow: 0 0 20px var(--gold); }
+        .btn-divine:hover { background: var(--gold); color: #000; box-shadow: 0 0 30px var(--gold); transform: scale(1.05); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        h1 { color: var(--gold); font-size: 3rem; text-transform: uppercase; letter-spacing: 4px; }
-        footer { padding: 30px; color: #444; font-size: 0.8rem; border-top: 1px solid #111; margin-top: 50px; }
+        h1 { font-family: 'Orbitron', sans-serif; color: var(--gold); font-size: 4rem; text-shadow: 0 0 20px rgba(212, 175, 55, 0.5); margin: 0; }
+        footer { padding: 40px; color: #333; font-size: 0.7rem; letter-spacing: 3px; }
     </style>
 </head>
 <body>
+    <div class="bg-mesh"></div>
     <nav>
-        <a href="/">INICIO</a>
-        <a href="/servicios">SERVICIOS</a>
-        <a href="/about">NOSOTROS</a>
-        <a href="/pagos">PAGOS</a>
+        <a href="/">HOME</a>
+        <a href="/servicios">UNIDADES</a>
+        <a href="/proyectos">PROYECTOS</a>
+        <a href="/about">IMPERIO</a>
+        <a href="/pagos">TERMINAL DE PAGO</a>
     </nav>
     <div class="container">
         {% block content %}{% endblock %}
     </div>
-    <footer>&copy; 2026 ECO KIDS ENGINEERING. ALL RIGHTS RESERVED.</footer>
+    <footer>SISTEMA TERRENCE.M - PROTOCOLO NIVEL DIOS v2.0</footer>
 </body>
 </html>
