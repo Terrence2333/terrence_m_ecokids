@@ -7,6 +7,8 @@ def index(): return render_template('index.html')
 def pagos(): return render_template('pagos.html')
 @app.route('/exito')
 def exito(): return render_template('exito.html')
+@app.route('/about')
+def about(): return render_template('index.html')
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
