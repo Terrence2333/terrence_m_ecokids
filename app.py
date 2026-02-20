@@ -20,5 +20,6 @@ def exito():
     return render_template('exito.html')
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    # Render usa la variable PORT, si no existe usa el 10000 por defecto
+    port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
