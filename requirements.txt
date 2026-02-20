@@ -3,3 +3,4 @@ gunicorn
 bcrypt
 beautifulsoup4
 flask-sqlalchemy
+stripe
