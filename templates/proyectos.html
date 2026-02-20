@@ -1,20 +1,15 @@
 {% extends "base.html" %}
-{% block title %}Nodos Globales{% endblock %}
+{% block title %}Proyectos{% endblock %}
 {% block content %}
-<div class="glass-panel">
-    <h1>ESTADO DE RED GLOBAL</h1>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
-        <div style="padding: 20px; border: 1px solid rgba(212,175,55,0.2); border-radius: 10px;">
-            <div style="width: 10px; height: 10px; background: #00ff00; border-radius: 50%; display: inline-block; animation: blink 1s infinite;"></div>
-            <h3 style="color: var(--gold);">DUBAI HUB</h3>
-            <p style="font-size: 0.7rem;">EFICIENCIA: 99.8%</p>
-        </div>
-        <div style="padding: 20px; border: 1px solid rgba(212,175,55,0.2); border-radius: 10px;">
-            <div style="width: 10px; height: 10px; background: #00ff00; border-radius: 50%; display: inline-block;"></div>
-            <h3 style="color: var(--gold);">ANDES NODO</h3>
-            <p style="font-size: 0.7rem;">EFICIENCIA: 94.2%</p>
-        </div>
+<h1>OPERACIONES GLOBALES</h1>
+<div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; margin-top: 50px;">
+    <div class="glass-panel" style="width: 300px;">
+        <h2 style="color: #d4af37;">PROYECTO ALPHA</h2>
+        <p>Planta Desalinizadora de Energía Mareomotriz en Dubai.</p>
+    </div>
+    <div class="glass-panel" style="width: 300px;">
+        <h2 style="color: #d4af37;">NEXUS-7</h2>
+        <p>Red de micro-redes inteligentes para ciudades inteligentes.</p>
     </div>
 </div>
-<style>@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }</style>
 {% endblock %}
