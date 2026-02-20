@@ -28,11 +28,18 @@
         .container { padding: 60px 20px; max-width: 1100px; margin: auto; text-align: center; position: relative; z-index: 10; }
         .glass-panel { background: rgba(10, 10, 10, 0.8); border: 1px solid rgba(212,175,55,0.3); padding: 40px; border-radius: 5px; backdrop-filter: blur(15px); box-shadow: 0 0 40px #000; position: relative; }
         
-        .btn-divine { background: transparent; color: var(--gold); padding: 15px 30px; text-decoration: none; font-family: 'Orbitron', sans-serif; border: 2px solid var(--gold); clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); transition: 0.3s; display: inline-block; }
-        .btn-divine:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px var(--gold); }
+        .btn-divine { background: transparent; color: var(--gold); padding: 10px 25px; text-decoration: none; font-family: 'Orbitron', sans-serif; border: 2px solid var(--gold); clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); transition: 0.3s; display: inline-block; cursor: pointer; }
 
-        #music-control { position: fixed; bottom: 80px; right: 20px; z-index: 2000; }
-        footer { position: fixed; bottom: 0; width: 100%; padding: 15px; color: #444; font-size: 0.7rem; letter-spacing: 3px; background: rgba(0,0,0,0.8); }
+        /* CHATBOT STYLE */
+        #chatbot-ui { position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; background: rgba(10,10,10,0.95); border: 1px solid var(--gold); border-radius: 10px; z-index: 5000; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 0 30px #000; }
+        #chat-header { background: var(--gold); color: #000; padding: 10px; font-family: 'Orbitron'; font-size: 0.7rem; display: flex; justify-content: space-between; }
+        #chat-messages { flex: 1; padding: 10px; overflow-y: auto; font-size: 0.9rem; color: #00ff00; font-family: 'Courier New'; }
+        #chat-input-area { display: flex; border-top: 1px solid var(--gold); }
+        #chat-input { background: #000; border: none; color: #fff; padding: 10px; flex: 1; outline: none; }
+        
+        #chat-trigger { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold); border-radius: 50%; z-index: 5001; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 30px; box-shadow: 0 0 20px var(--gold); }
+
+        footer { position: fixed; bottom: 0; width: 100%; padding: 15px; color: #444; font-size: 0.7rem; letter-spacing: 3px; background: rgba(0,0,0,0.8); z-index: 5; }
     </style>
 </head>
 <body>
@@ -41,29 +48,35 @@
     <div id="particles-js"></div><div class="bg-mesh"></div>
 
     <audio id="bg-audio" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
-    <audio id="click-sound"><source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg"></audio>
 
     <nav>
-        <a href="/" onmouseover="playClick()">HOME</a>
-        <a href="/servicios" onmouseover="playClick()">UNIDADES</a>
-        <a href="/proyectos" onmouseover="playClick()">NODOS</a>
-        <a href="/about" onmouseover="playClick()">IMPERIO</a>
-        <a href="/pagos" onmouseover="playClick()">PAGOS</a>
+        <a href="/">HOME</a>
+        <a href="/servicios">UNIDADES</a>
+        <a href="/proyectos">NODOS</a>
+        <a href="/about">IMPERIO</a>
+        <a href="/pagos">PAGOS</a>
     </nav>
-
-    <div id="music-control">
-        <button onclick="toggleMusic()" class="btn-divine" style="padding: 5px 15px; font-size: 9px;">AUDIO: OFF</button>
-    </div>
 
     <div class="container">{% block content %}{% endblock %}</div>
 
-    <footer>SISTEMA TERRENCE.M - PROTOCOLO RESTAURADO</footer>
+    <div id="chat-trigger" onclick="toggleChat()">🤖</div>
+    <div id="chatbot-ui">
+        <div id="chat-header"><span>TERRENCE IA CORE</span> <span onclick="toggleChat()" style="cursor:pointer">X</span></div>
+        <div id="chat-messages">
+            <p>> SISTEMA INICIALIZADO...</p>
+            <p>> Bienvenido al imperio Terrence.M. ¿Qué sugerencia de Nivel Dios tienes hoy?</p>
+        </div>
+        <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Escribe al Director..." onkeypress="handleChat(event)">
+        </div>
+    </div>
+
+    <footer>PROTOCOLO TERRENCE.M v5.0</footer>
 
     <script>
         window.onload = () => { setTimeout(() => { document.getElementById('loader').style.display='none'; }, 1000); };
-        
         particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": "#d4af37" }, "shape": { "type": "circle" }, "opacity": { "value": 0.4 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.5 } } });
-
+        
         const cursor = document.getElementById('custom-cursor');
         const dot = document.getElementById('cursor-dot');
         document.addEventListener('mousemove', (e) => {
@@ -71,16 +84,39 @@
             dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
         });
 
-        const audio = document.getElementById('bg-audio');
-        const clickSfx = document.getElementById('click-sound');
-        const btn = document.querySelector('#music-control button');
-        let audioOn = false;
-
-        function toggleMusic() {
-            if (audio.paused) { audio.play(); audioOn = true; btn.innerHTML = "AUDIO: ON"; btn.style.color = "#00ff00"; }
-            else { audio.pause(); audioOn = false; btn.innerHTML = "AUDIO: OFF"; btn.style.color = "var(--gold)"; }
+        // LÓGICA DEL CHATBOT "COMO TÚ"
+        function toggleChat() {
+            const ui = document.getElementById('chatbot-ui');
+            ui.style.display = ui.style.display === 'flex' ? 'none' : 'flex';
         }
-        function playClick() { if(audioOn) { clickSfx.currentTime = 0; clickSfx.volume = 0.2; clickSfx.play(); } }
+
+        function handleChat(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('chat-input');
+                const msgs = document.getElementById('chat-messages');
+                if (input.value.trim() === "") return;
+
+                // Tu mensaje
+                msgs.innerHTML += `<p style="color:var(--gold)">> Tú: ${input.value}</p>`;
+                
+                const userMsg = input.value.toLowerCase();
+                let response = "> IA: Estamos procesando tu sugerencia a nivel de excelencia cuántica. El Director Terrence lo aprobará personalmente.";
+
+                // Respuestas personalizadas con tu estilo
+                if(userMsg.includes("hola")) response = "> IA: Saludos. Estás ante la presencia digital de Terrence.M. ¿Cómo podemos elevar tu proyecto hoy?";
+                if(userMsg.includes("sugerencia")) response = "> IA: Recibido. Toda sugerencia es analizada bajo estándares de Nivel Super Dios.";
+                if(userMsg.includes("precio") || userMsg.includes("costo")) response = "> IA: El valor de la excelencia no tiene límites, pero nuestros nodos inician en $15,000 USD de inversión pura.";
+                if(userMsg.includes("quien eres")) response = "> IA: Soy la extensión digital del Director Terrence, encargado de mantener la perfección en este imperio.";
+
+                setTimeout(() => {
+                    msgs.innerHTML += `<p>> ${response}</p>`;
+                    msgs.scrollTop = msgs.scrollHeight;
+                }, 1000);
+
+                input.value = "";
+                msgs.scrollTop = msgs.scrollHeight;
+            }
+        }
     </script>
 </body>
 </html>
