@@ -1,13 +1,26 @@
 {% extends "base.html" %}
-{% block title %}Transacción Exitosa{% endblock %}
+{% block title %}Factura Digital{% endblock %}
 {% block content %}
-<div class="glass-panel" style="border-color: #00ff00; text-align: left; max-width: 500px; margin: auto;">
-    <h1 style="color: #00ff00;">✓ PAGO CONFIRMADO</h1>
-    <p style="font-size: 0.8rem;">RECIBO DIGITAL TERRENCE.M</p>
-    <hr style="border-color: #00ff00;">
-    <p>ID: TXN-{{ range(10000, 99999) | random }}</p>
-    <p>CONCEPTO: SERVICIOS DE INGENIERÍA ELITE</p>
-    <h2 style="color: #00ff00; text-align: right;">TOTAL: $15,000.00 USD</h2>
-    <button onclick="window.print()" class="btn-divine" style="border-color: #00ff00; color: #00ff00; width: 100%;">IMPRIMIR FACTURA</button>
+<div class="glass-panel" style="max-width: 600px; margin: auto; text-align: left; border: 1px solid #00ff00; padding: 40px; background: rgba(0,20,0,0.2);">
+    <div style="display: flex; justify-content: space-between;">
+        <h2 style="color: #00ff00; margin: 0;">PAGO AUTORIZADO</h2>
+        <span style="color: #00ff00; font-family: 'Orbitron'; font-size: 0.8rem;">ID: TX-{{ range(1000, 9999) | random }}</span>
+    </div>
+    <hr style="border: 0; border-top: 1px solid rgba(0,255,0,0.3); margin: 20px 0;">
+    
+    <p style="color: #ccc;">CLIENTE: DIRECTOR TERRENCE.M</p>
+    <p style="color: #ccc;">CONCEPTO: ACTIVACIÓN DE NODO ENERGÉTICO GLOBAL</p>
+    
+    <div style="background: rgba(0,255,0,0.1); padding: 20px; border-radius: 5px; margin: 20px 0;">
+        <h3 style="margin: 0; color: #00ff00; text-align: right;">TOTAL: $15,000.00 USD</h3>
+    </div>
+
+    <p style="font-size: 0.7rem; color: #666;">Este documento es un comprobante legal de transferencia electrónica procesado bajo el protocolo terrence.m v4.5.</p>
+    
+    <div style="text-align: center; margin-top: 30px;">
+        <button onclick="window.print()" class="btn-divine" style="border-color: #00ff00; color: #00ff00;">DESCARGAR PDF / IMPRIMIR</button>
+        <br><br>
+        <a href="/" style="color: var(--gold); text-decoration: none; font-size: 0.8rem;">← VOLVER AL COMANDO CENTRAL</a>
+    </div>
 </div>
 {% endblock %}

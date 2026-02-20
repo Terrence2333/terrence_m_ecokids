@@ -1,30 +1,39 @@
 {% extends "base.html" %}
 {% block title %}Terminal de Pago{% endblock %}
 {% block content %}
-<div class="glass-panel" id="terminal-box">
-    <div id="scan-proc">
-        <h2 style="color: var(--gold); letter-spacing: 5px;">VERIFICANDO IDENTIDAD...</h2>
-        <div style="width: 100%; height: 2px; background: var(--gold); position: relative; animation: move 2s infinite;"></div>
+<div class="glass-panel" style="min-height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div id="loading-layer">
+        <h2 style="color: var(--gold); letter-spacing: 5px; animation: pulse 1.5s infinite;">INICIALIZANDO PROTOCOLO DE PAGO...</h2>
+        <div style="width: 200px; height: 2px; background: var(--gold); margin: 20px auto; position: relative; overflow: hidden;">
+            <div style="width: 50px; height: 100%; background: #fff; position: absolute; animation: loading-bar 2s infinite;"></div>
+        </div>
     </div>
-    <div id="pay-ui" style="display: none; animation: fadeIn 1s;">
-        <h1 style="text-shadow: 0 0 20px var(--gold);">ACCESO AUTORIZADO</h1>
-        <div style="display: flex; flex-direction: column; gap: 20px; align-items: center; margin-top: 30px;">
-            <a href="/exito" class="btn-divine pulse" style="width: 250px;">NODO STRIPE</a>
-            <a href="/exito" class="btn-divine pulse" style="width: 250px;">NODO PAYPAL</a>
-            <a href="/exito" class="btn-divine pulse" style="width: 250px;">CRIPTOMONEDAS</a>
+
+    <div id="payment-interface" style="display: none; width: 100%;">
+        <h1 style="color: var(--gold); font-size: 2.5rem; text-shadow: 0 0 20px rgba(212,175,55,0.5);">NODO DE PAGO SEGURO</h1>
+        <p style="color: #888; letter-spacing: 3px; margin-bottom: 40px;">SELECCIONE MÉTODO DE TRANSFERENCIA</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 800px; margin: auto;">
+            <a href="/exito" class="btn-divine pulse-gold" onmouseover="playClick()">TARJETA DE CRÉDITO (STRIPE)</a>
+            <a href="/exito" class="btn-divine pulse-gold" onmouseover="playClick()">PAYPAL CORPORATIVO</a>
+            <a href="/exito" class="btn-divine pulse-gold" onmouseover="playClick()">BITCOIN / ETHEREUM</a>
+            <a href="/exito" class="btn-divine pulse-gold" onmouseover="playClick()">TRANSFERENCIA SWIFT</a>
         </div>
     </div>
 </div>
+
 <style>
-    @keyframes move { 0%, 100% { top: 0; } 50% { top: 50px; } }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .pulse { animation: glowing 2s infinite; }
-    @keyframes glowing { 0% { box-shadow: 0 0 5px var(--gold); } 50% { box-shadow: 0 0 25px var(--gold); } 100% { box-shadow: 0 0 5px var(--gold); } }
+    @keyframes loading-bar { 0% { left: -50px; } 100% { left: 200px; } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .pulse-gold { animation: border-glow 2s infinite; }
+    @keyframes border-glow { 0%, 100% { box-shadow: 0 0 5px var(--gold); } 50% { box-shadow: 0 0 20px var(--gold); } }
 </style>
+
 <script>
-    setTimeout(() => { 
-        document.getElementById('scan-proc').style.display = 'none';
-        document.getElementById('pay-ui').style.display = 'block';
-    }, 3000);
+    // Simulación de carga de seguridad para realismo nivel Dios
+    setTimeout(() => {
+        document.getElementById('loading-layer').style.display = 'none';
+        document.getElementById('payment-interface').style.display = 'block';
+    }, 2500);
 </script>
 {% endblock %}
