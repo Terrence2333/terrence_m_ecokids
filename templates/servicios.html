@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Servicios{% endblock %}
+{% block content %}
+<div class="card">
+    <h1>Nuestras Unidades de Ingeniería</h1>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 40px;">
+        <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; border: 1px solid rgba(212,175,55,0.1);">
+            <h2 style="color: #d4af37;">Solar Tech</h2>
+            <p>Sistemas fotovoltaicos industriales de alta eficiencia.</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; border: 1px solid rgba(212,175,55,0.1);">
+            <h2 style="color: #d4af37;">Eco Infra</h2>
+            <p>Desarrollo urbano con materiales sustentables.</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; border: 1px solid rgba(212,175,55,0.1);">
+            <h2 style="color: #d4af37;">Auditoría</h2>
+            <p>Certificación de impacto ambiental corporativo.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
