@@ -2,23 +2,24 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>ECO KIDS - Pagos Élite</title>
+    <title>ECO KIDS - Pagos Oficiales</title>
     <style>
-        body { background: #000; color: #fff; font-family: Arial; text-align: center; padding: 50px; }
-        .card { border: 2px solid #d4af37; padding: 30px; display: inline-block; border-radius: 15px; }
-        .btn { background: #d4af37; color: #000; padding: 15px 30px; text-decoration: none; font-weight: bold; border-radius: 5px; display: block; margin: 10px; }
-        h1 { color: #d4af37; }
+        body { background: #000; color: #fff; font-family: 'Arial', sans-serif; text-align: center; padding: 50px; }
+        .card { border: 2px solid #d4af37; padding: 30px; display: inline-block; border-radius: 15px; background: #0a0a0a; }
+        .btn { background: #d4af37; color: #000; padding: 15px 30px; text-decoration: none; font-weight: bold; border-radius: 5px; display: block; margin: 10px; border: none; cursor: pointer; }
+        h1 { color: #d4af37; letter-spacing: 2px; }
+        p { font-size: 1.2em; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h1>ECO KIDS - SISTEMA DE PAGOS</h1>
-        <p>Servicio: Ingeniería Sustentable de Élite</p>
-        <p>Monto: $150.00 USD</p>
-        <hr>
-        <a href="#" class="btn">PAGAR CON STRIPE (TARJETA)</a>
+        <h1>SISTEMA DE PAGOS ECO KIDS</h1>
+        <p>Servicio: Ingeniería Sustentable Profesional</p>
+        <p>Monto a transferir: $150.00 USD</p>
+        <hr style="border: 0.5px solid #333;">
+        <a href="#" class="btn">PAGAR CON TARJETA (STRIPE)</a>
         <a href="#" class="btn">PAGAR CON PAYPAL</a>
-        <a href="#" class="btn" onclick="alert('Simulando pago con Bitcoin... Redirigiendo a Tickets.'); window.location.href='/exito'">PAGAR CON BITCOIN</a>
+        <a href="#" class="btn" onclick="window.location.href='/exito'">PAGAR CON BITCOIN</a>
     </div>
 </body>
 </html>
