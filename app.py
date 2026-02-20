@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, redirect
+from flask import Flask, render_template_string, request, redirect
 
 app = Flask(__name__)
 
@@ -9,62 +9,64 @@ def home():
     <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>ECO KIDS | Global Payment Hub</title>
+        <title>ECO KIDS | Global Hub</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
         <style>
-            body { background: #000; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-            .hub-card { background: #0a0a0a; border: 2px solid #d4af37; padding: 40px; border-radius: 40px; text-align: center; box-shadow: 0 0 60px rgba(212,175,55,0.15); max-width: 600px; width: 100%; }
-            .price-tag { font-size: 3.5rem; font-weight: 900; color: #d4af37; margin: 10px 0; }
-            .payment-method { background: #111; border: 1px solid #333; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
-            .btc-btn { background: #f7931a; color: #fff; font-weight: bold; border: none; padding: 12px; border-radius: 8px; width: 100%; text-transform: uppercase; }
+            body { background: #000; color: #fff; font-family: 'Inter', sans-serif; height: 100vh; display: flex; align-items: center; justify-content: center; }
+            .hub-card { background: #0a0a0a; border: 1px solid #d4af37; padding: 50px; border-radius: 40px; text-align: center; box-shadow: 0 0 50px rgba(212,175,55,0.1); }
+            .btn-gold { background: #d4af37; color: #000; font-weight: bold; padding: 15px 40px; border-radius: 10px; text-decoration: none; display: inline-block; }
         </style>
     </head>
     <body>
         <div class="hub-card">
-            <p style="letter-spacing:5px; color:#666; font-size: 0.8rem;">TERRENCE MAYORGA GLOBAL SYSTEMS</p>
-            <h1 class="h2 mb-0">CENTRO DE PAGOS ELITE</h1>
-            <div class="price-tag">$150.00</div>
-            
-            <div class="payment-method">
-                <div id="paypal-button-container"></div>
-            </div>
-
-            <div class="payment-method">
-                <button class="btc-btn" onclick="window.location.href='/success'">
-                    Pagar con Bitcoin (Simulación)
-                </button>
-            </div>
+            <h1 style="color:#d4af37; font-weight:900;">ECO KIDS</h1>
+            <p class="mb-5 text-white-50">SISTEMA LIDERADO POR TERRENCE MAYORGA</p>
+            <a href="/pay" class="btn-gold">ADQUIRIR KIT PRO</a>
         </div>
-
-        <script>
-            paypal.Buttons({
-                createOrder: function(data, actions) {
-                    return actions.order.create({ purchase_units: [{ amount: { value: '150.00' } }] });
-                },
-                onApprove: function(data, actions) {
-                    return actions.order.capture().then(function(details) {
-                        window.location.href = "/success";
-                    });
-                }
-            }).render('#paypal-button-container');
-        </script>
     </body>
     </html>
+    '''
+
+@app.route('/pay')
+def pay():
+    return '''
+    <body style="background:#000; color:#fff; display:flex; align-items:center; justify-content:center; height:100vh; font-family:sans-serif;">
+        <div style="text-align:center; border:1px solid #333; padding:40px; border-radius:20px;">
+            <h2 style="color:#d4af37;">MÓDULO DE PAGO</h2>
+            <p>Simulación de Transacción Segura</p>
+            <button onclick="window.location.href='/success'" style="background:#d4af37; padding:10px 20px; border:none; cursor:pointer; font-weight:bold;">CONFIRMAR PAGO $150</button>
+        </div>
+    </body>
     '''
 
 @app.route('/success')
 def success():
     return '''
-    <body style="background:#000; color:#fff; font-family:sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; text-align:center;">
-        <div style="border:1px solid #d4af37; padding:50px; border-radius:30px; max-width:500px;">
-            <h1 style="color:#d4af37;">¡PAGO CONFIRMADO!</h1>
-            <p style="font-size:1.2rem; margin:20px 0;">Gracias por tu adquisición en ECO KIDS.</p>
-            <div style="background:#111; padding:20px; border-radius:10px; margin-bottom:30px;">
-                <p style="color:#888; margin:0;">PRÓXIMO PASO:</p>
-                <p>Un asesor de logística de Terrence Mayorga se contactará contigo en menos de 24 horas para coordinar la entrega de tu Kit Pro.</p>
-            </div>
-            <a href="/" style="color:#d4af37; text-decoration:none; font-weight:bold;">VOLVER AL INICIO</a>
+    <body style="background:#000; color:#fff; font-family:sans-serif; padding:50px;">
+        <div style="max-width:600px; margin:0 auto; border:1px solid #d4af37; padding:40px; border-radius:20px; text-align:center;">
+            <h1 style="color:#d4af37;">¡PAGO EXITOSO!</h1>
+            <p>Gracias por confiar en la ingeniería de Terrence Mayorga.</p>
+            <hr style="border-color:#222; margin:30px 0;">
+            <h3>¿NECESITAS AYUDA CON TU PEDIDO?</h3>
+            <p class="text-white-50">Genera un ticket de soporte inmediato:</p>
+            <form action="/ticket" method="POST">
+                <input type="text" name="asunto" placeholder="Asunto (Ej: Envío, Factura)" required style="width:100%; padding:10px; margin-bottom:10px; background:#111; border:1px solid #333; color:#fff;">
+                <textarea name="mensaje" placeholder="Describe tu duda aquí..." required style="width:100%; padding:10px; height:100px; background:#111; border:1px solid #333; color:#fff;"></textarea>
+                <button type="submit" style="background:#fff; color:#000; border:none; padding:10px 30px; font-weight:bold; margin-top:10px; cursor:pointer;">ENVIAR TICKET</button>
+            </form>
+        </div>
+    </body>
+    '''
+
+@app.route('/ticket', methods=['POST'])
+def ticket():
+    # En una app real, esto se guarda en la DB de Render
+    return '''
+    <body style="background:#000; color:#d4af37; display:flex; align-items:center; justify-content:center; height:100vh; font-family:sans-serif; text-align:center;">
+        <div>
+            <h1>TICKET GENERADO #EK-2026</h1>
+            <p style="color:#fff;">Director Terrence Mayorga ha recibido tu mensaje. Responderemos a la brevedad.</p>
+            <a href="/" style="color:#d4af37; text-decoration:none;">Volver al Panel Principal</a>
         </div>
     </body>
     '''
