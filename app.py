@@ -1,11 +1,8 @@
 import os
-from flask import Flask, render_template_string, request, session, redirect
+from flask import Flask, render_template_string, request, flash
 
 app = Flask(__name__)
 app.secret_key = 'ECO_KIDS_ELITE_2026'
-
-# Base de Datos de Visitas Simbolica (Nivel Dios)
-stats = {"visitas": 1250, "paises": 12, "proyectos": 45}
 
 @app.route('/')
 def home():
@@ -14,48 +11,46 @@ def home():
     <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>ECO KIDS | Global Elite Intelligence</title>
+        <title>ECO KIDS | Global Elite Network</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
-            body { background: #000; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; }
-            .hero { height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; background: radial-gradient(circle, #111, #000); }
-            .gold-text { color: #d4af37; font-weight: 900; letter-spacing: -2px; font-size: 5rem; }
-            .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 40px; max-width: 1000px; margin: -100px auto 0; }
-            .stat-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); border: 1px solid rgba(212,175,55,0.2); padding: 30px; border-radius: 25px; text-align: center; }
-            .stat-number { font-size: 2.5rem; color: #d4af37; font-weight: bold; }
-            .stat-label { color: #666; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; }
-            .nav-elite { padding: 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+            body { background: #000; color: #fff; font-family: 'Inter', sans-serif; }
+            .vip-section { height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #111 0%, #000 100%); }
+            .gold-form { background: rgba(255,255,255,0.02); border: 1px solid #d4af37; padding: 60px; border-radius: 40px; box-shadow: 0 0 100px rgba(212,175,55,0.1); max-width: 600px; width: 100%; text-align: center; }
+            .input-elite { background: transparent; border: none; border-bottom: 2px solid #333; color: #fff; padding: 15px; width: 100%; margin-bottom: 30px; text-align: center; transition: 0.4s; }
+            .input-elite:focus { outline: none; border-bottom-color: #d4af37; }
+            .btn-vip { background: #d4af37; color: #000; font-weight: 900; border: none; padding: 15px 50px; border-radius: 5px; text-transform: uppercase; letter-spacing: 2px; }
+            .director-tag { color: #d4af37; font-size: 0.8rem; letter-spacing: 4px; margin-bottom: 10px; display: block; }
         </style>
     </head>
     <body>
-        <nav class="nav-elite">
-            <span style="color:#d4af37; font-weight:bold; letter-spacing:3px;">ECO KIDS</span>
-            <span style="color:#444; font-size:0.8rem;">DIRECTOR: TERRENCE MAYORGA</span>
-        </nav>
-        
-        <section class="hero">
-            <div class="animate__animated animate__fadeIn">
-                <p class="text-white-50">SISTEMA GLOBAL DE MONITOREO</p>
-                <h1 class="gold-text">DATA CENTER</h1>
-            </div>
-        </section>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">''' + str(stats['visitas']) + '''</div>
-                <div class="stat-label">Impacto Global</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">''' + str(stats['paises']) + '''</div>
-                <div class="stat-label">Naciones Activas</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">''' + str(stats['proyectos']) + '''</div>
-                <div class="stat-label">Ingeniería Eco</div>
+        <div class="vip-section">
+            <div class="gold-form">
+                <span class="director-tag">TERRENCE MAYORGA PRESENTS</span>
+                <h1 class="mb-4" style="font-weight:900;">VIP ACCESS</h1>
+                <p class="text-white-50 mb-5">Únete a la red exclusiva de ingeniería sustentable ECO KIDS.</p>
+                <form action="/subscribe" method="POST">
+                    <input type="email" name="email" class="input-elite" placeholder="Tu Correo Electrónico Corporativo" required>
+                    <button type="submit" class="btn-vip">Solicitar Membresía</button>
+                </form>
             </div>
         </div>
     </body>
     </html>
+    '''
+
+@app.route('/subscribe', methods=['POST'])
+def subscribe():
+    email = request.form.get('email')
+    # Aquí los correos se guardarían en tu base de datos profesional
+    return f'''
+    <body style="background:#000; color:#d4af37; display:flex; align-items:center; justify-content:center; height:100vh; font-family:sans-serif; text-align:center;">
+        <div>
+            <h1>REGISTRO EXITOSO</h1>
+            <p style="color:#fff;">El correo {email} ha sido añadido a la lista privada de Terrence Mayorga.</p>
+            <a href="/" style="color:#d4af37; text-decoration:none; border:1px solid #d4af37; padding:10px 20px;">VOLVER</a>
+        </div>
+    </body>
     '''
 
 if __name__ == '__main__':
