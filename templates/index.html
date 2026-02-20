@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>ECO KIDS - Inicio</title>
-    <style>
-        body { background: #000; color: #d4af37; text-align: center; font-family: Arial; padding: 100px; }
-        .btn { background: #d4af37; color: #000; padding: 20px 40px; text-decoration: none; font-weight: bold; border-radius: 10px; display: inline-block; font-size: 20px; }
-    </style>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
     <h1>BIENVENIDO AL IMPERIO ECO KIDS</h1>
-    <p>Ingeniería Sustentable Profesional</p>
-    <br><br>
-    <a href="/pagos" class="btn">EXPLORAR IMPERIO</a>
-</body>
-</html>
+    <p>Innovación y Sostenibilidad desde la Base.</p>
+    <br>
+    <a href="/pagos" class="btn">EXPLORAR SISTEMA DE PAGOS</a>
+{% endblock %}
