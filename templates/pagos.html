@@ -1,11 +1,48 @@
 {% extends "base.html" %}
-{% block title %}Pagos{% endblock %}
+{% block title %}Terminal de Pago{% endblock %}
 {% block content %}
-    <h1>MÉTODOS DE PAGO</h1>
-    <div style="border: 2px solid #d4af37; padding: 30px; display: inline-block; border-radius: 15px;">
-        <p>Seleccione su plataforma preferida:</p>
-        <a href="/exito" class="btn">PAGAR CON STRIPE</a><br><br>
-        <a href="/exito" class="btn">PAGAR CON PAYPAL</a><br><br>
-        <a href="/exito" class="btn">PAGAR CON BITCOIN</a>
+<div class="glass-panel" id="scanner-container">
+    <div id="scan-ui">
+        <h2 style="color: var(--gold); letter-spacing: 5px;">INICIANDO PROTOCOLO DE PAGO</h2>
+        <div class="scan-line"></div>
+        <p id="status-text">ESCANEO DE SEGURIDAD EN CURSO...</p>
     </div>
+
+    <div id="payment-methods" style="display: none; animation: fadeIn 1s ease;">
+        <h1 style="font-size: 2rem;">AUTORIZADO</h1>
+        <p style="color: #888;">Seleccione el nodo de transferencia para terrence.m</p>
+        <hr style="border: 0; border-top: 1px solid rgba(212,175,55,0.2); margin: 20px 0;">
+        
+        <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+            <a href="/exito" class="btn-divine" style="width: 250px;">NODO STRIPE</a>
+            <a href="/exito" class="btn-divine" style="width: 250px;">NODO PAYPAL</a>
+            <a href="/exito" class="btn-divine" style="width: 250px;">BITCOIN CORE</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .scan-line {
+        width: 100%; height: 2px; background: var(--gold);
+        box-shadow: 0 0 15px var(--gold); position: relative;
+        animation: scanMove 2s infinite ease-in-out;
+    }
+    @keyframes scanMove {
+        0% { top: 0; }
+        50% { top: 150px; }
+        100% { top: 0; }
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
+
+<script>
+    // Simulación de escaneo de seguridad nivel Dios
+    setTimeout(() => {
+        document.getElementById('status-text').innerHTML = "IDENTIDAD CONFIRMADA. ABRIENDO CANALES...";
+        setTimeout(() => {
+            document.getElementById('scan-ui').style.display = 'none';
+            document.getElementById('payment-methods').style.display = 'block';
+        }, 1500);
+    }, 2500);
+</script>
 {% endblock %}
