@@ -8,57 +8,20 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
         :root { --gold: #d4af37; --bright-gold: #f9e272; --dark: #050505; }
-        body { background: var(--dark); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow: hidden; }
+        body { background: var(--dark); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; }
         
-        /* Contenedor de Partículas */
-        #particles-js {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; pointer-events: none;
-        }
+        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .bg-mesh { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px); background-size: 60px 60px; z-index: 0; }
 
-        .bg-mesh {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px), 
-                              linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px; z-index: 0;
-        }
-
-        nav { 
-            background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--gold);
-            padding: 15px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 5px 20px rgba(0,0,0,1);
-        }
-        nav a { color: var(--gold); text-decoration: none; margin: 0 25px; font-family: 'Orbitron', sans-serif; 
-                font-size: 0.9rem; letter-spacing: 2px; transition: 0.5s; cursor: pointer; position: relative; }
+        nav { background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--gold); padding: 15px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,1); }
+        nav a { color: var(--gold); text-decoration: none; margin: 0 25px; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; letter-spacing: 2px; transition: 0.5s; cursor: pointer; }
         nav a:hover { color: var(--bright-gold); text-shadow: 0 0 15px var(--gold); }
 
         .container { padding: 60px 20px; max-width: 1300px; margin: auto; text-align: center; position: relative; z-index: 10; }
-        
-        .glass-panel { 
-            background: rgba(10, 10, 10, 0.8); border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 50px; border-radius: 5px; backdrop-filter: blur(15px);
-            box-shadow: 0 0 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(212, 175, 55, 0.05);
-            position: relative; overflow: hidden;
-        }
-
-        /* Rayo de escaneo decorativo */
-        .glass-panel::after {
-            content: ""; position: absolute; top: -100%; left: -100%;
-            width: 50%; height: 300%; background: linear-gradient(rgba(212,175,55,0), rgba(212,175,55,0.1), rgba(212,175,55,0));
-            transform: rotate(45deg); animation: reflection 6s infinite;
-        }
-
-        @keyframes reflection { 0% { top: -100%; left: -100%; } 100% { top: 100%; left: 100%; } }
-
-        .btn-divine { 
-            background: transparent; color: var(--gold); padding: 18px 45px; 
-            text-decoration: none; font-weight: 700; font-family: 'Orbitron', sans-serif;
-            border: 2px solid var(--gold); clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
-            transition: 0.4s; display: inline-block; cursor: pointer; z-index: 20;
-        }
+        .glass-panel { background: rgba(10, 10, 10, 0.8); border: 1px solid rgba(212, 175, 55, 0.3); padding: 50px; border-radius: 5px; backdrop-filter: blur(15px); box-shadow: 0 0 40px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        .btn-divine { background: transparent; color: var(--gold); padding: 18px 45px; text-decoration: none; font-weight: 700; font-family: 'Orbitron', sans-serif; border: 2px solid var(--gold); clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); transition: 0.4s; display: inline-block; cursor: pointer; }
         .btn-divine:hover { background: var(--gold); color: #000; box-shadow: 0 0 30px var(--gold); }
 
-        h1 { font-family: 'Orbitron', sans-serif; color: var(--gold); font-size: 4rem; text-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
         footer { position: fixed; bottom: 0; width: 100%; padding: 20px; color: #444; font-size: 0.7rem; letter-spacing: 3px; z-index: 100; }
         #music-control { position: fixed; bottom: 80px; right: 20px; z-index: 2000; }
     </style>
@@ -88,37 +51,25 @@
 
     <footer>SISTEMA TERRENCE.M - PROTOCOLO NIVEL DIOS v2.0</footer>
 
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/647f1b7494630204ec51780e/default';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
     <script>
-        // Configuración de Partículas de Oro
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 80 },
-                "color": { "value": "#d4af37" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5, "random": true },
-                "size": { "value": 3, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#d4af37", "opacity": 0.2, "width": 1 },
-                "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out" }
-            },
-            "interactivity": {
-                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } },
-                "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 1 } } }
-            }
-        });
-
+        particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": "#d4af37" }, "shape": { "type": "circle" }, "opacity": { "value": 0.5 }, "size": { "value": 3 }, "line_linked": { "enable": true, "distance": 150, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 2 } }, "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } } });
         const audio = document.getElementById('bg-audio');
         const clickSfx = document.getElementById('click-sound');
         const btn = document.querySelector('#music-control button');
         let audioEnabled = false;
-
-        function toggleMusic() {
-            if (audio.paused) { audio.play(); audioEnabled = true; btn.innerHTML = "AUDIO: ON"; btn.style.color = "#00ff00"; }
-            else { audio.pause(); audioEnabled = false; btn.innerHTML = "AUDIO: OFF"; btn.style.color = "var(--gold)"; }
-        }
-
-        function playClick() {
-            if(audioEnabled) { clickSfx.currentTime = 0; clickSfx.volume = 0.2; clickSfx.play(); }
-        }
+        function toggleMusic() { if (audio.paused) { audio.play(); audioEnabled = true; btn.innerHTML = "AUDIO: ON"; btn.style.color = "#00ff00"; } else { audio.pause(); audioEnabled = false; btn.innerHTML = "AUDIO: OFF"; btn.style.color = "var(--gold)"; } }
+        function playClick() { if(audioEnabled) { clickSfx.currentTime = 0; clickSfx.volume = 0.2; clickSfx.play(); } }
     </script>
 </body>
 </html>
