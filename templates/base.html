@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>ECO KIDS - terrence.m</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>ECO KIDS: Juguetes Educativos</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Inicio</a> | 
+            <a href="{{ url_for('about') }}">Acerca de</a> | 
+            <a href="{{ url_for('productos') }}">Productos</a>
+        </nav>
+    </header>
+    <hr>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <hr>
+    <footer>
+        <p>&copy; 2026 Proyecto ECO KIDS. Integrantes: Jhanina Espinoza, Terrence Mayorga, Erika Parra.</p>
+    </footer>
+</body>
+</html>
