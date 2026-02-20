@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string
+from flask import Flask, render_template_string, redirect
 
 app = Flask(__name__)
 
@@ -16,8 +16,7 @@ def home():
             body { background: #000; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
             .hub-card { background: #0a0a0a; border: 2px solid #d4af37; padding: 40px; border-radius: 40px; text-align: center; box-shadow: 0 0 60px rgba(212,175,55,0.15); max-width: 600px; width: 100%; }
             .price-tag { font-size: 3.5rem; font-weight: 900; color: #d4af37; margin: 10px 0; }
-            .payment-method { background: #111; border: 1px solid #333; padding: 20px; border-radius: 15px; margin-bottom: 20px; transition: 0.3s; }
-            .payment-method:hover { border-color: #d4af37; transform: translateY(-5px); }
+            .payment-method { background: #111; border: 1px solid #333; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
             .btc-btn { background: #f7931a; color: #fff; font-weight: bold; border: none; padding: 12px; border-radius: 8px; width: 100%; text-transform: uppercase; }
         </style>
     </head>
@@ -28,41 +27,46 @@ def home():
             <div class="price-tag">$150.00</div>
             
             <div class="payment-method">
-                <p class="small text-white-50">Opción A: Pago Global & Ecuador</p>
                 <div id="paypal-button-container"></div>
             </div>
 
             <div class="payment-method">
-                <p class="small text-white-50">Opción B: Activos Digitales</p>
-                <button class="btc-btn" onclick="alert('DIRECCIÓN BTC DE TERRENCE: bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0w7h')">
-                    Pagar con Bitcoin (BTC)
+                <button class="btc-btn" onclick="window.location.href='/success'">
+                    Pagar con Bitcoin (Simulación)
                 </button>
             </div>
-
-            <div class="payment-method">
-                <p class="small text-white-50">Opción C: Stripe (Crédito/Débito)</p>
-                <button class="btn btn-outline-light w-100 py-2" style="border-radius:8px;">Continuar con Tarjeta</button>
-            </div>
-
-            <p class="mt-4" style="color:#d4af37; font-size: 0.7rem; letter-spacing: 2px;">PROTEGIDO POR CIFRADO NIVEL DIOS</p>
         </div>
 
         <script>
             paypal.Buttons({
                 createOrder: function(data, actions) {
-                    return actions.order.create({
-                        purchase_units: [{ amount: { value: '150.00' } }]
-                    });
+                    return actions.order.create({ purchase_units: [{ amount: { value: '150.00' } }] });
                 },
                 onApprove: function(data, actions) {
                     return actions.order.capture().then(function(details) {
-                        alert('¡TRANSACCIÓN EXITOSA! Bienvenido a ECO KIDS, ' + details.payer.name.given_name);
+                        window.location.href = "/success";
                     });
                 }
             }).render('#paypal-button-container');
         </script>
     </body>
     </html>
+    '''
+
+@app.route('/success')
+def success():
+    return '''
+    <body style="background:#000; color:#fff; font-family:sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; text-align:center;">
+        <div style="border:1px solid #d4af37; padding:50px; border-radius:30px; max-width:500px;">
+            <h1 style="color:#d4af37;">¡PAGO CONFIRMADO!</h1>
+            <p style="font-size:1.2rem; margin:20px 0;">Gracias por tu adquisición en ECO KIDS.</p>
+            <div style="background:#111; padding:20px; border-radius:10px; margin-bottom:30px;">
+                <p style="color:#888; margin:0;">PRÓXIMO PASO:</p>
+                <p>Un asesor de logística de Terrence Mayorga se contactará contigo en menos de 24 horas para coordinar la entrega de tu Kit Pro.</p>
+            </div>
+            <a href="/" style="color:#d4af37; text-decoration:none; font-weight:bold;">VOLVER AL INICIO</a>
+        </div>
+    </body>
     '''
 
 if __name__ == '__main__':
