@@ -1,34 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Factura Digital{% endblock %}
+{% block title %}Transacción Exitosa{% endblock %}
 {% block content %}
-<div class="glass-panel" id="invoice" style="max-width: 600px; margin: auto; text-align: left; border: 2px solid #00ff00; background: rgba(0,20,0,0.9);">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-            <h1 style="color: #00ff00; margin: 0;">INVOICE</h1>
-            <p style="font-size: 0.8rem; color: #888;">ID: TXN-{{ range(100000, 999999) | random }}</p>
-        </div>
-        <div style="text-align: right; color: var(--gold); font-family: 'Orbitron'; font-size: 0.8rem;">
-            TERRENCE.M ENGINEERING<br>SECURE PAYMENT HUB
-        </div>
-    </div>
-    
-    <hr style="border: 0; border-top: 1px solid #00ff00; margin: 20px 0;">
-    
-    <div style="display: flex; justify-content: space-between; margin: 10px 0;">
-        <span>CONCEPTO: INYECCIÓN DE CAPITAL NODO GLOBAL</span>
-        <span style="color: #00ff00;">$15,000.00 USD</span>
-    </div>
-    <div style="display: flex; justify-content: space-between; margin: 10px 0;">
-        <span>IMPUESTOS E INFRAESTRUCTURA:</span>
-        <span style="color: #00ff00;">$0.00 USD</span>
-    </div>
-    
-    <h2 style="text-align: right; color: #00ff00; margin-top: 30px;">TOTAL: $15,000.00 USD</h2>
-    
-    <p style="font-size: 0.7rem; color: #444; margin-top: 20px;">Esta factura ha sido encriptada y verificada mediante protocolo de nivel Super Dios. Los fondos han sido transferidos al imperio terrence.m de forma segura.</p>
-    
-    <div style="text-align: center; margin-top: 30px;">
-        <button onclick="window.print()" class="btn-divine" style="border-color: #00ff00; color: #00ff00;">IMPRIMIR COMPROBANTE</button>
-    </div>
+<div class="glass-panel" style="border-color: #00ff00; text-align: left; max-width: 500px; margin: auto;">
+    <h1 style="color: #00ff00;">✓ PAGO CONFIRMADO</h1>
+    <p style="font-size: 0.8rem;">RECIBO DIGITAL TERRENCE.M</p>
+    <hr style="border-color: #00ff00;">
+    <p>ID: TXN-{{ range(10000, 99999) | random }}</p>
+    <p>CONCEPTO: SERVICIOS DE INGENIERÍA ELITE</p>
+    <h2 style="color: #00ff00; text-align: right;">TOTAL: $15,000.00 USD</h2>
+    <button onclick="window.print()" class="btn-divine" style="border-color: #00ff00; color: #00ff00; width: 100%;">IMPRIMIR FACTURA</button>
 </div>
 {% endblock %}

@@ -1,65 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Nodos Globales{% endblock %}
 {% block content %}
-<div class="glass-panel" style="animation: fadeIn 1.5s ease;">
-    <h1 style="font-size: 2.5rem; letter-spacing: 15px;">ESTADO DE RED GLOBAL</h1>
-    <p style="color: #666; letter-spacing: 5px;">MONITOREO DE NODOS TERRENCE.M</p>
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px;">
-        <div class="node-card">
-            <div class="status-indicator online"></div>
-            <h2 style="color: var(--gold);">NODO ALPHA-1</h2>
-            <p style="font-size: 0.8rem; color: #888;">UBICACIÓN: DUBAI - SECTOR 7</p>
-            <div class="energy-bar"><div class="energy-fill" style="width: 85%;"></div></div>
-            <p style="font-size: 0.7rem;">EFICIENCIA: 98.4%</p>
+<div class="glass-panel">
+    <h1>ESTADO DE RED GLOBAL</h1>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+        <div style="padding: 20px; border: 1px solid rgba(212,175,55,0.2); border-radius: 10px;">
+            <div style="width: 10px; height: 10px; background: #00ff00; border-radius: 50%; display: inline-block; animation: blink 1s infinite;"></div>
+            <h3 style="color: var(--gold);">DUBAI HUB</h3>
+            <p style="font-size: 0.7rem;">EFICIENCIA: 99.8%</p>
         </div>
-
-        <div class="node-card">
-            <div class="status-indicator pulse"></div>
-            <h2 style="color: var(--gold);">NODO OMEGA-X</h2>
-            <p style="font-size: 0.8rem; color: #888;">UBICACIÓN: ANDES - NODO ECUADOR</p>
-            <div class="energy-bar"><div class="energy-fill" style="width: 92%;"></div></div>
-            <p style="font-size: 0.7rem;">EFICIENCIA: 99.1%</p>
-        </div>
-
-        <div class="node-card">
-            <div class="status-indicator online"></div>
-            <h2 style="color: var(--gold);">NODO SIGMA-9</h2>
-            <p style="font-size: 0.8rem; color: #888;">UBICACIÓN: BERLÍN - HUB EUROPA</p>
-            <div class="energy-bar"><div class="energy-fill" style="width: 74%;"></div></div>
-            <p style="font-size: 0.7rem;">EFICIENCIA: 95.7%</p>
+        <div style="padding: 20px; border: 1px solid rgba(212,175,55,0.2); border-radius: 10px;">
+            <div style="width: 10px; height: 10px; background: #00ff00; border-radius: 50%; display: inline-block;"></div>
+            <h3 style="color: var(--gold);">ANDES NODO</h3>
+            <p style="font-size: 0.7rem;">EFICIENCIA: 94.2%</p>
         </div>
     </div>
 </div>
-
-<style>
-    .node-card {
-        background: rgba(255,255,255,0.02);
-        border: 1px solid rgba(212,175,55,0.1);
-        padding: 30px;
-        border-radius: 10px;
-        position: relative;
-        transition: 0.5s;
-    }
-    .node-card:hover {
-        border-color: var(--gold);
-        box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
-        transform: translateY(-10px);
-    }
-    .status-indicator {
-        width: 10px; height: 10px; border-radius: 50%;
-        position: absolute; top: 20px; right: 20px;
-    }
-    .online { background: #00ff00; box-shadow: 0 0 10px #00ff00; }
-    .pulse { background: #00ff00; animation: blink 1s infinite; }
-    @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-    
-    .energy-bar {
-        width: 100%; height: 4px; background: #222; margin: 15px 0; border-radius: 2px;
-    }
-    .energy-fill {
-        height: 100%; background: var(--gold); border-radius: 2px;
-        box-shadow: 0 0 10px var(--gold);
-    }
-</style>
+<style>@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }</style>
 {% endblock %}
