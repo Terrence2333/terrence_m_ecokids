@@ -1,52 +1,55 @@
 {% extends "base.html" %}
 {% block title %}Comando Central{% endblock %}
 {% block content %}
-<div class="glass-panel" style="animation: slideUp 1s ease;">
-    <p style="letter-spacing: 10px; color: #666;">ESTABLECIENDO CONEXIÓN...</p>
-    <h1>TERRENCE M</h1>
-    <h3 style="color: var(--bright-gold); letter-spacing: 5px; font-weight: 300;">INGENIERÍA DE ÉLITE SUSTENTABLE</h3>
-    
-    <div style="display: flex; justify-content: center; gap: 40px; margin: 40px 0; border-top: 1px solid rgba(212,175,55,0.2); padding-top: 30px;">
-        <div>
-            <h2 id="count-co2" style="color: var(--gold); margin: 0;">0</h2>
-            <p style="font-size: 0.8rem; color: #888;">TONELADAS CO2 REDUCIDAS</p>
-        </div>
-        <div>
-            <h2 id="count-energy" style="color: var(--gold); margin: 0;">0</h2>
-            <p style="font-size: 0.8rem; color: #888;">MW GENERADOS</p>
-        </div>
-        <div>
-            <h2 id="count-proyects" style="color: var(--gold); margin: 0;">0</h2>
-            <p style="font-size: 0.8rem; color: #888;">NODOS ACTIVOS</p>
-        </div>
+<div class="glass-panel" style="animation: slideUp 1s ease; position: relative;">
+    <div id="ai-scanner" style="position: absolute; top: 20px; right: 20px; width: 180px; height: 130px; border: 1px solid var(--gold); background: #000; overflow: hidden; border-radius: 10px;">
+        <video id="video-feed" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; opacity: 0.6; filter: sepia(100%) saturate(300%) hue-rotate(10deg);"></video>
+        <div class="scan-overlay"></div>
+        <p style="position: absolute; bottom: 5px; width: 100%; font-size: 8px; color: var(--gold); text-align: center; margin: 0;">BIO-SCAN: ACTIVE</p>
     </div>
 
-    <p style="max-width: 700px; margin: 30px auto; color: #bbb; line-height: 2;">
-        Dominio total en infraestructuras renovables y optimización cuántica de recursos energéticos. 
-    </p>
+    <p style="letter-spacing: 10px; color: #666;">ESTABLECIENDO CONEXIÓN...</p>
+    <h1>TERRENCE M</h1>
+    <h3 style="color: var(--bright-gold); letter-spacing: 5px;">INGENIERÍA DE ÉLITE</h3>
+    
+    <div style="display: flex; justify-content: center; gap: 40px; margin: 40px 0; border-top: 1px solid rgba(212,175,55,0.2); padding-top: 30px;">
+        <div><h2 id="count-co2" style="color: var(--gold); margin: 0;">0</h2><p style="font-size: 0.7rem; color: #888;">CO2 REDUCIDO</p></div>
+        <div><h2 id="count-energy" style="color: var(--gold); margin: 0;">0</h2><p style="font-size: 0.7rem; color: #888;">MW GENERADOS</p></div>
+    </div>
+
     <a href="/servicios" class="btn-divine" onmouseover="playClick()">ACCEDER AL SISTEMA</a>
 </div>
 
-<script>
-    function animateCount(id, target) {
-        let current = 0;
-        let obj = document.getElementById(id);
-        let step = target / 100;
-        let timer = setInterval(() => {
-            current += step;
-            if (current >= target) {
-                obj.innerText = target + "+";
-                clearInterval(timer);
-            } else {
-                obj.innerText = Math.floor(current);
-            }
-        }, 30);
+<style>
+    .scan-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(rgba(212,175,55,0.1) 50%, transparent 50%);
+        background-size: 100% 4px; animation: scanline 2s linear infinite;
     }
-    // Iniciar contadores al cargar
-    setTimeout(() => {
-        animateCount('count-co2', 4500);
-        animateCount('energy', 1250);
-        animateCount('count-proyects', 84);
-    }, 500);
+    @keyframes scanline { from { background-position: 0 0; } to { background-position: 0 100%; } }
+</style>
+
+<script>
+    // Iniciar Cámara Real
+    async function startCamera() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            document.getElementById('video-feed').srcObject = stream;
+        } catch (err) {
+            console.log("Cámara bloqueada o no disponible");
+        }
+    }
+    startCamera();
+    
+    // Contadores
+    function animateCount(id, target) {
+        let current = 0; let obj = document.getElementById(id);
+        let timer = setInterval(() => {
+            current += target/50;
+            if (current >= target) { obj.innerText = target + "+"; clearInterval(timer); }
+            else { obj.innerText = Math.floor(current); }
+        }, 40);
+    }
+    setTimeout(() => { animateCount('count-co2', 4500); animateCount('count-energy', 1250); }, 1000);
 </script>
 {% endblock %}
