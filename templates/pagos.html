@@ -1,39 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Terminal de Pago{% endblock %}
 {% block content %}
-<div class="glass-panel" style="min-height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-    <div id="loading-layer">
-        <h2 style="color: var(--gold); letter-spacing: 5px; animation: pulse 1.5s infinite;">INICIALIZANDO PROTOCOLO DE PAGO...</h2>
-        <div style="width: 200px; height: 2px; background: var(--gold); margin: 20px auto; position: relative; overflow: hidden;">
-            <div style="width: 50px; height: 100%; background: #fff; position: absolute; animation: loading-bar 2s infinite;"></div>
-        </div>
-    </div>
-
-    <div id="payment-interface" style="display: none; width: 100%;">
-        <h1 style="color: var(--gold); font-size: 2.5rem; text-shadow: 0 0 20px rgba(212,175,55,0.5);">NODO DE PAGO SEGURO</h1>
-        <p style="color: #888; letter-spacing: 3px; margin-bottom: 40px;">SELECCIONE MÉTODO DE TRANSFERENCIA</p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 800px; margin: auto;">
-            <a href="/exito" class="btn-divine pulse-gold" onmouseover="playClick()">TARJETA DE CRÉDITO (STRIPE)</a>
-            <a href="/exito" class="btn-divine pulse-gold" onmouseover="playClick()">PAYPAL CORPORATIVO</a>
-            <a href="/exito" class="btn-divine pulse-gold" onmouseover="playClick()">BITCOIN / ETHEREUM</a>
-            <a href="/exito" class="btn-divine pulse-gold" onmouseover="playClick()">TRANSFERENCIA SWIFT</a>
-        </div>
+<div style="padding: 100px 20%; text-align: center;">
+    <h1 style="color:var(--gold); letter-spacing: 10px;">PASARELA_DE_PAGO_SEGURA</h1>
+    <div style="border: 2px solid var(--gold); padding: 50px; background: rgba(10,10,10,0.9);">
+        <p style="color:var(--neon)">SISTEMA DE ENCRIPTACIÓN terrence.m ACTIVO</p>
+        <form action="/exito" method="GET">
+            <input type="text" placeholder="ID_DE_CREDENCIAL" style="background:#111; border:1px solid var(--gold); color:#fff; padding:15px; width:80%; margin-bottom:20px; font-family:'Orbitron';">
+            <button type="submit" style="background:var(--gold); color:#000; border:none; padding:15px 40px; font-family:'Orbitron'; font-weight:900; cursor:pointer;">EJECUTAR TRANSACCIÓN</button>
+        </form>
     </div>
 </div>
-
-<style>
-    @keyframes loading-bar { 0% { left: -50px; } 100% { left: 200px; } }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-    .pulse-gold { animation: border-glow 2s infinite; }
-    @keyframes border-glow { 0%, 100% { box-shadow: 0 0 5px var(--gold); } 50% { box-shadow: 0 0 20px var(--gold); } }
-</style>
-
-<script>
-    // Simulación de carga de seguridad para realismo nivel Dios
-    setTimeout(() => {
-        document.getElementById('loading-layer').style.display = 'none';
-        document.getElementById('payment-interface').style.display = 'block';
-    }, 2500);
-</script>
 {% endblock %}

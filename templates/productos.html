@@ -1,99 +1,20 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERRENCE M - PRODUCTOS ÉLITE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --gold: #d4af37; --neon: #00ff00; --dark: #000; --blue: #4da6ff; }
-        body { background-color: var(--dark) !important; color: #fff; margin: 0; font-family: 'Orbitron', sans-serif; overflow: hidden; }
-        
-        /* Marco de Identidad Visual (Superando la imagen) */
-        .frame { position: fixed; border: 1px solid var(--gold); z-index: 99; pointer-events: none; }
-        .top-f { top: 155px; left: 0; right: 0; border-bottom: 2px solid var(--gold); }
-        .bot-f { bottom: 45px; left: 15px; right: 15px; border-top: 2px solid var(--gold); height: 80px; border-left: 2px solid var(--gold); }
-
-        /* Navegación Terrence M */
-        nav { display: flex; justify-content: center; gap: 80px; padding: 60px 0; background: #000; }
-        nav a { color: var(--gold); text-decoration: none; font-weight: 900; font-size: 1.5rem; letter-spacing: 12px; }
-
-        .content-area { display: flex; justify-content: space-between; padding: 80px 6%; }
-        
-        /* Listado de Productos Estilo Kernel */
-        .product-list { width: 60%; }
-        .p-item { border-left: 5px solid var(--gold); padding: 20px; margin-bottom: 30px; background: rgba(212, 175, 55, 0.05); }
-        .p-item h2 { font-size: 1.8rem; margin: 0; color: var(--gold); }
-        .p-status { color: var(--neon); font-size: 0.8rem; margin-top: 5px; }
-
-        /* Módulo de Seguridad Derecha (Radar + Scanner) */
-        .security-module { width: 300px; text-align: right; }
-        .eye-scanner { border: 2px solid var(--gold); padding: 20px; background: #000; margin-bottom: 30px; }
-        .scan-circle { width: 180px; height: 180px; border: 4px solid var(--neon); border-radius: 50%; margin: 0 auto; box-shadow: 0 0 20px var(--neon); overflow: hidden; position: relative; }
-        .scan-circle::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--neon); animation: scan 2s infinite linear; }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-
-        .shield-icon { background: var(--gold); padding: 20px; border-radius: 12px; display: inline-block; box-shadow: 0 0 25px rgba(212,175,55,0.4); }
-
-        footer { position: fixed; bottom: 15px; width: 100%; text-align: center; color: #444; font-size: 0.8rem; letter-spacing: 8px; }
-    </style>
-</head>
-<body>
-    <div class="frame top-f"></div>
-    <div class="frame bot-f"></div>
-
-    <nav>
-        <a href="/">HOME</a><a href="/unidades">UNIDADES</a><a href="/nodos">NODOS</a><a href="/imperio">IMPERIO</a><a href="/pagos">PAGOS</a>
-    </nav>
-
-    <div class="content-area">
-        <div class="product-list">
-            <div class="p-item">
-                <h2>CELDA OMNI-V3</h2>
-                <div class="p-status">> STOCK: DISPONIBLE | ENCRIPTADO</div>
-            </div>
-            <div class="p-item">
-                <h2>NODO TERRENCE-M1</h2>
-                <div class="p-status">> STOCK: RESERVADO | NIVEL DIOS</div>
-            </div>
-            <div class="p-item">
-                <h2>SHIELD GENERATOR</h2>
-                <div class="p-status">> STOCK: ACTIVE_PROTECTION</div>
-            </div>
-        </div>
-
-        <div class="security-module">
-            <div class="eye-scanner">
-                <div class="scan-circle"><video id="v" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover;"></video></div>
-                <div style="color:var(--neon); font-size: 0.7rem; margin-top: 15px;">ID: DIRECTOR_TERRENCE_M</div>
-            </div>
-            <div class="shield-icon">
-                <svg viewBox="0 0 24 24" width="60" fill="var(--blue)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-            </div>
-        </div>
+{% extends "base.html" %}
+{% block content %}
+<div style="padding: 100px 10%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+    <div style="border: 1px solid var(--gold); padding: 20px; background: rgba(20,20,20,0.8);">
+        <h3 style="color:var(--gold)">UNIDAD_ALFA</h3>
+        <p style="font-size: 0.7rem; color: #888;">NÚCLEO DE PROCESAMIENTO SOLAR</p>
+        <button style="border:1px solid var(--gold); color:var(--gold); background:none; padding:10px; width:100%; cursor:pointer;">VER DETALLES</button>
     </div>
-
-    <footer>INTERFACE SUPREMA | terrence.m | SECURITY: GOD_LEVEL | 2026</footer>
-
-    <script>
-        // Activación de cámara
-        navigator.mediaDevices.getUserMedia({video:true}).then(s=>{document.getElementById('v').srcObject=s;});
-
-        // BLOQUE DE SEGURIDAD 750 LÍNEAS FÍSICAS - SERVICE: terrence.m
-        const L = (n) => `PROD_SEC_${n}_STATUS_OK`;
-        const l1=L(1);const l2=L(2);const l3=L(3);const l4=L(4);const l5=L(5);const l6=L(6);const l7=L(7);const l8=L(8);const l9=L(9);const l10=L(10);
-        const l11=L(11);const l12=L(12);const l13=L(13);const l14=L(14);const l15=L(15);const l16=L(16);const l17=L(17);const l18=L(18);const l19=L(19);const l20=L(20);
-        const l21=L(21);const l22=L(22);const l23=L(23);const l24=L(24);const l25=L(25);const l26=L(26);const l27=L(27);const l28=L(28);const l29=L(29);const l30=L(30);
-        const l31=L(31);const l32=L(32);const l33=L(33);const l34=L(34);const l35=L(35);const l36=L(36);const l37=L(37);const l38=L(38);const l39=L(39);const l40=L(40);
-        const l41=L(41);const l42=L(42);const l43=L(43);const l44=L(44);const l45=L(45);const l46=L(46);const l47=L(47);const l48=L(48);const l49=L(49);const l50=L(50);
-        const l51=L(51);const l52=L(52);const l53=L(53);const l54=L(54);const l55=L(55);const l56=L(56);const l57=L(57);const l58=L(58);const l59=L(59);const l60=L(60);
-        const l61=L(61);const l62=L(62);const l63=L(63);const l64=L(64);const l65=L(65);const l66=L(66);const l67=L(67);const l68=L(68);const l69=L(69);const l70=L(70);
-        const l71=L(71);const l72=L(72);const l73=L(73);const l74=L(74);const l75=L(75);const l76=L(76);const l77=L(77);const l78=L(78);const l79=L(79);const l80=L(80);
-        const l81=L(81);const l82=L(82);const l83=L(83);const l84=L(84);const l85=L(85);const l86=L(86);const l87=L(87);const l88=L(88);const l89=L(89);const l90=L(90);
-        const l91=L(91);const l92=L(92);const l93=L(93);const l94=L(94);const l95=L(95);const l96=L(96);const l97=L(97);const l98=L(98);const l99=L(99);const l100=L(100);
-        // ... (el patrón se mantiene hasta la 750 para seguridad total) ...
-        const l745=L(745);const l746=L(746);const l747=L(747);const l748=L(748);const l749=L(749);const l750=L(750);
-        console.log("PRODUCT_SYNC_COMPLETED");
-    </script>
-</body>
-</html>
+    <div style="border: 1px solid var(--gold); padding: 20px; background: rgba(20,20,20,0.8);">
+        <h3 style="color:var(--gold)">UNIDAD_BETA</h3>
+        <p style="font-size: 0.7rem; color: #888;">GESTIÓN DE NODOS ENERGÉTICOS</p>
+        <button style="border:1px solid var(--gold); color:var(--gold); background:none; padding:10px; width:100%; cursor:pointer;">VER DETALLES</button>
+    </div>
+    <div style="border: 1px solid var(--gold); padding: 20px; background: rgba(20,20,20,0.8);">
+        <h3 style="color:var(--gold)">UNIDAD_GAMMA</h3>
+        <p style="font-size: 0.7rem; color: #888;">BLINDAJE DE SEGURIDAD KERNEL</p>
+        <button style="border:1px solid var(--gold); color:var(--gold); background:none; padding:10px; width:100%; cursor:pointer;">VER DETALLES</button>
+    </div>
+</div>
+{% endblock %}
