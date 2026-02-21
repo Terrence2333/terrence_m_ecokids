@@ -1,174 +1,188 @@
 {% extends "base.html" %}
 {% block content %}
 <div id="boot-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Orbitron', sans-serif; color: var(--gold);">
-    <div style="width: 50px; height: 50px; border: 5px solid #222; border-top: 5px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
-    <div id="boot-log" style="width: 450px; height: 200px; font-size: 0.6rem; color: var(--neon); overflow: hidden; background: rgba(10,10,10,0.9); padding: 10px; border: 1px solid #333;"></div>
-    <div style="width: 300px; height: 4px; background: #111; margin-top: 15px; border-radius: 10px; overflow: hidden;">
-        <div id="boot-progress" style="width: 0%; height: 100%; background: var(--gold); transition: width 0.1s;"></div>
+    <div style="width: 60px; height: 60px; border: 4px solid #111; border-top: 4px solid var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; box-shadow: 0 0 20px var(--gold);"></div>
+    <div id="boot-log" style="width: 450px; height: 180px; font-size: 0.6rem; color: var(--neon); overflow: hidden; margin-top: 20px; border: 1px solid rgba(212,175,55,0.2); padding: 10px; background: rgba(5,5,5,0.8);"></div>
+    <div style="width: 300px; height: 3px; background: #111; margin-top: 15px; border-radius: 10px; overflow: hidden;">
+        <div id="boot-progress" style="width: 0%; height: 100%; background: var(--gold); box-shadow: 0 0 10px var(--gold);"></div>
     </div>
-    <p style="font-size: 0.5rem; letter-spacing: 5px; margin-top: 10px; color: var(--gold);">AUTHORIZING: DIRECTOR_TERRENCE_M</p>
+    <p style="font-size: 0.5rem; letter-spacing: 8px; margin-top: 10px; color: var(--gold); text-transform: uppercase;">Initializing Omega Protocol</p>
 </div>
 
 <audio id="bg-music" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
 
 <div id="master-bg" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; overflow: hidden;">
     <canvas id="neural-canvas" style="position: absolute; top:0; left:0; width:100%; height:100%;"></canvas>
-    <div style="position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, transparent 20%, #000 90%);"></div>
+    <div style="position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, transparent 10%, #000 95%);"></div>
+    <div style="position: absolute; inset: 0; border: 2px solid var(--gold); opacity: 0.1; pointer-events: none; box-shadow: inset 0 0 100px var(--gold);"></div>
 </div>
 
 <div id="main-interface" style="display: flex; justify-content: space-between; padding: 40px 5%; align-items: flex-start; height: 85vh; position: relative; z-index: 1; opacity: 0; transition: opacity 2s;">
     
-    <div style="width: 250px;">
-        <div style="position: relative; width: 220px; height: 220px; border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); box-shadow: 0 0 40px rgba(212,175,55,0.2);">
-            <div style="position: absolute; width: 110%; height: 110%; border: 1px dashed var(--gold); border-radius: 50%; animation: spin 20s linear infinite; opacity: 0.5;"></div>
-            <h1 style="font-size: 1.8rem; letter-spacing: -2px; font-weight: 900; text-shadow: 0 0 20px var(--gold);">TERRENCE M</h1>
+    <div style="width: 280px;">
+        <div style="position: relative; width: 230px; height: 230px; border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); box-shadow: 0 0 50px rgba(212,175,55,0.15);">
+            <div style="position: absolute; width: 105%; height: 105%; border: 1px dashed var(--gold); border-radius: 50%; animation: spin 25s linear infinite;"></div>
+            <div style="position: absolute; width: 115%; height: 115%; border: 1px solid rgba(0,255,0,0.1); border-radius: 50%; animation: spin 15s reverse linear infinite;"></div>
+            <h1 style="font-size: 2rem; letter-spacing: -2px; font-weight: 900; text-shadow: 0 0 25px var(--gold);">TERRENCE M</h1>
         </div>
-        <div style="margin-top: 30px; background: rgba(0,0,0,0.9); border: 1px solid var(--gold); border-left: 5px solid var(--gold); padding: 15px; font-size: 0.7rem;">
-            <p style="color:var(--gold); font-weight: 900;">[ STATUS: GOD_LEVEL ]</p>
-            <p style="color:var(--neon); margin: 5px 0;">> SECURITY: TIER_10</p>
-            <p style="color:#fff; margin: 5px 0;">> FIREWALL: OMNI_SHIELD</p>
-            <div id="telemetry" style="color:rgba(212,175,55,0.5); font-family:monospace; font-size: 0.6rem; margin-top: 10px;"></div>
-        </div>
-    </div>
-
-    <div style="display: flex; gap: 30px; align-self: center;">
-        <div style="text-align: center; background: rgba(10,10,10,0.8); padding: 30px; border: 1px solid var(--gold); box-shadow: inset 0 0 20px rgba(212,175,55,0.1);">
-            <span style="display: block; font-size: 3rem; color: var(--gold); font-weight: 900; text-shadow: 0 0 15px var(--gold);">4500+</span>
-            <small style="color: #666; letter-spacing: 3px;">CO2_OFFSET</small>
-        </div>
-        <div style="text-align: center; background: rgba(10,10,10,0.8); padding: 30px; border: 1px solid var(--gold); box-shadow: inset 0 0 20px rgba(212,175,55,0.1);">
-            <span style="display: block; font-size: 3rem; color: var(--gold); font-weight: 900; text-shadow: 0 0 15px var(--gold);">1250+</span>
-            <small style="color: #666; letter-spacing: 3px;">MW_CLEAN_ENERGY</small>
+        <div style="margin-top: 35px; background: rgba(0,0,0,0.95); border: 1px solid var(--gold); border-left: 6px solid var(--gold); padding: 20px; font-size: 0.7rem; box-shadow: 10px 10px 30px #000;">
+            <p style="color:var(--gold); font-weight: 900; margin: 0;">[ AUTH: OMNIPOTENT ]</p>
+            <p style="color:var(--neon); margin: 8px 0;">> ENCRYPTION: QUANTUM_RSA</p>
+            <p style="color:#fff; margin: 8px 0;">> UPLINK: SAT_ACTIVE</p>
+            <div id="telemetry" style="color:rgba(212,175,55,0.4); font-family:monospace; font-size: 0.6rem; margin-top: 15px; border-top: 1px solid #222; padding-top: 10px;"></div>
         </div>
     </div>
 
-    <div style="text-align: right; width: 250px;">
-        <div style="border: 2px solid var(--gold); padding: 10px; background: #000; box-shadow: 0 0 50px rgba(0,0,0,1);">
-            <div style="width: 100%; height: 180px; border: 2px solid var(--neon); position: relative; overflow: hidden;">
-                <video id="webcam" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover; filter: sepia(1) hue-rotate(90deg);"></video>
-                <div style="position: absolute; top:0; left:0; width:100%; height:2px; background:var(--neon); animation: scanLine 2s infinite linear;"></div>
-                <div style="position: absolute; border: 1px solid var(--neon); width: 40px; height: 40px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.5;"></div>
+    <div style="display: flex; gap: 40px; align-self: center;">
+        <div class="stat-card">
+            <span style="display: block; font-size: 3.5rem; color: var(--gold); font-weight: 900; text-shadow: 0 0 20px var(--gold);">4500+</span>
+            <small style="color: #555; letter-spacing: 4px; font-weight: 900;">CO2_OFF</small>
+        </div>
+        <div class="stat-card">
+            <span style="display: block; font-size: 3.5rem; color: var(--gold); font-weight: 900; text-shadow: 0 0 20px var(--gold);">1250+</span>
+            <small style="color: #555; letter-spacing: 4px; font-weight: 900;">MW_GEN</small>
+        </div>
+    </div>
+
+    <div style="text-align: right; width: 280px;">
+        <div style="border: 2px solid var(--gold); padding: 12px; background: #000; box-shadow: 0 0 60px rgba(0,0,0,1);">
+            <div style="width: 100%; height: 200px; border: 2px solid var(--neon); position: relative; overflow: hidden; background: #050505;">
+                <video id="webcam" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(1.2) sepia(0.6);"></video>
+                <div style="position: absolute; inset: 0; background: repeating-linear-gradient(transparent, transparent 2px, rgba(0,255,0,0.03) 3px);"></div>
+                <div style="position: absolute; top:0; left:0; width:100%; height:2px; background:var(--neon); animation: scanLine 2.5s infinite linear; box-shadow: 0 0 15px var(--neon);"></div>
             </div>
-            <p style="color:var(--neon); font-size: 0.6rem; font-weight: 900; margin-top: 10px;">ID: TERRENCE_M [VERIFIED]</p>
+            <p style="color:var(--neon); font-size: 0.65rem; font-weight: 900; margin-top: 12px; letter-spacing: 1px;">DIRECTOR_IDENTITY_CONFIRMED</p>
         </div>
-        <div id="mic-btn" style="margin-top: 20px; background: var(--gold); padding: 15px; border-radius: 5px; cursor: pointer; display: inline-block; transition: 0.3s;" onclick="startListening()">
-            <svg viewBox="0 0 24 24" width="30" fill="#000"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        <div id="mic-btn" style="margin-top: 25px; background: var(--gold); padding: 18px; border-radius: 8px; cursor: pointer; display: inline-block; border: 1px solid #fff; box-shadow: 0 0 20px rgba(212,175,55,0.4);" onclick="startListening()">
+            <svg viewBox="0 0 24 24" width="35" fill="#000"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
         </div>
     </div>
 </div>
 
-<div id="chat-container" style="position: fixed; bottom: 80px; right: 30px; width: 350px; background: rgba(0,0,0,0.95); border: 2px solid var(--gold); z-index: 1000; box-shadow: 0 0 60px #000;">
-    <div style="background: var(--gold); color: #000; padding: 12px; font-weight: 900; font-size: 0.7rem; display: flex; justify-content: space-between;">
-        <span>CORE_INTEL_SYSTEM_V.5</span>
-        <span id="system-clock">00:00:00</span>
+<div id="chat-container" style="position: fixed; bottom: 80px; right: 30px; width: 360px; background: rgba(5,5,5,0.98); border: 2px solid var(--gold); z-index: 1000; box-shadow: 0 0 80px #000;">
+    <div style="background: var(--gold); color: #000; padding: 12px; font-weight: 900; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+        <span>OMEGA_INTEL_V.6</span>
+        <span id="system-clock" style="font-family: monospace;">00:00:00</span>
     </div>
-    <div id="chat-box" style="height: 180px; overflow-y: auto; padding: 15px; font-size: 0.7rem; color: #fff; font-family: 'Courier New', monospace; line-height: 1.5;"></div>
+    <div id="chat-box" style="height: 200px; overflow-y: auto; padding: 15px; font-size: 0.75rem; color: #fff; font-family: 'Courier New', monospace; scroll-behavior: smooth;"></div>
     <div style="display: flex; border-top: 2px solid var(--gold);">
-        <input type="text" id="user-input" placeholder="EXECUTE_COMMAND..." style="flex:1; background:#000; border:none; color:#fff; padding:15px; font-family:'Orbitron'; font-size:0.7rem; outline:none;">
-        <button onclick="sendMessage()" style="background:var(--gold); border:none; padding:15px 25px; cursor:pointer; font-weight:900;">GO</button>
+        <input type="text" id="user-input" placeholder="ORDEN O CHISTE..." style="flex:1; background:#000; border:none; color:#fff; padding:18px; font-family:'Orbitron'; font-size:0.75rem; outline:none;">
+        <button onclick="sendMessage()" style="background:var(--gold); border:none; padding:15px 30px; cursor:pointer; font-weight:900; color:#000;">RUN</button>
     </div>
 </div>
 
 <style>
+    :root { --gold: #d4af37; --neon: #00ff00; }
+    .stat-card { text-align: center; background: rgba(0,0,0,0.85); padding: 35px; border: 1px solid var(--gold); border-radius: 4px; position: relative; overflow: hidden; }
+    .stat-card::before { content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(212,175,55,0.05), transparent); animation: spin 10s linear infinite; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
     @keyframes scanLine { 0% { top: 0; } 100% { top: 100%; } }
-    @keyframes pulse { 0% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-thumb { background: var(--gold); }
 </style>
 
 <script>
-    // 1. BOOT SEQUENCE
-    const messages = [
-        "SISTEMA OPERATIVO INICIADO...",
-        "CARGANDO KERNEL TERRENCE_M...",
-        "ACTIVANDO FIREWALL NIVEL DIOS...",
-        "SINCRONIZANDO SATELITES...",
-        "ACCESO BIOMETRICO CONFIRMADO.",
-        "BIENVENIDO, DIRECTOR."
+    // 1. BOOT SEQUENCE OMEGA
+    const logMsgs = [
+        "ACCEDIENDO A RED SATELITAL GLOBAL...",
+        "CARGANDO MODULO DE HUMOR_V1.0...",
+        "BYPASSING SECURITY PROTOCOLS...",
+        "LEVEL_GOD_MODE: ENABLED",
+        "SINCRONIZANDO BIOMETRIA CON DIRECTOR...",
+        "TODO LISTO. BIENVENIDO AL FUTURO."
     ];
-    let mIdx = 0;
+    let lIdx = 0;
     function runBoot() {
-        if(mIdx < messages.length){
-            document.getElementById('boot-log').innerHTML += `<p style="margin:5px 0">> ${messages[mIdx]}</p>`;
-            mIdx++;
-            document.getElementById('boot-progress').style.width = (mIdx * 16.6) + "%";
-            setTimeout(runBoot, 700);
+        if(lIdx < logMsgs.length){
+            document.getElementById('boot-log').innerHTML += `<p style="margin:4px 0; font-family:monospace;">> ${logMsgs[lIdx]}</p>`;
+            lIdx++;
+            document.getElementById('boot-progress').style.width = (lIdx * 16.6) + "%";
+            setTimeout(runBoot, 600);
         } else {
             setTimeout(() => {
                 document.getElementById('boot-screen').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('boot-screen').style.display = 'none';
                     document.getElementById('main-interface').style.opacity = '1';
-                    speak("Sistemas operativos. Nivel Dios activado.");
+                    speak("Protocolo Omega activado. Director Terrence, estoy a sus órdenes.");
                 }, 1000);
             }, 500);
         }
     }
     window.onload = runBoot;
 
-    // 2. NEURAL BACKGROUND (ELIMINA EL BLANCO)
+    // 2. NEURAL NETWORK CON FONDO REACTIVO (MOUSE)
     const canvas = document.getElementById('neural-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    let mouse = { x: null, y: null };
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+
+    window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
 
     class Particle {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.vx = (Math.random() - 0.5) * 0.5;
-            this.vy = (Math.random() - 0.5) * 0.5;
+            this.size = Math.random() * 2;
+            this.vx = (Math.random() - 0.5) * 0.4;
+            this.vy = (Math.random() - 0.5) * 0.4;
+        }
+        draw() {
+            ctx.fillStyle = "rgba(212,175,55,0.5)";
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
         }
         update() {
             this.x += this.vx; this.y += this.vy;
-            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            if(this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if(this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            // Efecto Mouse
+            let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+            let distance = Math.sqrt(dx*dx + dy*dy);
+            if(distance < 100) { this.x -= dx/20; this.y -= dy/20; }
         }
     }
-    for(let i=0; i<100; i++) particles.push(new Particle());
+    for(let i=0; i<120; i++) particles.push(new Particle());
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = "rgba(212,175,55,0.15)";
-        ctx.beginPath();
         particles.forEach(p => {
-            p.update();
+            p.update(); p.draw();
             particles.forEach(p2 => {
-                let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                if (dist < 100) {
-                    ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y);
+                let d = Math.hypot(p.x - p2.x, p.y - p2.y);
+                if(d < 110) {
+                    ctx.strokeStyle = `rgba(212,175,55,${0.15 - d/110})`;
+                    ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
                 }
             });
         });
-        ctx.stroke();
         requestAnimationFrame(animate);
     }
     animate();
 
-    // 3. IA & SEGURIDAD
-    const audio = document.getElementById('bg-music');
-    const video = document.getElementById('webcam');
-    navigator.mediaDevices.getUserMedia({ video: true }).then(s => { video.srcObject = s; });
-    document.body.addEventListener('click', () => { if(audio.paused) audio.play(); }, { once: true });
+    // 3. IA Y CHISTES
+    const chistes = [
+        "¿Qué le dice un .gif a un .jpg? Ánimate hombre.",
+        "¿Por qué los programadores confunden Halloween con Navidad? Porque Oct 31 == Dec 25.",
+        "Hay 10 tipos de personas en el mundo: las que saben binario y las que no.",
+        "Un SQL entra en un bar, se acerca a dos mesas y pregunta: ¿Puedo unirme?",
+        "¿Qué es un terapeuta? 1024 gigapeutas."
+    ];
 
     function speak(t) {
         const m = new SpeechSynthesisUtterance(t);
-        m.lang = 'es-ES'; m.rate = 0.9; m.pitch = 0.6;
+        m.lang = 'es-ES'; m.rate = 0.95; m.pitch = 0.7;
         window.speechSynthesis.speak(m);
     }
 
     setInterval(() => {
         document.getElementById('system-clock').innerText = new Date().toLocaleTimeString();
-        document.getElementById('telemetry').innerText = `DATA_STREAM: ${Math.random().toString(16).slice(2,10).toUpperCase()} | SIG: ${Math.floor(Math.random()*100)}%`;
+        document.getElementById('telemetry').innerText = `NODE_CORE: ${Math.random().toString(36).substring(7).toUpperCase()} | HEAT: 32°C | UPTIME: CONFIRMED`;
     }, 1000);
 
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const rec = Recognition ? new Recognition() : null;
     if(rec){
         rec.lang = 'es-ES';
-        function startListening() { rec.start(); speak("Escuchando comandos"); }
+        function startListening() { rec.start(); speak("Oído atento, Director."); }
         rec.onresult = (e) => { document.getElementById('user-input').value = e.results[0][0].transcript; sendMessage(); };
     }
 
@@ -176,10 +190,19 @@
         const i = document.getElementById('user-input');
         const b = document.getElementById('chat-box');
         if(!i.value) return;
-        b.innerHTML += `<p style="color:#888">> ${i.value}</p>`;
-        let r = "Comando procesado en el núcleo de seguridad Terrence.m.";
-        if(i.value.toLowerCase().includes("hola")) r = "Director, bienvenido al sistema de máxima seguridad. Todos los protocolos están en nivel Dios.";
-        setTimeout(() => { b.innerHTML += `<p style="color:var(--gold)">[IA]: ${r}</p>`; b.scrollTop = b.scrollHeight; speak(r); }, 500);
+        b.innerHTML += `<p style="color:#666">> REQ: ${i.value}</p>`;
+        const val = i.value.toLowerCase();
+        let r = "Orden recibida. Procesando en el núcleo Omega.";
+
+        if(val.includes("hola")) r = "Saludos, Director Terrence. El sistema Omega está operando a máxima potencia. ¿Listo para dominar la red?";
+        if(val.includes("chiste")) r = chistes[Math.floor(Math.random()*chistes.length)];
+        if(val.includes("seguridad")) r = "Escudos cuánticos activos. El firewall nivel Dios está bloqueando 1.2 millones de intentos de acceso por segundo.";
+
+        setTimeout(() => { 
+            b.innerHTML += `<p style="color:var(--gold)">[OMEGA_IA]: ${r}</p>`; 
+            b.scrollTop = b.scrollHeight; 
+            speak(r); 
+        }, 500);
         i.value = "";
     }
 </script>
