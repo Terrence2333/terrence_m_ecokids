@@ -1,152 +1,220 @@
 {% extends "base.html" %}
 {% block content %}
 <div id="boot-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Orbitron', sans-serif; color: var(--gold);">
-    <div style="width: 70px; height: 70px; border: 2px solid #111; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); border-radius: 50%; animation: spin 0.5s linear infinite;"></div>
-    <div id="boot-log" style="width: 500px; height: 250px; font-size: 0.6rem; color: var(--neon); overflow: hidden; margin-top: 20px; border: 1px solid rgba(212,175,55,0.3); padding: 15px; background: rgba(2,2,2,0.9); font-family: monospace;"></div>
-    <p style="font-size: 0.5rem; letter-spacing: 10px; margin-top: 20px; color: var(--gold);">STATE DEFENSE SYSTEM: ACTIVE</p>
+    <div style="width: 100px; height: 100px; border: 1px solid #111; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 0.3s linear infinite; box-shadow: 0 0 50px rgba(212,175,55,0.4);"></div>
+    <div id="boot-log" style="width: 600px; height: 250px; font-size: 0.6rem; color: var(--neon); overflow: hidden; margin-top: 40px; border: 1px solid rgba(212,175,55,0.3); padding: 20px; background: rgba(2,2,2,0.95); font-family: 'Courier New', monospace; box-shadow: inset 0 0 20px #000;"></div>
+    <p style="font-size: 0.6rem; letter-spacing: 15px; margin-top: 25px; color: var(--gold); text-shadow: 0 0 10px var(--gold);">GOD_MODE_INJECTION: 100%</p>
 </div>
 
-<div id="defense-alert" style="position: fixed; inset: 0; background: rgba(255,0,0,0.1); z-index: 9999; display: none; pointer-events: none; border: 10px solid red; animation: pulseRed 0.5s infinite;"></div>
+<div id="defense-overlay" style="position: fixed; inset: 0; z-index: 9999; display: none; pointer-events: none; background: radial-gradient(circle, transparent, rgba(255,0,0,0.2)); border: 20px solid red; animation: glitch 0.1s infinite;"></div>
 
 <div id="master-bg" style="position: fixed; inset: 0; z-index: -1; background: #000; overflow: hidden;">
-    <canvas id="neural-canvas" style="position: absolute; inset: 0;"></canvas>
-    <div id="radar-circle" style="position: absolute; top: 50%; left: 50%; width: 800px; height: 800px; border: 1px solid rgba(212,175,55,0.1); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none;"></div>
+    <canvas id="main-canvas" style="position: absolute; inset: 0;"></canvas>
+    <div style="position: absolute; inset: 0; background: radial-gradient(circle at center, transparent 20%, #000 100%);"></div>
 </div>
 
-<div id="main-interface" style="display: flex; justify-content: space-between; padding: 40px 5%; align-items: flex-start; height: 85vh; position: relative; z-index: 1; opacity: 0; transition: opacity 2s;">
+<div id="main-interface" style="display: flex; justify-content: space-between; padding: 30px 4%; align-items: flex-start; height: 90vh; position: relative; z-index: 1; opacity: 0; transition: opacity 3s;">
     
-    <div style="width: 300px;">
-        <div style="position: relative; width: 240px; height: 240px; border: 3px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); box-shadow: 0 0 60px rgba(212,175,55,0.2);">
-            <div style="position: absolute; width: 108%; height: 108%; border: 1px dashed var(--gold); border-radius: 50%; animation: spin 30s linear infinite;"></div>
-            <h1 style="font-size: 2.2rem; font-weight: 900; text-shadow: 0 0 30px var(--gold);">TERRENCE M</h1>
+    <div style="width: 320px;">
+        <div style="position: relative; width: 250px; height: 250px; border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); box-shadow: 0 0 60px rgba(212,175,55,0.25);">
+            <div style="position: absolute; width: 115%; height: 115%; border: 1px solid rgba(212,175,55,0.1); border-radius: 50%; animation: spin 60s linear infinite;"></div>
+            <div style="position: absolute; width: 105%; height: 105%; border: 2px dashed var(--gold); border-radius: 50%; animation: spin 20s linear infinite;"></div>
+            <h1 style="font-size: 2.2rem; font-weight: 900; text-shadow: 0 0 30px var(--gold); letter-spacing: -1px;">TERRENCE M</h1>
         </div>
-        <div style="margin-top: 30px; background: rgba(5,5,5,0.95); border: 1px solid var(--gold); border-left: 8px solid var(--gold); padding: 20px; font-size: 0.7rem;">
-            <p style="color:var(--gold); font-weight: 900;">[ NUCLEAR_AUTH_CODE: ENABLED ]</p>
-            <p style="color:var(--neon); margin: 8px 0;">> DEFCON LEVEL: 1</p>
-            <p style="color:#fff; margin: 8px 0;">> ENCRYPTION: OMEGA-NONCE</p>
-            <div id="threat-monitor" style="color:red; font-size: 0.6rem; margin-top: 15px; font-weight: bold; border-top: 1px solid #333; padding-top: 10px;">SCANNING FOR INTRUSIONS...</div>
-        </div>
-    </div>
-
-    <div style="display: flex; gap: 30px; align-self: center;">
-        <div class="stat-hex">
-            <span style="font-size: 3rem; color: var(--gold); font-weight: 900;">4500+</span><br>
-            <small>REDUCTION_CO2</small>
-        </div>
-        <div class="stat-hex">
-            <span style="font-size: 3rem; color: var(--gold); font-weight: 900;">1250+</span><br>
-            <small>MEGAWATTS_GEN</small>
-        </div>
-    </div>
-
-    <div style="text-align: right; width: 300px;">
-        <div style="border: 2px solid var(--gold); padding: 10px; background: #000; box-shadow: 0 0 50px #000;">
-            <div style="width: 100%; height: 200px; border: 2px solid var(--neon); position: relative; overflow: hidden;">
-                <video id="webcam" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover; filter: brightness(1.2) sepia(1);"></video>
-                <div style="position: absolute; top:0; width:100%; height:2px; background:var(--neon); animation: scanLine 2s infinite linear;"></div>
+        
+        <div style="margin-top: 30px; background: rgba(0,0,0,0.9); border: 1px solid #222; border-left: 10px solid var(--gold); padding: 20px; box-shadow: 15px 15px 40px #000;">
+            <p style="color:var(--gold); font-weight: 900; font-size: 0.8rem; margin:0;">[ SYSTEM_RANK: OMNIPOTENT ]</p>
+            <div id="sat-status" style="margin-top:15px; font-family: monospace; font-size: 0.65rem; color: var(--neon);">
+                > UPLINK: SAT-CH-09 [ONLINE]<br>
+                > LATENCY: 0.0001ms<br>
+                > ENCRYPTION: 4096-BIT
             </div>
-            <p style="color:var(--neon); font-size: 0.6rem; font-weight: 900; margin-top: 10px; letter-spacing: 2px;">SECURE_SCAN: DIRECTOR_AUTH</p>
+            <div id="random-codes" style="color:rgba(212,175,55,0.3); font-size: 0.55rem; font-family: monospace; margin-top: 15px; height: 40px; overflow: hidden;"></div>
         </div>
-        <div id="mic-btn" style="margin-top: 20px; background: var(--gold); padding: 20px; border-radius: 5px; cursor: pointer; display: inline-block;" onclick="startListening()">
-            <svg viewBox="0 0 24 24" width="30" fill="#000"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 30px; flex: 1;">
+        <div style="display: flex; gap: 20px;">
+            <div class="stat-box">
+                <span class="stat-val">4500+</span><br>
+                <small>CO2_NEUTRALIZED</small>
+            </div>
+            <div class="stat-box">
+                <span class="stat-val">1250+</span><br>
+                <small>GW_DISTRIBUTED</small>
+            </div>
+        </div>
+        <div style="border: 1px solid var(--gold); padding: 5px 20px; border-radius: 20px; background: rgba(212,175,55,0.1);">
+            <span style="color:var(--gold); font-size: 0.6rem; letter-spacing: 5px; animation: pulse 1.5s infinite;">GLOBAL_SCAN_ACTIVE</span>
+        </div>
+    </div>
+
+    <div style="text-align: right; width: 320px;">
+        <div style="border: 2px solid var(--gold); padding: 10px; background: #000; position: relative;">
+            <div style="width: 100%; height: 220px; border: 1px solid var(--neon); position: relative; overflow: hidden;">
+                <video id="webcam" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover; filter: brightness(1.1) contrast(1.2) grayscale(0.8);"></video>
+                <div style="position: absolute; inset: 20px; border: 1px solid rgba(0,255,0,0.3); pointer-events: none;"></div>
+                <div style="position: absolute; top:0; width:100%; height:2px; background:var(--neon); animation: scanLine 2s infinite linear; box-shadow: 0 0 20px var(--neon);"></div>
+            </div>
+            <p style="color:var(--neon); font-size: 0.6rem; font-weight: 900; margin-top: 10px;">ID_VERIFICATION: DIRECTOR_LEVEL_7</p>
+        </div>
+        
+        <div id="mic-btn" style="margin-top: 20px; background: var(--gold); padding: 25px; border-radius: 50%; cursor: pointer; display: inline-block; box-shadow: 0 0 30px rgba(212,175,55,0.4);" onclick="startListening()">
+            <svg viewBox="0 0 24 24" width="30" fill="#000"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
         </div>
     </div>
 </div>
 
-<div id="chat-container" style="position: fixed; bottom: 80px; right: 30px; width: 380px; background: rgba(2,2,2,0.98); border: 2px solid var(--gold); z-index: 1000;">
-    <div style="background: var(--gold); color: #000; padding: 12px; font-weight: 900; font-size: 0.75rem; display: flex; justify-content: space-between;">
-        <span>STATE_DEFENSE_CORE_V.7</span>
+<div id="chat-container" style="position: fixed; bottom: 80px; right: 30px; width: 400px; background: rgba(0,0,0,0.95); border: 2px solid var(--gold); z-index: 1000; box-shadow: 0 0 100px #000;">
+    <div style="background: var(--gold); color: #000; padding: 15px; font-weight: 900; font-size: 0.8rem; display: flex; justify-content: space-between; border-bottom: 2px solid #fff;">
+        <span>SINGULARITY_CORE_TM</span>
         <span id="system-clock">00:00:00</span>
     </div>
-    <div id="chat-box" style="height: 220px; overflow-y: auto; padding: 15px; font-size: 0.7rem; color: #fff; font-family: monospace;"></div>
+    <div id="chat-box" style="height: 250px; overflow-y: auto; padding: 20px; font-size: 0.75rem; color: #fff; font-family: 'Courier New', monospace; line-height: 1.6; background: rgba(5,5,5,0.5);"></div>
     <div style="display: flex; border-top: 2px solid var(--gold);">
-        <input type="text" id="user-input" placeholder="ORDEN TACTICA..." style="flex:1; background:#000; border:none; color:#fff; padding:15px; font-family:'Orbitron'; font-size:0.7rem; outline:none;">
-        <button onclick="sendMessage()" style="background:var(--gold); border:none; padding:15px; cursor:pointer; font-weight:900;">RUN</button>
+        <input type="text" id="user-input" placeholder="INGRESE COMANDO DE ESTADO..." style="flex:1; background:#000; border:none; color:#fff; padding:20px; font-family:'Orbitron'; font-size:0.75rem; outline:none;">
+        <button onclick="sendMessage()" style="background:var(--gold); border:none; padding:20px 30px; cursor:pointer; font-weight:900; color:#000;">EXE</button>
     </div>
 </div>
 
 <style>
     :root { --gold: #d4af37; --neon: #00ff00; }
-    .stat-hex { background: rgba(0,0,0,0.8); padding: 30px; border: 1px solid var(--gold); text-align: center; clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%); }
+    .stat-box { background: rgba(0,0,0,0.9); padding: 30px; border: 1px solid var(--gold); text-align: center; min-width: 180px; box-shadow: inset 0 0 20px rgba(212,175,55,0.1); }
+    .stat-val { font-size: 3.5rem; color: var(--gold); font-weight: 900; text-shadow: 0 0 20px var(--gold); }
     @keyframes spin { 100% { transform: rotate(360deg); } }
     @keyframes scanLine { 0% { top: 0; } 100% { top: 100%; } }
-    @keyframes pulseRed { 0% { opacity: 0.1; } 50% { opacity: 0.4; } 100% { opacity: 0.1; } }
-    .glitch { animation: glitchAnim 0.1s infinite; }
-    @keyframes glitchAnim { 0% { transform: translate(0); } 50% { transform: translate(-5px, 5px); } 100% { transform: translate(5px, -5px); } }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 100% { transform: translate(0); } }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: var(--gold); }
 </style>
 
 <script>
-    // 1. PROTOCOLOS DE DEFENSA (CONTRA HACKERS)
-    document.addEventListener('contextmenu', e => { e.preventDefault(); defenseTrigger("CLICK DERECHO DETECTADO"); });
-    document.onkeydown = e => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) { e.preventDefault(); defenseTrigger("INTENTO DE INSPECCIÓN DE CÓDIGO"); return false; } };
+    // 1. DEFENSA ACTIVA (ANTI-INTRUSIÓN)
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.onkeydown = e => {
+        if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
+            triggerSecurityAlert();
+            return false;
+        }
+    };
 
-    function defenseTrigger(type) {
-        document.getElementById('defense-alert').style.display = 'block';
-        speak("¡Alerta! Intento de intrusión detectado. Protocolo Aegis activado.");
-        setTimeout(() => document.getElementById('defense-alert').style.display = 'none', 2000);
-        const b = document.getElementById('chat-box');
-        b.innerHTML += `<p style="color:red">[!!!] INTRUSIÓN: ${type}</p>`;
-        b.scrollTop = b.scrollHeight;
+    function triggerSecurityAlert() {
+        document.getElementById('defense-overlay').style.display = 'block';
+        speak("¡ALERTA! Intento de brecha detectado. Ejecutando protocolo de contra-espionaje.");
+        const box = document.getElementById('chat-box');
+        box.innerHTML += `<p style="color:red; font-weight:bold;">[!!!] SECURITY BREACH ATTEMPT DETECTED [!!!]</p>`;
+        box.innerHTML += `<p style="color:red;">> TRACING IP...</p>`;
+        setTimeout(() => document.getElementById('defense-overlay').style.display = 'none', 3000);
     }
 
-    // 2. SECUENCIA DE ARRANQUE MILITAR
-    const logArr = [
-        "ACCEDIENDO A RED DEFENSA NACIONAL...",
-        "ACTIVANDO FIREWALL PERIMETRAL...",
-        "ENLACE SATELITAL ENCRIPTADO...",
-        "NIVEL DE AMENAZA: DEFCON 1",
-        "BIENVENIDO, DIRECTOR TERRENCE M."
-    ];
-    let lIdx = 0;
-    function boot() {
-        if(lIdx < logArr.length){
-            document.getElementById('boot-log').innerHTML += `<p>> ${logArr[lIdx]}</p>`;
-            lIdx++;
-            document.getElementById('boot-progress').style.width = (lIdx * 20) + "%";
-            setTimeout(boot, 800);
-        } else {
-            setTimeout(() => {
-                document.getElementById('boot-screen').style.display = 'none';
-                document.getElementById('main-interface').style.opacity = '1';
-                speak("Sistema de defensa de estado activo. Director, el mundo está bajo su supervisión.");
-            }, 1000);
+    // 2. MOTOR GRÁFICO (GLOBO + NEURAL)
+    const canvas = document.getElementById('main-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+
+    let globeRot = 0;
+    let particles = [];
+    const particleCount = 100;
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+        }
+        update() {
+            this.x += this.vx; this.y += this.vy;
+            if(this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if(this.y < 0 || this.y > canvas.height) this.vy *= -1;
         }
     }
-    window.onload = boot;
+    for(let i=0; i<particleCount; i++) particles.push(new Particle());
 
-    // 3. FONDO NEURAL REACTIVO
-    const canvas = document.getElementById('neural-canvas');
-    const ctx = canvas.getContext('2d');
-    let pts = [];
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    for(let i=0; i<100; i++) pts.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5});
     function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "rgba(0,0,0,0.15)";
+        ctx.fillRect(0,0,canvas.width, canvas.height);
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2 + 50;
+        const rad = 280;
+
+        // Globo Táctico
         ctx.strokeStyle = "rgba(212,175,55,0.2)";
-        pts.forEach(p => {
-            p.x += p.vx; p.y += p.vy;
-            if(p.x<0 || p.x>canvas.width) p.vx*=-1; if(p.y<0 || p.y>canvas.height) p.vy*=-1;
-            pts.forEach(p2 => {
-                if(Math.hypot(p.x-p2.x, p.y-p2.y)<100){ ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); }
-            });
+        for(let i=0; i<12; i++) {
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY, Math.abs(rad * Math.sin(globeRot + i)), rad, 0, 0, Math.PI*2);
+            ctx.stroke();
+        }
+        globeRot += 0.005;
+
+        // Red Neural
+        particles.forEach((p, i) => {
+            p.update();
+            ctx.fillStyle = "rgba(212,175,55,0.3)";
+            ctx.beginPath(); ctx.arc(p.x, p.y, 1, 0, Math.PI*2); ctx.fill();
+            for(let j=i+1; j<particles.length; j++) {
+                let d = Math.hypot(p.x - particles[j].x, p.y - particles[j].y);
+                if(d < 120) {
+                    ctx.strokeStyle = `rgba(212,175,55,${0.1 - d/1200})`;
+                    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+                }
+            }
         });
         requestAnimationFrame(draw);
     }
     draw();
 
-    // 4. IA Y CHISTES DE HACKERS
-    const chistes = ["¿Por qué los hackers no van al campo? Porque hay muchos bugs.", "¿Cómo se despiden los informáticos? Con un control-zeta.", "Un programador se va a dormir y pone dos vasos en la mesilla: uno lleno por si tiene sed y otro vacío por si no la tiene."];
-    function speak(t) { const m = new SpeechSynthesisUtterance(t); m.lang='es-ES'; m.rate=0.85; m.pitch=0.6; window.speechSynthesis.speak(m); }
+    // 3. SECUENCIA DE BOOT
+    const bootMsgs = [
+        "INITIALIZING OMNI-KERNEL V.9...",
+        "OVERRIDING NATIONAL FIREWALLS...",
+        "SAT-LINK ESTABLISHED: CHANNEL_TERRENCE",
+        "LOADING AI HUMOR & DEFENSE ALGORITHMS...",
+        "BIOMETRIC SCAN COMPLETE.",
+        "ACCESS GRANTED: WELCOME GOD-DIRECTOR."
+    ];
+    let bIdx = 0;
+    function runBoot() {
+        if(bIdx < bootMsgs.length){
+            document.getElementById('boot-log').innerHTML += `<p style="margin:5px 0">> ${bootMsgs[bIdx]}</p>`;
+            bIdx++;
+            document.getElementById('boot-progress').style.width = (bIdx * 16.6) + "%";
+            setTimeout(runBoot, 700);
+        } else {
+            setTimeout(() => {
+                document.getElementById('boot-screen').style.display = 'none';
+                document.getElementById('main-interface').style.opacity = '1';
+                speak("Sistemas al cien por ciento. Director Terrence, el mundo espera sus órdenes.");
+            }, 1000);
+        }
+    }
+    window.onload = runBoot;
+
+    // 4. IA, CHISTES Y TELEMETRÍA
+    const chistes = [
+        "¿Por qué un hacker no puede ser arrestado? Porque tiene un buen 'escape'.",
+        "¿Cuál es el postre favorito de un hacker? Las cookies, pero solo si son de sesión.",
+        "¿Qué le dice un servidor a otro? ¿Vienes mucho por este nodo?"
+    ];
+
+    function speak(t) {
+        const m = new SpeechSynthesisUtterance(t);
+        m.lang = 'es-ES'; m.rate = 0.85; m.pitch = 0.55;
+        window.speechSynthesis.speak(m);
+    }
+
     setInterval(() => {
         document.getElementById('system-clock').innerText = new Date().toLocaleTimeString();
-        document.getElementById('threat-monitor').innerText = `GLOBAL_THREAT: ${Math.floor(Math.random()*10)}% | SENSORS: ACTIVE`;
+        document.getElementById('random-codes').innerText = Math.random().toString(16).repeat(5);
     }, 1000);
 
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const rec = Recognition ? new Recognition() : null;
     if(rec){
         rec.lang = 'es-ES';
-        function startListening() { rec.start(); speak("Escuchando órdenes de estado."); }
+        function startListening() { rec.start(); speak("Escuchando comando supremo."); }
         rec.onresult = (e) => { document.getElementById('user-input').value = e.results[0][0].transcript; sendMessage(); };
     }
 
@@ -154,13 +222,22 @@
         const i = document.getElementById('user-input');
         const b = document.getElementById('chat-box');
         if(!i.value) return;
-        b.innerHTML += `<p style="color:#666">> CMD: ${i.value}</p>`;
+        b.innerHTML += `<p style="color:#777">> REQ: ${i.value}</p>`;
         const val = i.value.toLowerCase();
-        let r = "Protocolo Terrence.m ejecutado con éxito.";
-        if(val.includes("hola")) r = "Director, los sistemas de armas defensivas y satélites están sincronizados.";
+        let r = "Protocolo de Singularidad Terrence.m ejecutado exitosamente.";
+
+        if(val.includes("hola")) r = "Director, todos los nodos globales están bajo su control absoluto. Es un buen día para liderar.";
         if(val.includes("chiste")) r = chistes[Math.floor(Math.random()*chistes.length)];
-        if(val.includes("ataque")) { r = "Iniciando contramedidas electrónicas. Bloqueando acceso extranjero."; document.getElementById('main-interface').classList.add('glitch'); setTimeout(() => document.getElementById('main-interface').classList.remove('glitch'), 1000); }
-        setTimeout(() => { b.innerHTML += `<p style="color:var(--gold)">[SYSTEM]: ${r}</p>`; b.scrollTop = b.scrollHeight; speak(r); }, 500);
+        if(val.includes("ataque") || val.includes("defensa")) {
+            r = "Iniciando despliegue de cortafuegos cuánticos. Ninguna potencia extranjera puede penetrar su código.";
+            document.getElementById('main-interface').style.animation = "glitch 0.2s 3";
+        }
+
+        setTimeout(() => { 
+            b.innerHTML += `<p style="color:var(--gold)">[SINGULARITY_IA]: ${r}</p>`; 
+            b.scrollTop = b.scrollHeight; 
+            speak(r); 
+        }, 500);
         i.value = "";
     }
 </script>
