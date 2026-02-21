@@ -1,88 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERRENCE M - SERVICIOS ÉLITE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --gold: #d4af37; --neon: #00ff00; --dark: #000; --blue: #4da6ff; }
-        body { background-color: var(--dark) !important; color: #fff; margin: 0; font-family: 'Orbitron', sans-serif; overflow: hidden; }
-        
-        /* Marco Dorado */
-        .frame { position: fixed; border: 1px solid var(--gold); z-index: 99; pointer-events: none; }
-        .top-frame { top: 155px; left: 0; right: 0; border-bottom: 2px solid var(--gold); }
-        .bottom-frame { bottom: 45px; left: 15px; right: 15px; border-top: 2px solid var(--gold); height: 80px; border-left: 2px solid var(--gold); }
-
-        /* Navegación */
-        nav { display: flex; justify-content: center; gap: 80px; padding: 60px 0; background: #000; }
-        nav a { color: var(--gold); text-decoration: none; font-weight: 900; font-size: 1.5rem; letter-spacing: 12px; }
-
-        /* Contenido Servicios */
-        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; padding: 100px 6%; }
-        .service-card { border: 2px solid var(--gold); padding: 30px; background: rgba(15,15,15,0.9); text-align: center; transition: 0.3s; }
-        .service-card:hover { background: var(--gold); color: #000; transform: translateY(-10px); }
-        .service-card h3 { font-size: 1.2rem; margin-bottom: 15px; letter-spacing: 3px; }
-        .service-card p { font-size: 0.7rem; color: #ccc; line-height: 1.6; }
-
-        /* Scanner Derecha */
-        .fixed-scanner { position: fixed; right: 4%; top: 250px; border: 2px solid var(--gold); padding: 20px; background: #000; width: 220px; }
-        .eye-circle { width: 140px; height: 140px; border: 3px solid var(--neon); border-radius: 50%; margin: 0 auto; box-shadow: 0 0 15px var(--neon); overflow: hidden; }
-
-        footer { position: fixed; bottom: 15px; width: 100%; text-align: center; color: #444; font-size: 0.8rem; letter-spacing: 8px; }
-    </style>
-</head>
-<body>
-    <div class="frame top-frame"></div>
-    <div class="frame bottom-frame"></div>
-
-    <nav>
-        <a href="/">HOME</a><a href="/unidades">UNIDADES</a><a href="/nodos">NODOS</a><a href="/imperio">IMPERIO</a><a href="/pagos">PAGOS</a>
-    </nav>
-
-    <div class="services-grid">
-        <div class="service-card">
-            <h3>NODO ENERGÉTICO</h3>
-            <p>Implementación de celdas fotovoltaicas de alta eficiencia para el imperio terrence.m.</p>
-        </div>
-        <div class="service-card">
-            <h3>SEGURIDAD KERNEL</h3>
-            <p>Protección de datos mediante protocolos de encriptación nivel OMNIPRESENTE.</p>
-        </div>
-        <div class="service-card">
-            <h3>ECO-INGENIERÍA</h3>
-            <p>Diseño sustentable avanzado con reducción certificada de CO2.</p>
-        </div>
+{% extends "base.html" %}
+{% block title %}Servicios{% endblock %}
+{% block content %}
+<h1>Nuestras Unidades</h1>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 40px;">
+    <div class="card" style="padding: 20px;">
+        <h2 style="color: var(--gold);">Solar Tech</h2>
+        <p>Implementación de granjas fotovoltaicas de alta eficiencia.</p>
     </div>
-
-    <div class="fixed-scanner">
-        <div class="eye-circle"><video id="vid" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover;"></video></div>
-        <div style="color:var(--neon); font-size: 0.6rem; margin-top: 15px; text-align: center;">AUTH: DIRECTOR_M</div>
+    <div class="card" style="padding: 20px;">
+        <h2 style="color: var(--gold);">Eco Infra</h2>
+        <p>Infraestructura civil con materiales 100% biodegradables.</p>
     </div>
-
-    <footer>INTERFACE SUPREMA | terrence.m | SECURITY: GOD_LEVEL | 2026</footer>
-
-    <script>
-        // Cámara activa
-        navigator.mediaDevices.getUserMedia({video:true}).then(s=>{document.getElementById('vid').srcObject=s;});
-
-        // INICIO PROTOCOLO SEGURIDAD 750 LÍNEAS FÍSICAS
-        const L = (n) => `SERVICE_LN_${n}_OK`;
-        const l1=L(1);const l2=L(2);const l3=L(3);const l4=L(4);const l5=L(5);const l6=L(6);const l7=L(7);const l8=L(8);const l9=L(9);const l10=L(10);
-        const l11=L(11);const l12=L(12);const l13=L(13);const l14=L(14);const l15=L(15);const l16=L(16);const l17=L(17);const l18=L(18);const l19=L(19);const l20=L(20);
-        const l21=L(21);const l22=L(22);const l23=L(23);const l24=L(24);const l25=L(25);const l26=L(26);const l27=L(27);const l28=L(28);const l29=L(29);const l30=L(30);
-        const l31=L(31);const l32=L(32);const l33=L(33);const l34=L(34);const l35=L(35);const l36=L(36);const l37=L(37);const l38=L(38);const l39=L(39);const l40=L(40);
-        const l41=L(41);const l42=L(42);const l43=L(43);const l44=L(44);const l45=L(45);const l46=L(46);const l47=L(47);const l48=L(48);const l49=L(49);const l50=L(50);
-        const l51=L(51);const l52=L(52);const l53=L(53);const l54=L(54);const l55=L(55);const l56=L(56);const l57=L(57);const l58=L(58);const l59=L(59);const l60=L(60);
-        const l61=L(61);const l62=L(62);const l63=L(63);const l64=L(64);const l65=L(65);const l66=L(66);const l67=L(67);const l68=L(68);const l69=L(69);const l70=L(70);
-        const l71=L(71);const l72=L(72);const l73=L(73);const l74=L(74);const l75=L(75);const l76=L(76);const l77=L(77);const l78=L(78);const l79=L(79);const l80=L(80);
-        const l81=L(81);const l82=L(82);const l83=L(83);const l84=L(84);const l85=L(85);const l86=L(86);const l87=L(87);const l88=L(88);const l89=L(89);const l90=L(90);
-        const l91=L(91);const l92=L(92);const l93=L(93);const l94=L(94);const l95=L(95);const l96=L(96);const l97=L(97);const l98=L(98);const l99=L(99);const l100=L(100);
-        const l101=L(101);const l102=L(102);const l103=L(103);const l104=L(104);const l105=L(105);const l106=L(106);const l107=L(107);const l108=L(108);const l109=L(109);const l110=L(110);
-        const l111=L(111);const l112=L(112);const l113=L(113);const l114=L(114);const l115=L(115);const l116=L(116);const l117=L(117);const l118=L(118);const l119=L(119);const l120=L(120);
-        // ... (Repetir el patrón hasta l750 para el peso total del archivo) ...
-        const l745=L(745);const l746=L(746);const l747=L(747);const l748=L(748);const l749=L(749);const l750=L(750);
-        console.log("SERVICIOS_SYNC_COMPLETE");
-    </script>
-</body>
-</html>
+    <div class="card" style="padding: 20px;">
+        <h2 style="color: var(--gold);">Consultoría</h2>
+        <p>Auditoría de impacto ambiental para grandes industrias.</p>
+    </div>
+</div>
+{% endblock %}
