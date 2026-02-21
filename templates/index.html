@@ -1,171 +1,186 @@
 {% extends "base.html" %}
 {% block content %}
+<div id="boot-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Orbitron', sans-serif; color: var(--gold);">
+    <div style="width: 50px; height: 50px; border: 5px solid #222; border-top: 5px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
+    <div id="boot-log" style="width: 450px; height: 200px; font-size: 0.6rem; color: var(--neon); overflow: hidden; background: rgba(10,10,10,0.9); padding: 10px; border: 1px solid #333;"></div>
+    <div style="width: 300px; height: 4px; background: #111; margin-top: 15px; border-radius: 10px; overflow: hidden;">
+        <div id="boot-progress" style="width: 0%; height: 100%; background: var(--gold); transition: width 0.1s;"></div>
+    </div>
+    <p style="font-size: 0.5rem; letter-spacing: 5px; margin-top: 10px; color: var(--gold);">AUTHORIZING: DIRECTOR_TERRENCE_M</p>
+</div>
+
 <audio id="bg-music" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
 
 <div id="master-bg" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; overflow: hidden;">
-    <div style="position: absolute; width: 200%; height: 200%; background-image: 
-        radial-gradient(circle, rgba(212,175,55,0.1) 1px, transparent 1px),
-        linear-gradient(rgba(212,175,55,0.05) 1px, transparent 1px), 
-        linear-gradient(90deg, rgba(212,175,55,0.05) 1px, transparent 1px); 
-        background-size: 80px 80px, 40px 40px, 40px 40px; 
-        transform: perspective(1000px) rotateX(50deg); animation: gridMove 25s linear infinite;">
-    </div>
-    <div class="pulse-ring"></div>
-    <canvas id="matrix-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.15;"></canvas>
+    <canvas id="neural-canvas" style="position: absolute; top:0; left:0; width:100%; height:100%;"></canvas>
+    <div style="position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, transparent 20%, #000 90%);"></div>
 </div>
 
-<div id="main-interface" style="display: flex; justify-content: space-between; padding: 60px 8% 0 8%; align-items: flex-start; height: 75vh; position: relative; z-index: 1;">
-    <div>
-        <div style="position: relative; width: 220px; height: 220px; border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); box-shadow: 0 0 30px rgba(212,175,55,0.3);">
-            <div style="position: absolute; width: 105%; height: 105%; border: 1px dashed var(--gold); border-radius: 50%; animation: spin 15s linear infinite;"></div>
-            <h1 style="font-size: 2rem; letter-spacing: -2px; font-weight: 900; text-shadow: 0 0 15px var(--gold);">TERRENCE M</h1>
-        </div>
-        
-        <div style="margin-top: 25px; background: rgba(0,0,0,0.9); padding: 15px; border-left: 4px solid var(--gold); font-size: 0.75rem; border: 1px solid rgba(212,175,55,0.3); box-shadow: 5px 5px 15px rgba(0,0,0,0.5);">
-            <p style="color:var(--gold); margin: 5px 0; font-weight: bold;">[ KERNEL_AUTH: OMNI-DIRECTOR ]</p>
-            <p style="color:var(--neon); margin: 5px 0;">> UPLINK: SAT_ENCRYPT_ENABLED</p>
-            <p style="color:#fff; margin: 5px 0;">> SECURITY: MILITARY_LEVEL_7</p>
-            <div id="live-coords" style="color:rgba(212,175,55,0.6); font-family:monospace; margin-top: 10px;">LAT: 0.00 | LNG: 0.00</div>
-        </div>
-    </div>
-
-    <div style="display: flex; flex-direction: column; gap: 20px; align-self: center;">
-        <div style="text-align: center; background: rgba(0,0,0,0.8); padding: 20px; border: 1px solid var(--gold); border-radius: 0 20px 0 20px;">
-            <span style="display: block; font-size: 2.2rem; color: var(--gold); font-weight: 900;">4500+</span>
-            <small style="color: #888; font-size: 0.6rem; letter-spacing: 2px;">CO2 REDUCIDO</small>
-        </div>
-        <div style="text-align: center; background: rgba(0,0,0,0.8); padding: 20px; border: 1px solid var(--gold); border-radius: 20px 0 20px 0;">
-            <span style="display: block; font-size: 2.2rem; color: var(--gold); font-weight: 900;">1250+</span>
-            <small style="color: #888; font-size: 0.6rem; letter-spacing: 2px;">MW GENERADOS</small>
-        </div>
-    </div>
-
-    <div style="text-align: right;">
-        <div style="border: 2px solid var(--gold); padding: 10px; background: #000; width: 220px; box-shadow: 0 0 40px #000;">
-            <div style="width: 100%; height: 160px; border: 2px solid var(--neon); overflow: hidden; position: relative;">
-                <video id="webcam" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover; filter: brightness(1.2) contrast(1.3) grayscale(0.5);"></video>
-                <div style="position: absolute; top:0; left:0; width:100%; height:2px; background:var(--neon); animation: scanLine 3s infinite linear;"></div>
-            </div>
-            <p style="color:var(--neon); margin-top: 10px; font-size: 0.6rem; font-weight: 900; letter-spacing: 2px;">ID_VERIFIED: TERRENCE.M</p>
-        </div>
-        
-        <div id="mic-btn" style="margin-top: 20px; background: var(--gold); padding: 15px; border-radius: 5px; display: inline-block; cursor: pointer; transition: 0.3s; border: 1px solid #fff;" onclick="startListening()">
-            <svg viewBox="0 0 24 24" width="30" fill="#000"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-            <p style="margin:0; font-size:0.5rem; color:#000; font-weight:900;">VOICE_COMMAND</p>
-        </div>
-    </div>
-</div>
-
-<div id="chat-container" style="position: fixed; bottom: 80px; right: 30px; width: 340px; background: rgba(5,5,5,0.95); border: 2px solid var(--gold); z-index: 200; box-shadow: 0 0 50px rgba(0,0,0,1);">
-    <div style="background: var(--gold); color: #000; padding: 10px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; display: flex; justify-content: space-between;">
-        <span>TERMINAL TÁCTICA V.4</span>
-        <span id="system-time" style="font-size: 0.6rem;">00:00:00</span>
-    </div>
-    <div id="chat-box" style="height: 180px; overflow-y: auto; padding: 15px; font-size: 0.75rem; color: #fff; font-family: 'Courier New', monospace;">
-        <p style="color: var(--neon)">[SISTEMA]: Blindaje militar activo. Coordenadas sincronizadas. Bienvenido, Director.</p>
-    </div>
-    <div style="display: flex; border-top: 2px solid var(--gold);">
-        <input type="text" id="user-input" placeholder="INGRESAR CÓDIGO..." style="flex: 1; background: #000; border: none; color: #fff; padding: 12px; font-family: 'Orbitron'; font-size: 0.7rem; outline: none;">
-        <button onclick="sendMessage()" style="background: var(--gold); border: none; padding: 12px 20px; cursor: pointer; font-weight: 900;">EXEC</button>
-    </div>
-</div>
-
-<style> 
-    @keyframes spin { 100% { transform: rotate(360deg); } } 
-    @keyframes scanLine { 0% { top: 0; } 100% { top: 100%; } }
-    @keyframes gridMove { from { transform: perspective(1000px) rotateX(50deg) translateY(0); } to { transform: perspective(1000px) rotateX(50deg) translateY(80px); } }
-    @keyframes pulseEffect { 0% { transform: scale(0.5); opacity: 0; } 50% { opacity: 0.4; } 100% { transform: scale(2.8); opacity: 0; } }
-    @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-3px, 3px); } 40% { transform: translate(-3px, -3px); } 60% { transform: translate(3px, 3px); } 100% { transform: translate(0); } }
+<div id="main-interface" style="display: flex; justify-content: space-between; padding: 40px 5%; align-items: flex-start; height: 85vh; position: relative; z-index: 1; opacity: 0; transition: opacity 2s;">
     
-    .pulse-ring { position: absolute; top: 50%; left: 50%; width: 500px; height: 500px; border: 1px solid var(--gold); border-radius: 50%; transform: translate(-50%, -50%); animation: pulseEffect 8s infinite; pointer-events: none; }
-    .glitch-active { animation: glitch 0.1s infinite; filter: hue-rotate(45deg); }
-    ::-webkit-scrollbar { width: 3px; }
+    <div style="width: 250px;">
+        <div style="position: relative; width: 220px; height: 220px; border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); box-shadow: 0 0 40px rgba(212,175,55,0.2);">
+            <div style="position: absolute; width: 110%; height: 110%; border: 1px dashed var(--gold); border-radius: 50%; animation: spin 20s linear infinite; opacity: 0.5;"></div>
+            <h1 style="font-size: 1.8rem; letter-spacing: -2px; font-weight: 900; text-shadow: 0 0 20px var(--gold);">TERRENCE M</h1>
+        </div>
+        <div style="margin-top: 30px; background: rgba(0,0,0,0.9); border: 1px solid var(--gold); border-left: 5px solid var(--gold); padding: 15px; font-size: 0.7rem;">
+            <p style="color:var(--gold); font-weight: 900;">[ STATUS: GOD_LEVEL ]</p>
+            <p style="color:var(--neon); margin: 5px 0;">> SECURITY: TIER_10</p>
+            <p style="color:#fff; margin: 5px 0;">> FIREWALL: OMNI_SHIELD</p>
+            <div id="telemetry" style="color:rgba(212,175,55,0.5); font-family:monospace; font-size: 0.6rem; margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 30px; align-self: center;">
+        <div style="text-align: center; background: rgba(10,10,10,0.8); padding: 30px; border: 1px solid var(--gold); box-shadow: inset 0 0 20px rgba(212,175,55,0.1);">
+            <span style="display: block; font-size: 3rem; color: var(--gold); font-weight: 900; text-shadow: 0 0 15px var(--gold);">4500+</span>
+            <small style="color: #666; letter-spacing: 3px;">CO2_OFFSET</small>
+        </div>
+        <div style="text-align: center; background: rgba(10,10,10,0.8); padding: 30px; border: 1px solid var(--gold); box-shadow: inset 0 0 20px rgba(212,175,55,0.1);">
+            <span style="display: block; font-size: 3rem; color: var(--gold); font-weight: 900; text-shadow: 0 0 15px var(--gold);">1250+</span>
+            <small style="color: #666; letter-spacing: 3px;">MW_CLEAN_ENERGY</small>
+        </div>
+    </div>
+
+    <div style="text-align: right; width: 250px;">
+        <div style="border: 2px solid var(--gold); padding: 10px; background: #000; box-shadow: 0 0 50px rgba(0,0,0,1);">
+            <div style="width: 100%; height: 180px; border: 2px solid var(--neon); position: relative; overflow: hidden;">
+                <video id="webcam" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover; filter: sepia(1) hue-rotate(90deg);"></video>
+                <div style="position: absolute; top:0; left:0; width:100%; height:2px; background:var(--neon); animation: scanLine 2s infinite linear;"></div>
+                <div style="position: absolute; border: 1px solid var(--neon); width: 40px; height: 40px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.5;"></div>
+            </div>
+            <p style="color:var(--neon); font-size: 0.6rem; font-weight: 900; margin-top: 10px;">ID: TERRENCE_M [VERIFIED]</p>
+        </div>
+        <div id="mic-btn" style="margin-top: 20px; background: var(--gold); padding: 15px; border-radius: 5px; cursor: pointer; display: inline-block; transition: 0.3s;" onclick="startListening()">
+            <svg viewBox="0 0 24 24" width="30" fill="#000"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+    </div>
+</div>
+
+<div id="chat-container" style="position: fixed; bottom: 80px; right: 30px; width: 350px; background: rgba(0,0,0,0.95); border: 2px solid var(--gold); z-index: 1000; box-shadow: 0 0 60px #000;">
+    <div style="background: var(--gold); color: #000; padding: 12px; font-weight: 900; font-size: 0.7rem; display: flex; justify-content: space-between;">
+        <span>CORE_INTEL_SYSTEM_V.5</span>
+        <span id="system-clock">00:00:00</span>
+    </div>
+    <div id="chat-box" style="height: 180px; overflow-y: auto; padding: 15px; font-size: 0.7rem; color: #fff; font-family: 'Courier New', monospace; line-height: 1.5;"></div>
+    <div style="display: flex; border-top: 2px solid var(--gold);">
+        <input type="text" id="user-input" placeholder="EXECUTE_COMMAND..." style="flex:1; background:#000; border:none; color:#fff; padding:15px; font-family:'Orbitron'; font-size:0.7rem; outline:none;">
+        <button onclick="sendMessage()" style="background:var(--gold); border:none; padding:15px 25px; cursor:pointer; font-weight:900;">GO</button>
+    </div>
+</div>
+
+<style>
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes scanLine { 0% { top: 0; } 100% { top: 100%; } }
+    @keyframes pulse { 0% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
+    ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-thumb { background: var(--gold); }
 </style>
 
 <script>
-    const audio = document.getElementById('bg-music');
-    const video = document.getElementById('webcam');
-    const ui = document.getElementById('main-interface');
-
-    // Acceso a Cámara
-    navigator.mediaDevices.getUserMedia({ video: true }).then(s => { video.srcObject = s; });
-
-    // Activación de Audio
-    document.body.addEventListener('click', () => { if(audio.paused) audio.play(); }, { once: true });
-
-    // VOZ DE IA
-    function speak(text) {
-        const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'es-ES'; msg.rate = 0.95; msg.pitch = 0.75;
-        window.speechSynthesis.speak(msg);
-    }
-
-    // RELOJ Y COORDENADAS DINÁMICAS
-    setInterval(() => {
-        const now = new Date();
-        document.getElementById('system-time').innerText = now.toLocaleTimeString();
-        document.getElementById('live-coords').innerText = `LAT: ${(Math.random()*90).toFixed(4)} | LNG: ${(Math.random()*180).toFixed(4)}`;
-    }, 1000);
-
-    // LLUVIA DE DATOS (MATRIX)
-    const canvas = document.getElementById('matrix-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const chars = "01ABCDEF";
-    const fontSize = 10;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
-
-    function drawMatrix() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#d4af37";
-        ctx.font = fontSize + "px monospace";
-        for (let i = 0; i < drops.length; i++) {
-            const text = chars.charAt(Math.floor(Math.random() * chars.length));
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
+    // 1. BOOT SEQUENCE
+    const messages = [
+        "SISTEMA OPERATIVO INICIADO...",
+        "CARGANDO KERNEL TERRENCE_M...",
+        "ACTIVANDO FIREWALL NIVEL DIOS...",
+        "SINCRONIZANDO SATELITES...",
+        "ACCESO BIOMETRICO CONFIRMADO.",
+        "BIENVENIDO, DIRECTOR."
+    ];
+    let mIdx = 0;
+    function runBoot() {
+        if(mIdx < messages.length){
+            document.getElementById('boot-log').innerHTML += `<p style="margin:5px 0">> ${messages[mIdx]}</p>`;
+            mIdx++;
+            document.getElementById('boot-progress').style.width = (mIdx * 16.6) + "%";
+            setTimeout(runBoot, 700);
+        } else {
+            setTimeout(() => {
+                document.getElementById('boot-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('boot-screen').style.display = 'none';
+                    document.getElementById('main-interface').style.opacity = '1';
+                    speak("Sistemas operativos. Nivel Dios activado.");
+                }, 1000);
+            }, 500);
         }
     }
-    setInterval(drawMatrix, 50);
+    window.onload = runBoot;
 
-    // CHATBOT Y VOZ
+    // 2. NEURAL BACKGROUND (ELIMINA EL BLANCO)
+    const canvas = document.getElementById('neural-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+        }
+        update() {
+            this.x += this.vx; this.y += this.vy;
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
+    }
+    for(let i=0; i<100; i++) particles.push(new Particle());
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "rgba(212,175,55,0.15)";
+        ctx.beginPath();
+        particles.forEach(p => {
+            p.update();
+            particles.forEach(p2 => {
+                let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                if (dist < 100) {
+                    ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y);
+                }
+            });
+        });
+        ctx.stroke();
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    // 3. IA & SEGURIDAD
+    const audio = document.getElementById('bg-music');
+    const video = document.getElementById('webcam');
+    navigator.mediaDevices.getUserMedia({ video: true }).then(s => { video.srcObject = s; });
+    document.body.addEventListener('click', () => { if(audio.paused) audio.play(); }, { once: true });
+
+    function speak(t) {
+        const m = new SpeechSynthesisUtterance(t);
+        m.lang = 'es-ES'; m.rate = 0.9; m.pitch = 0.6;
+        window.speechSynthesis.speak(m);
+    }
+
+    setInterval(() => {
+        document.getElementById('system-clock').innerText = new Date().toLocaleTimeString();
+        document.getElementById('telemetry').innerText = `DATA_STREAM: ${Math.random().toString(16).slice(2,10).toUpperCase()} | SIG: ${Math.floor(Math.random()*100)}%`;
+    }, 1000);
+
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const rec = Recognition ? new Recognition() : null;
-    if(rec) {
+    if(rec){
         rec.lang = 'es-ES';
-        function startListening() { rec.start(); document.getElementById('mic-btn').style.background = "#00ff00"; }
-        rec.onresult = (e) => {
-            document.getElementById('user-input').value = e.results[0][0].transcript;
-            document.getElementById('mic-btn').style.background = "var(--gold)";
-            sendMessage();
-        };
+        function startListening() { rec.start(); speak("Escuchando comandos"); }
+        rec.onresult = (e) => { document.getElementById('user-input').value = e.results[0][0].transcript; sendMessage(); };
     }
 
     function sendMessage() {
-        const input = document.getElementById('user-input');
-        const box = document.getElementById('chat-box');
-        if (!input.value) return;
-
-        box.innerHTML += `<p style="color: #666">> CMD: ${input.value}</p>`;
-        const cmd = input.value.toLowerCase();
-        let resp = "Protocolo Terrence.m ejecutado con éxito.";
-
-        if(cmd.includes("hola")) resp = "Director, bienvenido al núcleo operativo. Todos los satélites reportan estado estable.";
-        if(cmd.includes("peligro") || cmd.includes("alerta")) {
-            resp = "¡BRECHA DETECTADA! Bloqueando puertos y activando contramedidas militares.";
-            ui.classList.add('glitch-active');
-            setTimeout(() => ui.classList.remove('glitch-active'), 2000);
-        }
-
-        setTimeout(() => {
-            box.innerHTML += `<p style="color: var(--gold)">[TM-IA]: ${resp}</p>`;
-            box.scrollTop = box.scrollHeight;
-            speak(resp);
-        }, 400);
-        input.value = "";
+        const i = document.getElementById('user-input');
+        const b = document.getElementById('chat-box');
+        if(!i.value) return;
+        b.innerHTML += `<p style="color:#888">> ${i.value}</p>`;
+        let r = "Comando procesado en el núcleo de seguridad Terrence.m.";
+        if(i.value.toLowerCase().includes("hola")) r = "Director, bienvenido al sistema de máxima seguridad. Todos los protocolos están en nivel Dios.";
+        setTimeout(() => { b.innerHTML += `<p style="color:var(--gold)">[IA]: ${r}</p>`; b.scrollTop = b.scrollHeight; speak(r); }, 500);
+        i.value = "";
     }
 </script>
 {% endblock %}
