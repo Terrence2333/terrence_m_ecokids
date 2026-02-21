@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+{% block content %}
+<canvas id="noise-canvas" style="position: fixed; inset: 0; z-index: 20000; pointer-events: none; opacity: 0; transition: opacity 0.1s;"></canvas>
+<div id="boot-screen" style="position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Orbitron', sans-serif; color: #d4af37;">
+    <div id="loader-ring" style="width: 120px; height: 120px; border: 2px solid #ff4500; border-radius: 50%; animation: spin 0.5s linear infinite;"></div>
+    <p style="letter-spacing: 10px; margin-top: 20px; font-size: 0.7rem;">ESTABLECIENDO ENLACE CON RENDER...</p>
+</div>
+<div id="main-interface" style="padding: 50px; opacity: 0; visibility: hidden; transition: opacity 1s;">
+    <h1 style="color: #d4af37; font-family: 'Orbitron'; font-weight: 900;">TERRENCE M - LIVE SYSTEM</h1>
+    <div style="background: rgba(255,69,0,0.1); border: 1px solid #ff4500; padding: 25px; color: #fff; font-family: monospace;">
+        <p>[ SISTEMA OPERATIVO EN LÍNEA ]</p>
+        <p>> PROTOCOLO DE PÁNICO: [ESC] ACTIVO</p>
+        <p>> RADAR SÍSMICO: CALIBRADO</p>
+    </div>
+</div>
+<script>
+    window.addEventListener('keydown', (e) => { 
+        if (e.key === "Escape") {
+            document.getElementById('noise-canvas').style.opacity = "1";
+            setTimeout(() => { location.reload(); }, 500);
+        }
+    });
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('main-interface').style.visibility = 'visible';
+            document.getElementById('main-interface').style.opacity = '1';
+        }, 1500);
+    });
+</script>
+{% endblock %}
+{% extends "base.html" %}
+{% block content %}
+<style>
+    /* VARIABLES Y RESET */
+    :root {
+        --gold: #d4af37;
+        --orange-tm: #ff4500;
+        --glow-green: #0f0;
+        --blue-shield: #0055ff;
+    }
+
+    body, html {
+        background: #000 !important;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        font-family: 'Orbitron', sans-serif;
+        color: #fff;
+    }
+
+    /* CAPAS DE RENDERIZADO */
+    #background-layer { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+    #ui-main-layer { position: relative; z-index: 10; width: 100%; height: 100vh; display: flex; flex-direction: column; }
+    #overlay-layer { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
+
+    /* NAVEGACIÓN SUPERIOR (IMAGEN 1) */
+    nav.top-nav {
+        height: 80px;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        letter-spacing: 10px;
+        font-weight: 900;
+        color: var(--gold);
+        text-transform: uppercase;
+    }
+
+    /* CONTENIDO CENTRAL */
+    .hero-section {
+        flex: 1;
+        padding: 60px 8%;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        align-items: center;
+    }
+
+    .identity-block h1 {
+        font-size: 5rem;
+        margin: 0;
+        letter-spacing: 15px;
+        font-weight: 900;
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .system-logs {
+        margin-top: 40px;
+        font-family: monospace;
+        color: var(--gold);
+        font-size: 0.9rem;
+        line-height: 2.2;
+    }
+
+    .stats-container {
+        display: flex;
+        gap: 60px;
+        margin-top: 50px;
+    }
+
+    .stat-box { text-align: center; }
+    .stat-value { font-size: 2.5rem; font-weight: 900; color: var(--gold); }
+    .stat-label { font-size: 0.6rem; color: #666; letter-spacing: 2px; text-transform: uppercase; }
+
+    /* BLOQUE DE CÁMARA (IMAGEN 1) */
+    .director-monitor {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .camera-frame {
+        border: 1px solid var(--gold);
+        padding: 25px;
+        background: rgba(10, 10, 10, 0.9);
+        position: relative;
+    }
+
+    .video-circle {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 4px solid var(--glow-green);
+        overflow: hidden;
+        box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+    }
+
+    /* CHAT Y SISTEMA VIVO (AÑADIDOS) */
+    #chat-dock {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 380px;
+        background: rgba(0, 0, 0, 0.95);
+        border: 1px solid var(--orange-tm);
+        pointer-events: auto;
+    }
+
+    #chat-display { height: 160px; overflow-y: auto; padding: 15px; font-family: monospace; font-size: 0.75rem; }
+    
+    /* BOTÓN ESCUDO (IMAGEN 1) */
+    .shield-btn {
+        position: fixed;
+        bottom: 40px;
+        left: 40px;
+        width: 70px;
+        height: 70px;
+        background: #b59431; /* Color dorado de la captura */
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        animation: pulse 2s infinite;
+        pointer-events: auto;
+    }
+
+    /* ANIMACIONES */
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    @keyframes laser { 0% { top: -10%; opacity: 0; } 50% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
+    .laser-line {
+        position: absolute; width: 100%; height: 2px; background: var(--orange-tm);
+        box-shadow: 0 0 20px var(--orange-tm); animation: laser 8s linear infinite;
+    }
+</style>
+
+<div id="background-layer">
+    <div class="laser-line"></div>
+    <canvas id="globe-canvas"></canvas>
+</div>
+
+<div id="ui-main-layer">
+    <nav class="top-nav">
+        <span>Home</span><span>Unidades</span><span>Nodos</span><span>Imperio</span><span>Pagos</span>
+    </nav>
+
+    <main class="hero-section">
+        <div class="identity-block">
+            <h1>TERRENCE M</h1>
+            <div class="system-logs">
+                <p>> KERNEL: 0x8899-OMNI-V3</p>
+                <p>> INGENIERÍA SUSTENTABLE DE ÉLITE</p>
+                <p>> STATUS: <span style="color: var(--glow-green)">STABLE</span></p>
+                <p>> X: <span id="dyn-x">0491</span> | Y: <span id="dyn-y">0155</span></p>
+                <p>> SECURE_TIME: <span id="timer">0s</span></p>
+                <p>> NODES: ACTIVE_PROTECTION</p>
+                <p><a href="#" style="color: #3366ff; text-decoration: none;">ACCEDER AL NÚCLEO</a></p>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-value">4500+</div>
+                    <div class="stat-label">CO2 Reducido</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">1250+</div>
+                    <div class="stat-label">MW Generados</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="director-monitor">
+            <div class="camera-frame">
+                <div class="video-circle">
+                    <video id="webcam" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover;"></video>
+                </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <p style="color: var(--glow-green); font-size: 0.7rem; margin: 0; font-weight: 900;">ID: DIRECTOR_TERRENCE_M</p>
+                    <p style="color: #444; font-size: 0.5rem; margin: 5px 0 0;">AUTH_LVL: OMNIPRESENTE</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div style="width: 100%; height: 100px; border-top: 1px solid #222; display: flex; align-items: center; padding-left: 8%;">
+        <div style="border: 2px solid var(--gold); padding: 15px 40px; background: rgba(0,0,0,0.5);">
+            <h2 style="margin: 0; letter-spacing: 15px; font-size: 1.5rem;">SHIELD: STANDBY</h2>
+        </div>
+    </div>
+</div>
+
+<div id="chat-dock">
+    <div style="background: var(--orange-tm); color: #000; padding: 10px; font-weight: 900; font-size: 0.8rem;">TERRENCE.M_COMMANDER</div>
+    <div id="chat-display"></div>
+    <canvas id="seismo-canvas" style="width: 100%; height: 40px; background: #000; border-top: 1px solid #222;"></canvas>
+    <div style="display: flex; border-top: 1px solid var(--orange-tm);">
+        <input type="text" id="cmd-input" placeholder="ORDEN DE MANDO..." style="flex: 1; background: #000; border: none; color: #fff; padding: 15px; outline: none; font-family: monospace;">
+        <button onclick="processCommand()" style="background: var(--orange-tm); border: none; padding: 0 20px; font-weight: 900; cursor: pointer;">EXE</button>
+    </div>
+</div>
+
+<div class="shield-btn">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="#0055ff">
+        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+    </svg>
+</div>
+
+<script>
+    // 1. INICIALIZACIÓN DE CÁMARA
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+        document.getElementById('webcam').srcObject = stream;
+    });
+
+    // 2. RADAR GLOBO (FONDO)
+    const gCvs = document.getElementById('globe-canvas'), gCtx = gCvs.getContext('2d');
+    gCvs.width = window.innerWidth; gCvs.height = window.innerHeight;
+    let rot = 0;
+    function drawGlobe() {
+        gCtx.fillStyle = "black"; gCtx.fillRect(0,0,gCvs.width, gCvs.height);
+        const x = gCvs.width/2, y = gCvs.height/2, r = 320;
+        gCtx.strokeStyle = "rgba(212, 175, 55, 0.15)";
+        for(let i=0; i<18; i++) {
+            gCtx.beginPath(); gCtx.ellipse(x, y, Math.abs(r * Math.sin(rot + i)), r, 0, 0, Math.PI*2); gCtx.stroke();
+        }
+        rot += 0.002; requestAnimationFrame(drawGlobe);
+    }
+    drawGlobe();
+
+    // 3. SISMÓGRAFO
+    const sCvs = document.getElementById('seismo-canvas'), sCtx = sCvs.getContext('2d');
+    let sx = 0;
+    function drawSeismo() {
+        sCtx.fillStyle = "rgba(0,0,0,0.1)"; sCtx.fillRect(0,0,sCvs.width, sCvs.height);
+        sCtx.strokeStyle = "#ff4500"; sCtx.beginPath(); sCtx.moveTo(sx, 20);
+        sCtx.lineTo(sx+2, 20+(Math.random()*20-10)); sCtx.stroke(); sx += 2;
+        if(sx > sCvs.width) sx = 0;
+        requestAnimationFrame(drawSeismo);
+    }
+    drawSeismo();
+
+    // 4. CHATBOY INTELIGENTE
+    const chat = document.getElementById('chat-display');
+    function log(msg, color="#fff") {
+        chat.innerHTML += `<div style="color:${color}; margin-bottom: 8px;">> ${msg}</div>`;
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    function processCommand() {
+        const input = document.getElementById('cmd-input');
+        const val = input.value.toLowerCase();
+        if(!val) return;
+        
+        log(val, "#666");
+        if(val.includes("status")) log("SISTEMA ESTABLE. TODAS LAS UNIDADES EN LÍNEA.", "#0f0");
+        else if(val.includes("shield")) log("ESCUDO EN MODO STANDBY. ESPERANDO AUTORIZACIÓN.", "#0055ff");
+        else log("COMANDO NO RECONOCIDO. REINTENTE.");
+        
+        input.value = "";
+    }
+
+    // 5. DATOS DINÁMICOS
+    let seconds = 0;
+    setInterval(() => {
+        seconds++;
+        document.getElementById('timer').innerText = seconds + "s";
+        document.getElementById('dyn-x').innerText = (Math.random() * 9999).toFixed(0).padStart(4, '0');
+        document.getElementById('dyn-y').innerText = (Math.random() * 9999).toFixed(0).padStart(4, '0');
+    }, 1000);
+
+    log("INICIALIZANDO TERRENCE.M_OS...", "#d4af37");
+    setTimeout(() => log("CONEXIÓN ESTABLECIDA CON RENDER_NODE.", "#d4af37"), 1000);
+</script>
+{% endblock %}
