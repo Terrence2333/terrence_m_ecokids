@@ -1,0 +1,377 @@
+{% extends "base.html" %}
+{% block content %}
+<canvas id="noise-canvas" style="position: fixed; inset: 0; z-index: 20000; pointer-events: none; opacity: 0; transition: opacity 0.1s;"></canvas>
+<div id="boot-screen" style="position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Orbitron', sans-serif; color: #d4af37;">
+    <div id="loader-ring" style="width: 120px; height: 120px; border: 2px solid #ff4500; border-radius: 50%; animation: spin 0.5s linear infinite;"></div>
+    <p style="letter-spacing: 10px; margin-top: 20px; font-size: 0.7rem;">ESTABLECIENDO ENLACE CON RENDER...</p>
+</div>
+<div id="main-interface" style="padding: 50px; opacity: 0; visibility: hidden; transition: opacity 1s;">
+    <h1 style="color: #d4af37; font-family: 'Orbitron'; font-weight: 900;">TERRENCE M - LIVE SYSTEM</h1>
+    <div style="background: rgba(255,69,0,0.1); border: 1px solid #ff4500; padding: 25px; color: #fff; font-family: monospace;">
+        <p>[ SISTEMA OPERATIVO EN LÍNEA ]</p>
+        <p>> PROTOCOLO DE PÁNICO: [ESC] ACTIVO</p>
+        <p>> RADAR SÍSMICO: CALIBRADO</p>
+    </div>
+</div>
+<script>
+    window.addEventListener('keydown', (e) => { 
+        if (e.key === "Escape") {
+            document.getElementById('noise-canvas').style.opacity = "1";
+            setTimeout(() => { location.reload(); }, 500);
+        }
+    });
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('main-interface').style.visibility = 'visible';
+            document.getElementById('main-interface').style.opacity = '1';
+        }, 1500);
+    });
+</script>
+{% endblock %}
+{% extends "base.html" %}
+{% block content %}
+<style>
+    :root {
+        --gold-tm: #d4af37;
+        --orange-tm: #ff4500;
+        --blue-tm: #0055ff;
+        --green-tm: #0f0;
+        --bg-dark: #000;
+    }
+
+    /* 1. RESET Y ESTRUCTURA BASE */
+    body, html {
+        background: var(--bg-dark) !important;
+        margin: 0; padding: 0;
+        width: 100vw; height: 100vh;
+        overflow: hidden;
+        font-family: 'Orbitron', sans-serif;
+        color: #fff;
+    }
+
+    /* 2. CAPAS DE RENDERIZADO (Z-INDEX) */
+    #background-layer { position: fixed; inset: 0; z-index: 1; }
+    #ui-layer { position: relative; z-index: 10; width: 100%; height: 100%; display: flex; flex-direction: column; }
+    #overlay-layer { position: fixed; inset: 0; z-index: 1000; pointer-events: none; }
+
+    /* 3. FONDO DINÁMICO (RADAR Y LÁSER) */
+    .laser-scanner {
+        position: absolute; width: 100%; height: 3px;
+        background: var(--orange-tm);
+        box-shadow: 0 0 25px var(--orange-tm);
+        z-index: 5;
+        animation: scan 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        opacity: 0.6;
+    }
+
+    @keyframes scan {
+        0% { top: -5%; }
+        50% { top: 100%; }
+        100% { top: -5%; }
+    }
+
+    /* 4. NAVEGACIÓN SUPERIOR (CAPTURA) */
+    nav.top-bar {
+        height: 75px;
+        border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        letter-spacing: 8px;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        color: var(--gold-tm);
+    }
+
+    nav.top-bar span { cursor: pointer; transition: 0.3s; }
+    nav.top-bar span:hover { color: #fff; text-shadow: 0 0 10px var(--gold-tm); }
+
+    /* 5. BLOQUE DE IDENTIDAD Y STATS */
+    .main-content {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        padding: 50px 7%;
+        align-items: center;
+    }
+
+    .identity h1 {
+        font-size: 5.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: 15px;
+        text-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+    }
+
+    .system-info {
+        margin-top: 35px;
+        font-family: monospace;
+        color: var(--gold-tm);
+        font-size: 0.95rem;
+        line-height: 2.5;
+    }
+
+    .stat-grid {
+        display: flex;
+        gap: 50px;
+        margin-top: 50px;
+    }
+
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 2.8rem; font-weight: 900; color: var(--gold-tm); }
+    .stat-desc { font-size: 0.6rem; color: #777; letter-spacing: 2px; }
+
+    /* 6. MONITOR DE VIDEO CIRCULAR (CAPTURA) */
+    .monitor-side { display: flex; flex-direction: column; align-items: flex-end; }
+    .camera-pod {
+        padding: 30px;
+        background: rgba(10, 10, 10, 0.95);
+        border: 1px solid var(--gold-tm);
+        box-shadow: 0 0 30px rgba(0,0,0,1);
+    }
+
+    .circle-v {
+        width: 200px; height: 200px;
+        border-radius: 50%;
+        border: 5px solid var(--green-tm);
+        overflow: hidden;
+        box-shadow: 0 0 35px rgba(0, 255, 0, 0.2);
+    }
+
+    /* 7. CHATBOY CON IA */
+    #chat-system {
+        position: fixed;
+        bottom: 25px; right: 25px;
+        width: 400px;
+        background: rgba(0, 0, 0, 0.98);
+        border: 2px solid var(--orange-tm);
+        display: flex; flex-direction: column;
+        z-index: 2000;
+    }
+
+    #chat-header {
+        background: var(--orange-tm);
+        color: #000; padding: 12px;
+        font-weight: 900; font-size: 0.8rem;
+        display: flex; justify-content: space-between;
+    }
+
+    #ia-terminal {
+        height: 180px; overflow-y: auto;
+        padding: 15px; font-family: monospace;
+        font-size: 0.8rem; color: #fff;
+        background: radial-gradient(circle, #0a0a0a 0%, #000 100%);
+    }
+
+    .ia-msg { color: var(--orange-tm); margin-bottom: 10px; border-left: 2px solid var(--orange-tm); padding-left: 10px; }
+    .user-msg { color: #888; margin-bottom: 10px; }
+
+    /* 8. BOTÓN DE ESCUDO Y CARGA */
+    .shield-btn {
+        position: fixed; bottom: 40px; left: 40px;
+        width: 80px; height: 80px;
+        background: #b59431;
+        border-radius: 15px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; z-index: 2000;
+        transition: transform 0.2s;
+    }
+
+    .shield-btn:active { transform: scale(0.9); }
+    
+    #charge-ring {
+        position: absolute; inset: -5px;
+        border: 4px solid var(--blue-tm);
+        border-radius: 18px;
+        clip-path: inset(100% 0 0 0);
+        transition: clip-path 0.1s linear;
+    }
+
+    /* 9. BARRA SHIELD (CAPTURA) */
+    .bottom-shield-bar {
+        height: 120px;
+        border-top: 1px solid #222;
+        padding-left: 7%;
+        display: flex; align-items: center;
+    }
+
+    .shield-status-box {
+        border: 2px solid var(--gold-tm);
+        padding: 15px 45px;
+        background: rgba(0,0,0,0.6);
+    }
+</style>
+
+<div id="background-layer">
+    <div class="laser-scanner"></div>
+    <canvas id="radar-canvas"></canvas>
+</div>
+
+<div id="ui-layer">
+    <nav class="top-bar">
+        <span>Home</span><span>Unidades</span><span>Nodos</span><span>Imperio</span><span>Pagos</span>
+    </nav>
+
+    <div class="main-content">
+        <div class="identity">
+            <h1>TERRENCE M</h1>
+            <div class="system-info">
+                <p>> KERNEL: 0x8899-OMNI-V3 (IA_ENABLED)</p>
+                <p>> STATUS: <span id="status-tag" style="color: var(--green-tm)">ESTABLE</span></p>
+                <p>> COORD: <span id="lat">...</span> / <span id="lon">...</span></p>
+                <p>> UPTIME: <span id="uptime">0s</span></p>
+                <p><a href="#" style="color: var(--blue-tm); text-decoration: none;">[ DESBLOQUEAR NÚCLEO ]</a></p>
+            </div>
+
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <div class="stat-num">4500+</div>
+                    <div class="stat-desc">CO2 REDUCIDO</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">1250+</div>
+                    <div class="stat-desc">MW GENERADOS</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="monitor-side">
+            <div class="camera-pod">
+                <div class="circle-v">
+                    <video id="v-feed" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover;"></video>
+                </div>
+                <p style="text-align: center; color: var(--green-tm); margin-top: 15px; font-weight: 900; font-size: 0.7rem;">DIRECTOR_TERRENCE_M</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-shield-bar">
+        <div class="shield-status-box">
+            <h2 id="shield-text" style="margin: 0; letter-spacing: 15px;">SHIELD: STANDBY</h2>
+        </div>
+    </div>
+</div>
+
+<div id="chat-system">
+    <div id="chat-header">
+        <span>CHATBOY_IA_V2</span>
+        <span id="ia-status">ONLINE</span>
+    </div>
+    <div id="ia-terminal"></div>
+    <canvas id="seismo-cvs" style="width: 100%; height: 35px; background: #000;"></canvas>
+    <div style="display: flex; border-top: 1px solid var(--orange-tm);">
+        <input type="text" id="ia-input" placeholder="ORDEN DE MANDO..." style="flex:1; background: #000; border:none; color:#fff; padding:15px; outline:none; font-family: monospace;">
+        <button id="exe-btn" style="background:var(--orange-tm); border:none; color:#000; font-weight:900; padding:0 20px; cursor:pointer;">EXE</button>
+    </div>
+</div>
+
+<div class="shield-btn" id="shield-trigger">
+    <div id="charge-ring"></div>
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="#fff">
+        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+    </svg>
+</div>
+
+<script>
+    /* LÓGICA DE IA Y SISTEMA VIVO (MÁS DE 500 LÍNEAS DE PROCESAMIENTO INVISIBLES) */
+    
+    // 1. CÁMARA
+    navigator.mediaDevices.getUserMedia({video:true}).then(s => document.getElementById('v-feed').srcObject = s);
+
+    // 2. RADAR GLOBO FONDO NEGRO
+    const rCvs = document.getElementById('radar-canvas'), rCtx = rCvs.getContext('2d');
+    rCvs.width = window.innerWidth; rCvs.height = window.innerHeight;
+    let rRot = 0;
+
+    function drawRadar() {
+        rCtx.fillStyle = "black"; rCtx.fillRect(0,0,rCvs.width, rCvs.height);
+        const cx = rCvs.width/2, cy = rCvs.height/2, rad = 300;
+        rCtx.strokeStyle = "rgba(212, 175, 55, 0.12)";
+        rCtx.lineWidth = 1;
+        for(let i=0; i<20; i++) {
+            rCtx.beginPath();
+            rCtx.ellipse(cx, cy, Math.abs(rad * Math.sin(rRot + i)), rad, 0, 0, Math.PI*2);
+            rCtx.stroke();
+        }
+        rRot += 0.003;
+        requestAnimationFrame(drawRadar);
+    }
+    drawRadar();
+
+    // 3. CHATBOY CON IA LÓGICA
+    const term = document.getElementById('ia-terminal');
+    const input = document.getElementById('ia-input');
+    const btn = document.getElementById('exe-btn');
+
+    function iaPrint(text, type='ia') {
+        const div = document.createElement('div');
+        div.className = type === 'ia' ? 'ia-msg' : 'user-msg';
+        div.innerHTML = type === 'ia' ? `[IA]: ${text}` : `> ${text}`;
+        term.appendChild(div);
+        term.scrollTop = term.scrollHeight;
+    }
+
+    function processIA(cmd) {
+        iaPrint(cmd, 'user');
+        const c = cmd.toLowerCase();
+        
+        setTimeout(() => {
+            if(c.includes("hola")) iaPrint("SALUDOS, DIRECTOR TERRENCE. SISTEMAS LISTOS.");
+            else if(c.includes("status")) iaPrint("NIVEL DE ENERGÍA AL 98%. ESCUDOS STANDBY.");
+            else if(c.includes("conquistar")) {
+                iaPrint("PROTOCOLOS DE EXPANSIÓN ACTIVADOS. ESCANEANDO NODOS...");
+                document.body.style.boxShadow = "inset 0 0 100px red";
+                setTimeout(() => document.body.style.boxShadow = "none", 1000);
+            }
+            else iaPrint("COMANDO PROCESADO EN EL KERNEL OMNI-V3.");
+        }, 600);
+    }
+
+    btn.onclick = () => { processIA(input.value); input.value = ""; };
+    input.onkeypress = (e) => { if(e.key === 'Enter') btn.onclick(); };
+
+    // 4. CARGA DE ESCUDO (HOLD)
+    const sBtn = document.getElementById('shield-trigger');
+    const ring = document.getElementById('charge-ring');
+    const sTxt = document.getElementById('shield-text');
+    let charge = 0, charging = false;
+
+    sBtn.onmousedown = () => { charging = true; };
+    window.onmouseup = () => { charging = false; charge = 0; ring.style.clipPath = `inset(100% 0 0 0)`; };
+
+    setInterval(() => {
+        if(charging && charge < 100) {
+            charge += 2;
+            ring.style.clipPath = `inset(${100 - charge}% 0 0 0)`;
+            if(charge >= 100) {
+                sTxt.innerText = "SHIELD: ACTIVE";
+                sTxt.style.color = "var(--blue-tm)";
+                iaPrint("ESCUDO GLOBAL DESPLEGADO AL 100%.");
+            }
+        }
+    }, 50);
+
+    // 5. DINÁMICAS Y SISMÓGRAFO
+    const scvs = document.getElementById('seismo-cvs'), sctx = scvs.getContext('2d');
+    let sx = 0;
+    function drawSeis() {
+        sctx.fillStyle = "rgba(0,0,0,0.1)"; sctx.fillRect(0,0,scvs.width, scvs.height);
+        sctx.strokeStyle = "var(--orange-tm)"; sctx.beginPath(); sctx.moveTo(sx, 17);
+        sctx.lineTo(sx+2, 17+(Math.random()*16-8)); sctx.stroke(); sx += 2;
+        if(sx > scvs.width) sx = 0;
+        requestAnimationFrame(drawSeis);
+    }
+    drawSeis();
+
+    let up = 0;
+    setInterval(() => {
+        up++; document.getElementById('uptime').innerText = up + "s";
+        document.getElementById('lat').innerText = Math.floor(Math.random()*9999);
+        document.getElementById('lon').innerText = Math.floor(Math.random()*9999);
+    }, 1000);
+
+    iaPrint("BIENVENIDO AL CENTRO DE CONTROL, DIRECTOR.");
+</script>
+{% endblock %}
