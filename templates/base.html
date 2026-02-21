@@ -11,38 +11,39 @@
         * { cursor: none !important; }
         body { background: var(--dark); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; }
         
-        /* CAPAS DE FONDO - z-index bajo para no bloquear clics */
+        /* Capas de Fondo Blindadas */
         #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
         .bg-mesh { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px); background-size: 60px 60px; z-index: 0; pointer-events: none; }
         .perimeter-scan { position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid rgba(212,175,55,0.1); pointer-events: none; z-index: 2; }
         .scan-line-v { position: absolute; width: 1px; height: 100%; background: var(--gold); left: 50%; animation: scan-v 8s infinite linear; opacity: 0.3; pointer-events: none; }
         @keyframes scan-v { 0% { left: 0%; } 100% { left: 100%; } }
 
-        /* CURSOR LÁSER */
-        #custom-cursor { position: fixed; width: 25px; height: 25px; border: 1px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); }
+        /* Cursor Táctico */
+        #custom-cursor { position: fixed; width: 25px; height: 25px; border: 1px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: transform 0.05s ease-out; }
         #cursor-dot { position: fixed; width: 5px; height: 5px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--gold); }
 
-        /* NAVEGACIÓN Y CONTENIDO - z-index alto para captar clics */
+        /* Navegación y Paneles */
         nav { background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--gold); padding: 15px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 5000; }
-        nav a { color: var(--gold); text-decoration: none; margin: 0 20px; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 2px; position: relative; z-index: 5001; pointer-events: auto; }
-        
-        .container { padding: 80px 20px; max-width: 1100px; margin: auto; text-align: center; position: relative; z-index: 100; }
-        .glass-panel { background: rgba(10, 10, 10, 0.85); border: 1px solid rgba(212,175,55,0.3); padding: 50px; border-radius: 5px; backdrop-filter: blur(20px); pointer-events: auto; }
+        nav a { color: var(--gold); text-decoration: none; margin: 0 20px; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 2px; pointer-events: auto; }
+        nav a:hover { color: var(--bright-gold); text-shadow: 0 0 15px var(--gold); }
 
-        .btn-divine { background: transparent; color: var(--gold); padding: 15px 35px; text-decoration: none; font-family: 'Orbitron', sans-serif; border: 2px solid var(--gold); clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); transition: 0.3s; display: inline-block; cursor: pointer; pointer-events: auto; position: relative; z-index: 101; }
+        .container { padding: 80px 20px; max-width: 1100px; margin: auto; text-align: center; position: relative; z-index: 100; }
+        .glass-panel { background: rgba(10, 10, 10, 0.85); border: 1px solid rgba(212,175,55,0.3); padding: 40px; border-radius: 5px; backdrop-filter: blur(20px); pointer-events: auto; }
+
+        .btn-divine { background: transparent; color: var(--gold); padding: 12px 30px; text-decoration: none; font-family: 'Orbitron', sans-serif; border: 2px solid var(--gold); clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); transition: 0.3s; display: inline-block; cursor: pointer; pointer-events: auto; }
         .btn-divine:hover { background: var(--gold); color: #000; box-shadow: 0 0 30px var(--gold); }
 
-        /* AUDIO Y CHAT */
+        /* Widgets de Élite */
         #music-control { position: fixed; bottom: 80px; right: 20px; z-index: 6000; pointer-events: auto; }
-        #chat-trigger { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold); border-radius: 50%; z-index: 6000; cursor: pointer; display: flex; justify-content: center; align-items: center; pointer-events: auto; box-shadow: 0 0 20px var(--gold); }
-        #chatbot-ui { position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; background: rgba(5,5,5,0.98); border: 1px solid var(--gold); border-radius: 10px; z-index: 6001; display: none; flex-direction: column; pointer-events: auto; }
+        #chat-trigger { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold); border-radius: 50%; z-index: 6000; cursor: pointer; display: flex; justify-content: center; align-items: center; pointer-events: auto; box-shadow: 0 0 20px var(--gold); font-size: 24px; }
+        #chatbot-ui { position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; background: rgba(5,5,5,0.98); border: 1px solid var(--gold); border-radius: 10px; z-index: 6001; display: none; flex-direction: column; pointer-events: auto; box-shadow: 0 0 30px #000; }
         
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; }
-        footer { position: fixed; bottom: 0; width: 100%; padding: 15px; color: #444; font-size: 0.6rem; letter-spacing: 5px; z-index: 5; pointer-events: none; }
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        footer { position: fixed; bottom: 0; width: 100%; padding: 10px; color: #444; font-size: 0.6rem; letter-spacing: 5px; background: rgba(0,0,0,0.9); z-index: 5; pointer-events: none; }
     </style>
 </head>
 <body>
-    <div id="loader"><h2 style="color:var(--gold); font-family:'Orbitron';">SISTEMA REINICIANDO...</h2></div>
+    <div id="loader"><div style="width:50px; height:50px; border:2px solid var(--gold); border-top:2px solid #fff; border-radius:50%; animation:spin 1s linear infinite;"></div></div>
     <div class="perimeter-scan"><div class="scan-line-v"></div></div>
     <div id="custom-cursor"></div><div id="cursor-dot"></div>
     <div id="particles-js"></div><div class="bg-mesh"></div>
@@ -58,24 +59,26 @@
     </nav>
 
     <div id="music-control">
-        <button onclick="toggleMusic()" class="btn-divine" id="music-btn" style="padding: 8px 15px; font-size: 9px;">AUDIO: OFF</button>
+        <button onclick="toggleMusic()" class="btn-divine" id="music-btn" style="padding: 5px 15px; font-size: 9px;">AUDIO: OFF</button>
     </div>
 
     <div class="container">{% block content %}{% endblock %}</div>
 
     <div id="chat-trigger" onclick="toggleChat()">🤖</div>
     <div id="chatbot-ui">
-        <div style="background:var(--gold); color:#000; padding:10px; font-family:'Orbitron'; font-size:0.7rem;">TERRENCE IA</div>
+        <div style="background:var(--gold); color:#000; padding:10px; font-family:'Orbitron'; font-size:0.7rem; display:flex; justify-content:space-between;">
+            <span>TERRENCE IA</span><span onclick="toggleChat()" style="cursor:pointer">X</span>
+        </div>
         <div id="chat-messages" style="flex:1; padding:15px; overflow-y:auto; color:#00ff00; font-family:'Courier New'; font-size:0.8rem;"></div>
-        <input type="text" id="chat-input" placeholder="Comando..." onkeypress="handleChat(event)" style="background:#111; border:none; border-top:1px solid var(--gold); color:#fff; padding:10px;">
+        <input type="text" id="chat-input" placeholder="Escriba comando..." onkeypress="handleChat(event)" style="background:#111; border:none; border-top:1px solid var(--gold); color:#fff; padding:12px; outline:none;">
     </div>
 
     <footer>SISTEMA TERRENCE.M - PROTOCOLO OMNIPRESENTE v5.5</footer>
 
     <script>
         window.onload = () => { 
-            setTimeout(() => { document.getElementById('loader').style.display='none'; }, 1000);
-            particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": "#d4af37" }, "opacity": 0.4, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.5 } } });
+            setTimeout(() => { document.getElementById('loader').style.display='none'; }, 800);
+            particlesJS("particles-js", { "particles": { "number": { "value": 70 }, "color": { "value": "#d4af37" }, "opacity": 0.4, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.5 } } });
         };
         
         const cursor = document.getElementById('custom-cursor');
@@ -97,11 +100,16 @@
             if (e.key === 'Enter') {
                 const input = document.getElementById('chat-input');
                 const msgs = document.getElementById('chat-messages');
+                if (!input.value.trim()) return;
                 msgs.innerHTML += `<p style="color:var(--gold)">> Tú: ${input.value}</p>`;
-                setTimeout(() => { msgs.innerHTML += `<p>> IA: Protocolo Terrence activado.</p>`; msgs.scrollTop = msgs.scrollHeight; }, 500);
+                setTimeout(() => { 
+                    msgs.innerHTML += `<p>> IA: Recibido. Procesando con Nivel Super Dios.</p>`; 
+                    msgs.scrollTop = msgs.scrollHeight; 
+                }, 600);
                 input.value = "";
             }
         }
     </script>
+    <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
 </body>
 </html>
