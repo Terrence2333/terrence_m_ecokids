@@ -1,31 +1,39 @@
 {% extends "base.html" %}
 {% block title %}Nodos Globales{% endblock %}
 {% block content %}
-<div class="glass-panel">
-    <h1 style="letter-spacing: 10px; text-shadow: 0 0 20px var(--gold);">RED GLOBAL DE OPERACIONES</h1>
-    <p style="color: #666;">HAGA CLIC EN UN NODO PARA SINCRONIZAR</p>
+<div class="glass-panel" style="border-top: 4px solid var(--gold);">
+    <h1 style="font-family: 'Orbitron'; letter-spacing: 15px; margin-bottom: 5px;">TERRENCE M</h1>
+    <p style="color: var(--gold); letter-spacing: 5px; font-size: 0.7rem; margin-bottom: 40px;">INGENIERÍA SUSTENTABLE DE ÉLITE</p>
     
-    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; margin-top: 40px;">
-        <div class="node-box" onclick="syncNode(this, 'DUBAI')" style="border: 1px solid var(--gold); padding: 20px; margin: 10px; cursor: pointer; transition: 0.3s; width: 200px;">
-            <h3>NODO DUBAI</h3>
-            <p>EFICIENCIA: 99%</p>
-        </div>
-        <div class="node-box" onclick="syncNode(this, 'ANDES')" style="border: 1px solid var(--gold); padding: 20px; margin: 10px; cursor: pointer; transition: 0.3s; width: 200px;">
-            <h3>NODO ANDES</h3>
-            <p>EFICIENCIA: 94%</p>
-        </div>
+    <div style="background: rgba(0,0,0,0.5); padding: 20px; border: 1px solid rgba(212,175,55,0.2);">
+        <h3 style="text-align: left; font-family: 'Orbitron'; font-size: 0.8rem; color: var(--gold);">GLOBAL OPS NETWORK</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px; color: #ccc; font-family: 'Orbitron'; font-size: 0.75rem;">
+            <tr style="border-bottom: 1px solid rgba(212,175,55,0.3); color: #666;">
+                <th style="padding: 15px; text-align: left;">STATUS</th>
+                <th>EFFICIENCY</th>
+                <th>DATA STREAM</th>
+            </tr>
+            <tr onclick="sync(this)" style="border-bottom: 1px solid rgba(212,175,55,0.1); cursor: pointer;">
+                <td style="padding: 20px; text-align: left;">NODE DUBAI</td>
+                <td>98.7%</td>
+                <td><div style="width:100%; height:4px; background:#222;"><div style="width:98%; height:100%; background:var(--gold); box-shadow: 0 0 10px var(--gold);"></div></div></td>
+            </tr>
+            <tr onclick="sync(this)" style="border-bottom: 1px solid rgba(212,175,55,0.1); cursor: pointer;">
+                <td style="padding: 20px; text-align: left;">NODE ANDES</td>
+                <td>91.4%</td>
+                <td><div style="width:100%; height:4px; background:#222;"><div style="width:91%; height:100%; background:var(--gold);"></div></div></td>
+            </tr>
+        </table>
     </div>
 </div>
 
 <script>
-    function syncNode(el, name) {
-        el.style.background = "var(--gold)";
-        el.style.color = "#000";
-        alert("SINCRONIZANDO CON " + name + "...");
-        setTimeout(() => { 
-            el.style.background = "transparent"; 
-            el.style.color = "#fff";
-        }, 1000);
+    function sync(el) {
+        el.style.color = "var(--bright-gold)";
+        const audio = new Audio('https://www.soundjay.com/buttons/button-09.mp3');
+        audio.volume = 0.2;
+        audio.play().catch(e => {});
+        setTimeout(() => el.style.color = "#ccc", 1000);
     }
 </script>
 {% endblock %}

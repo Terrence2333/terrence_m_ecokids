@@ -7,37 +7,60 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
-        :root { --gold: #d4af37; --bright-gold: #f9e272; --dark: #050505; }
-        * { cursor: none !important; }
-        body { background: var(--dark); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; }
+        :root { --gold: #d4af37; --bright-gold: #f9e272; --dark: #020205; }
+        * { cursor: none !important; box-sizing: border-box; }
         
-        /* FONDO RESTAURADO */
+        /* FONDO DE NEBULOSA Y MALLA ESPACIAL */
+        body { 
+            background: var(--dark); 
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(20, 30, 70, 0.4) 0%, transparent 70%),
+                url('https://www.transparenttextures.com/patterns/stardust.png');
+            color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; 
+        }
+
         #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-        .bg-mesh { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 175, 55, 0.05) 1px, transparent 1px); background-size: 50px 50px; z-index: 0; pointer-events: none; }
-        
-        /* CURSOR */
-        #custom-cursor { position: fixed; width: 30px; height: 30px; border: 1px solid var(--gold); pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: 0.1s; }
+        .bg-mesh { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background-image: linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px; z-index: 0; pointer-events: none; 
+        }
+
+        /* CURSOR DE PRECISIÓN GALÁCTICA */
+        #custom-cursor { position: fixed; width: 40px; height: 40px; border: 1px solid var(--gold); pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; transition: 0.1s; }
+        #custom-cursor::before { content: '+'; color: var(--gold); font-family: 'Orbitron'; font-size: 10px; }
         #cursor-dot { position: fixed; width: 4px; height: 4px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--gold); }
 
-        nav { background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--gold); padding: 15px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 5000; }
-        nav a { color: var(--gold); text-decoration: none; margin: 0 20px; font-family: 'Orbitron'; font-size: 0.8rem; pointer-events: auto !important; }
+        /* NAVEGACIÓN SUPERIOR */
+        nav { background: rgba(0,0,0,0.8); border-bottom: 1px solid var(--gold); padding: 20px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 5000; backdrop-filter: blur(10px); }
+        nav a { color: var(--gold); text-decoration: none; margin: 0 25px; font-family: 'Orbitron'; font-size: 0.75rem; letter-spacing: 4px; pointer-events: auto !important; }
+        nav a:hover { color: #fff; text-shadow: 0 0 15px var(--gold); }
 
-        .container { padding: 60px 20px; text-align: center; position: relative; z-index: 100; }
-        .glass-panel { background: rgba(10, 10, 10, 0.85); border: 1px solid rgba(212,175,55,0.3); padding: 40px; backdrop-filter: blur(15px); pointer-events: auto !important; }
-        .btn-divine { background: transparent; color: var(--gold); padding: 12px 30px; border: 1px solid var(--gold); cursor: pointer; pointer-events: auto !important; font-family: 'Orbitron'; }
+        /* PANELES DE CRISTAL TÁCTICO */
+        .container { padding: 40px 20px; max-width: 1200px; margin: auto; position: relative; z-index: 100; }
+        .glass-panel { 
+            background: rgba(5, 10, 20, 0.7); border: 1px solid rgba(212,175,55,0.4); 
+            padding: 40px; border-radius: 4px; backdrop-filter: blur(20px); 
+            pointer-events: auto !important; box-shadow: 0 0 40px rgba(0,0,0,1); 
+        }
 
-        /* CHAT BOT CON BOTÓN CERRAR */
-        #chatbot-ui { position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px; background: #000; border: 1px solid var(--gold); z-index: 6001; display: none; flex-direction: column; pointer-events: auto !important; box-shadow: 0 0 30px #000; }
-        #chat-header { background: var(--gold); color: #000; padding: 10px; font-family: 'Orbitron'; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; color: #00ff00; font-family: monospace; font-size: 0.85rem; background: rgba(0,0,0,0.9); }
-        #chat-input { background: #111; border: none; border-top: 1px solid var(--gold); color: #fff; padding: 15px; outline: none; width: 100%; box-sizing: border-box; }
-        #chat-trigger { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold); border-radius: 50%; z-index: 6000; cursor: pointer; display: flex; justify-content: center; align-items: center; pointer-events: auto !important; }
+        /* CHATBOT INTELIGENTE CON BOTÓN DE CIERRE */
+        #chatbot-ui { position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px; background: rgba(0,0,0,0.95); border: 1px solid var(--gold); z-index: 6001; display: none; flex-direction: column; pointer-events: auto !important; }
+        .chat-header { background: var(--gold); color: #000; padding: 12px; font-family: 'Orbitron'; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; color: #00ff00; font-family: 'Courier New'; font-size: 0.85rem; }
+        #chat-input { background: #0a0a0a; border: none; border-top: 1px solid var(--gold); color: #fff; padding: 15px; outline: none; width: 100%; }
 
-        footer { position: fixed; bottom: 0; width: 100%; padding: 10px; color: #444; font-size: 0.6rem; z-index: 5; text-align: center; background: #000; }
+        #chat-trigger { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold); border-radius: 50%; z-index: 6000; cursor: pointer; display: flex; justify-content: center; align-items: center; pointer-events: auto !important; box-shadow: 0 0 20px var(--gold); font-size: 24px; }
+
+        .btn-divine { background: transparent; color: var(--gold); padding: 12px 30px; text-decoration: none; font-family: 'Orbitron'; border: 1px solid var(--gold); transition: 0.3s; display: inline-block; cursor: pointer; pointer-events: auto !important; }
+        .btn-divine:hover { background: var(--gold); color: #000; }
+
+        footer { position: fixed; bottom: 0; width: 100%; padding: 10px; color: #444; font-size: 0.6rem; letter-spacing: 5px; z-index: 5; text-align: center; }
     </style>
 </head>
 <body>
-    <div id="particles-js"></div><div class="bg-mesh"></div>
+    <div class="bg-mesh"></div>
+    <div id="particles-js"></div>
     <div id="custom-cursor"></div><div id="cursor-dot"></div>
     <audio id="bg-audio" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
 
@@ -50,24 +73,26 @@
     </nav>
 
     <div style="position: fixed; bottom: 90px; right: 20px; z-index: 6000;">
-        <button onclick="toggleMusic()" class="btn-divine" id="music-btn" style="font-size: 10px;">AUDIO: OFF</button>
+        <button onclick="toggleMusic()" class="btn-divine" id="music-btn" style="padding: 5px 15px; font-size: 9px;">LINK: OFFLINE</button>
     </div>
 
     <div class="container">{% block content %}{% endblock %}</div>
 
     <div id="chat-trigger" onclick="toggleChat()">🤖</div>
     <div id="chatbot-ui">
-        <div id="chat-header">
-            <span>TERRENCE IA</span>
+        <div class="chat-header">
+            <span>TERRENCE IA CORE</span>
             <span onclick="toggleChat()" style="cursor:pointer; font-size: 20px;">×</span>
         </div>
-        <div id="chat-messages">> SISTEMA ONLINE. Director, ¿en qué puedo asistirle?</div>
-        <input type="text" id="chat-input" placeholder="Escriba aquí..." onkeypress="handleChat(event)">
+        <div id="chat-messages">> PROTOCOLO OMNIPRESENTE ACTIVADO. Esperando comandos...</div>
+        <input type="text" id="chat-input" placeholder="Ingrese consulta de seguridad..." onkeypress="handleChat(event)">
     </div>
+
+    <footer>SISTEMA TERRENCE.M | COORDINATES: 2.1701 S, 79.9223 W</footer>
 
     <script>
         window.onload = () => { 
-            particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": "#d4af37" }, "opacity": 0.4, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.5 } } });
+            particlesJS("particles-js", { "particles": { "number": { "value": 100 }, "color": { "value": "#d4af37" }, "opacity": 0.5, "size": { "value": 1.5 }, "line_linked": { "enable": true, "distance": 130, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 1 } } });
         };
         document.addEventListener('mousemove', (e) => {
             document.getElementById('custom-cursor').style.left = e.clientX + 'px';
@@ -79,8 +104,8 @@
         const audio = document.getElementById('bg-audio');
         function toggleMusic() {
             const btn = document.getElementById('music-btn');
-            if (audio.paused) { audio.play(); btn.innerHTML = "AUDIO: ON"; }
-            else { audio.pause(); btn.innerHTML = "AUDIO: OFF"; }
+            if (audio.paused) { audio.play(); btn.innerHTML = "LINK: ACTIVE"; btn.style.color = "#00ff00"; }
+            else { audio.pause(); btn.innerHTML = "LINK: OFFLINE"; btn.style.color = "var(--gold)"; }
         }
 
         function toggleChat() { const ui = document.getElementById('chatbot-ui'); ui.style.display = ui.style.display === 'flex' ? 'none' : 'flex'; }
@@ -90,14 +115,14 @@
                 const input = document.getElementById('chat-input');
                 const msgs = document.getElementById('chat-messages');
                 const val = input.value.toLowerCase();
-                msgs.innerHTML += `<p style="color:var(--gold)">> Tú: ${input.value}</p>`;
+                msgs.innerHTML += `<p style="color:var(--gold)">> CMD: ${input.value}</p>`;
                 
-                let resp = "> IA: Procesando datos del imperio...";
-                if(val.includes("hola")) resp = "> IA: Saludos, Director Terrence.";
-                if(val.includes("estado")) resp = "> IA: Todos los sistemas operando al 100%.";
-                if(val.includes("nodos")) resp = "> IA: Los nodos globales están sincronizados.";
+                let resp = "> IA: Analizando red de nodos globales...";
+                if(val.includes("seguridad")) resp = "> IA: Perímetro asegurado. Sin intrusos.";
+                if(val.includes("terrence")) resp = "> IA: El Director Terrence es el único administrador nivel 10.";
+                if(val.includes("nodos")) resp = "> IA: Nodos Dubai y Andes operando al 100%.";
                 
-                setTimeout(() => { msgs.innerHTML += `<p>${resp}</p>`; msgs.scrollTop = msgs.scrollHeight; }, 500);
+                setTimeout(() => { msgs.innerHTML += `<p>${resp}</p>`; msgs.scrollTop = msgs.scrollHeight; }, 600);
                 input.value = "";
             }
         }
