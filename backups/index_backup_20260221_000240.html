@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<canvas id="noise-canvas" style="position: fixed; inset: 0; z-index: 20000; pointer-events: none; opacity: 0; transition: opacity 0.1s;"></canvas>
+<div id="boot-screen" style="position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Orbitron', sans-serif; color: #d4af37;">
+    <div id="loader-ring" style="width: 120px; height: 120px; border: 2px solid #ff4500; border-radius: 50%; animation: spin 0.5s linear infinite;"></div>
+    <p style="letter-spacing: 10px; margin-top: 20px; font-size: 0.7rem;">ESTABLECIENDO ENLACE CON RENDER...</p>
+</div>
+<div id="main-interface" style="padding: 50px; opacity: 0; visibility: hidden; transition: opacity 1s;">
+    <h1 style="color: #d4af37; font-family: 'Orbitron'; font-weight: 900;">TERRENCE M - LIVE SYSTEM</h1>
+    <div style="background: rgba(255,69,0,0.1); border: 1px solid #ff4500; padding: 25px; color: #fff; font-family: monospace;">
+        <p>[ SISTEMA OPERATIVO EN LÍNEA ]</p>
+        <p>> PROTOCOLO DE PÁNICO: [ESC] ACTIVO</p>
+        <p>> RADAR SÍSMICO: CALIBRADO</p>
+    </div>
+</div>
+<script>
+    window.addEventListener('keydown', (e) => { 
+        if (e.key === "Escape") {
+            document.getElementById('noise-canvas').style.opacity = "1";
+            setTimeout(() => { location.reload(); }, 500);
+        }
+    });
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('main-interface').style.visibility = 'visible';
+            document.getElementById('main-interface').style.opacity = '1';
+        }, 1500);
+    });
+</script>
+{% endblock %}
