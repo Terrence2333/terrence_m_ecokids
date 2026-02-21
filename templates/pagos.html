@@ -1,13 +1,50 @@
 {% extends "base.html" %}
 {% block content %}
-<div style="padding: 100px 20%; text-align: center;">
-    <h1 style="color:var(--gold); letter-spacing: 10px;">PASARELA_DE_PAGO_SEGURA</h1>
-    <div style="border: 2px solid var(--gold); padding: 50px; background: rgba(10,10,10,0.9);">
-        <p style="color:var(--neon)">SISTEMA DE ENCRIPTACIÓN terrence.m ACTIVO</p>
-        <form action="/exito" method="GET">
-            <input type="text" placeholder="ID_DE_CREDENCIAL" style="background:#111; border:1px solid var(--gold); color:#fff; padding:15px; width:80%; margin-bottom:20px; font-family:'Orbitron';">
-            <button type="submit" style="background:var(--gold); color:#000; border:none; padding:15px 40px; font-family:'Orbitron'; font-weight:900; cursor:pointer;">EJECUTAR TRANSACCIÓN</button>
+<div style="padding: 100px 15%; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh;">
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: var(--gold); letter-spacing: 12px; font-weight: 900; text-transform: uppercase; margin: 0;">Pasarela de Pago</h1>
+        <p style="color: var(--neon); font-size: 0.8rem; letter-spacing: 4px;">[ ESTADO: CONEXIÓN ENCRIPTADA PROTOCOLO TERRENCE.M ]</p>
+    </div>
+
+    <div style="border: 2px solid var(--gold); background: rgba(10, 10, 10, 0.95); padding: 50px; width: 100%; max-width: 600px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--gold); opacity: 0.5; animation: scanMove 3s infinite linear;"></div>
+
+        <form action="/exito" method="GET" style="display: flex; flex-direction: column; gap: 25px;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <label style="color: var(--gold); font-size: 0.7rem; letter-spacing: 2px;">ID DE CREDENCIAL DEL DIRECTOR</label>
+                <input type="text" placeholder="####-####-####" required style="background: #000; border: 1px solid var(--gold); color: #fff; padding: 15px; font-family: 'Orbitron'; outline: none; border-radius: 0;">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <label style="color: var(--gold); font-size: 0.7rem; letter-spacing: 2px;">VALOR DE LA TRANSACCIÓN (MW/H)</label>
+                <input type="number" placeholder="0.00" required style="background: #000; border: 1px solid var(--gold); color: var(--neon); padding: 15px; font-family: 'Orbitron'; outline: none; border-radius: 0;">
+            </div>
+
+            <button type="submit" style="background: var(--gold); color: #000; border: none; padding: 20px; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 5px; cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase;">
+                Ejecutar Transferencia
+            </button>
         </form>
+        
+        <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: center;">
+            <small style="color: #444; font-size: 0.6rem;">SECURITY_ID: KERNEL_750_AUTH</small>
+            <div style="display: flex; gap: 10px;">
+                <div style="width: 10px; height: 10px; background: var(--neon); border-radius: 50%; box-shadow: 0 0 5px var(--neon);"></div>
+                <div style="width: 10px; height: 10px; background: var(--neon); border-radius: 50%; box-shadow: 0 0 5px var(--neon);"></div>
+                <div style="width: 10px; height: 10px; background: var(--neon); border-radius: 50%; box-shadow: 0 0 5px var(--neon);"></div>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+    @keyframes scanMove {
+        0% { top: 0; }
+        100% { top: 100%; }
+    }
+    button:hover {
+        background: #fff;
+        box-shadow: 0 0 25px var(--gold);
+        transform: scale(1.02);
+    }
+</style>
 {% endblock %}

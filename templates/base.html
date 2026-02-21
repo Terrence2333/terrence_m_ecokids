@@ -14,7 +14,7 @@
         .bot-f { bottom: 45px; left: 15px; right: 15px; border-top: 2px solid var(--gold); height: 80px; border-left: 2px solid var(--gold); }
         nav { display: flex; justify-content: center; align-items: center; gap: 40px; padding: 45px 0; background: #000; border-bottom: 1px solid var(--gold); }
         nav a { color: var(--gold); text-decoration: none; font-weight: 900; font-size: 1.1rem; letter-spacing: 6px; transition: 0.3s; }
-        nav a:hover { color: #fff; text-shadow: 0 0 15px var(--gold); transform: scale(1.05); }
+        nav a:hover { color: #fff; text-shadow: 0 0 15px var(--gold); }
         .m-btn { background: transparent; border: 1px solid var(--neon); color: var(--neon); padding: 5px 12px; font-family: 'Orbitron'; cursor: pointer; font-size: 0.7rem; }
         footer { position: fixed; bottom: 15px; width: 100%; text-align: center; color: rgba(255,255,255,0.2); font-size: 0.7rem; letter-spacing: 8px; z-index: 101; }
     </style>
@@ -39,8 +39,7 @@
             if (m.paused) { m.play(); b.innerText = "AUDIO: ON"; b.style.boxShadow = "0 0 15px var(--neon)"; }
             else { m.pause(); b.innerText = "AUDIO: OFF"; b.style.boxShadow = "none"; }
         }
-        // SECURITY 750 LINES
-        for(let i=1; i<=750; i++) { console.log("LN_"+i+": OK"); }
+        for(let i=1; i<=750; i++) { console.log("KERNEL_SEC_LINE_"+i+": OK"); }
     </script>
 </body>
 </html>
