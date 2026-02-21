@@ -11,40 +11,43 @@
         * { cursor: none !important; }
         body { background: var(--dark); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; }
         
-        /* CAPAS DE FONDO - SIN BLOQUEO DE CLIC */
-        #particles-js, .bg-mesh, .perimeter-scan { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none !important; }
-        #particles-js { z-index: 1; }
+        /* CAPAS DE FONDO INVISIBLES AL CLIC */
+        #particles-js, .bg-mesh, .perimeter-scan, .glitch-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none !important; z-index: 1; }
         .bg-mesh { background-image: linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px); background-size: 60px 60px; z-index: 0; }
-        .perimeter-scan { border: 1px solid rgba(212,175,55,0.1); z-index: 2; overflow: hidden; }
+        .perimeter-scan { border: 1px solid rgba(212,175,55,0.1); z-index: 2; }
         .scan-line-v { position: absolute; width: 1px; height: 100%; background: var(--gold); left: 50%; animation: scan-v 8s infinite linear; opacity: 0.3; }
         @keyframes scan-v { 0% { left: 0%; } 100% { left: 100%; } }
 
-        /* CURSOR LÁSER */
-        #custom-cursor { position: fixed; width: 25px; height: 25px; border: 1px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); }
-        #cursor-dot { position: fixed; width: 5px; height: 5px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--gold); }
+        /* EFECTO GLITCH AL HACER CLIC */
+        .glitch-overlay { background: rgba(212,175,55,0.05); display: none; z-index: 9000; }
 
-        /* NAVEGACIÓN Y PANELES */
+        /* CURSOR NIVEL OMNIPRESENTE */
+        #custom-cursor { position: fixed; width: 30px; height: 30px; border: 1px solid var(--gold); pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
+        #cursor-dot { position: fixed; width: 4px; height: 4px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--gold); }
+
+        /* INTERFAZ */
         nav { background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--gold); padding: 15px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 5000; }
-        nav a { color: var(--gold); text-decoration: none; margin: 0 20px; font-family: 'Orbitron'; font-size: 0.8rem; letter-spacing: 2px; pointer-events: auto !important; }
-        nav a:hover { color: var(--bright-gold); text-shadow: 0 0 15px var(--gold); }
+        nav a { color: var(--gold); text-decoration: none; margin: 0 20px; font-family: 'Orbitron'; font-size: 0.75rem; letter-spacing: 2px; pointer-events: auto !important; transition: 0.3s; }
+        nav a:hover { color: #fff; text-shadow: 0 0 10px var(--gold); }
 
         .container { padding: 60px 20px; max-width: 1100px; margin: auto; text-align: center; position: relative; z-index: 100; }
-        .glass-panel { background: rgba(10, 10, 10, 0.85); border: 1px solid rgba(212,175,55,0.3); padding: 40px; border-radius: 5px; backdrop-filter: blur(20px); pointer-events: auto !important; }
+        .glass-panel { background: rgba(10, 10, 10, 0.9); border: 1px solid rgba(212,175,55,0.3); padding: 40px; border-radius: 2px; backdrop-filter: blur(20px); pointer-events: auto !important; box-shadow: 0 0 50px #000; }
         
-        .btn-divine { background: transparent; color: var(--gold); padding: 12px 30px; text-decoration: none; font-family: 'Orbitron'; border: 2px solid var(--gold); clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); transition: 0.3s; display: inline-block; cursor: pointer; pointer-events: auto !important; }
-        .btn-divine:hover { background: var(--gold); color: #000; box-shadow: 0 0 30px var(--gold); }
+        .btn-divine { background: transparent; color: var(--gold); padding: 12px 30px; text-decoration: none; font-family: 'Orbitron'; border: 1px solid var(--gold); transition: 0.3s; display: inline-block; cursor: pointer; pointer-events: auto !important; position: relative; overflow: hidden; }
+        .btn-divine:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px var(--gold); }
 
-        /* WIDGETS Y CHAT */
+        /* WIDGETS */
         #music-control { position: fixed; bottom: 80px; right: 20px; z-index: 6000; pointer-events: auto !important; }
-        #chat-trigger { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold); border-radius: 50%; z-index: 6000; cursor: pointer; display: flex; justify-content: center; align-items: center; pointer-events: auto !important; box-shadow: 0 0 20px var(--gold); font-size: 25px; }
-        #chatbot-ui { position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; background: rgba(5,5,5,0.98); border: 1px solid var(--gold); border-radius: 10px; z-index: 6001; display: none; flex-direction: column; pointer-events: auto !important; box-shadow: 0 0 30px #000; }
+        #chat-trigger { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold); border-radius: 50%; z-index: 6000; cursor: pointer; display: flex; justify-content: center; align-items: center; pointer-events: auto !important; box-shadow: 0 0 20px var(--gold); }
+        #chatbot-ui { position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; background: #000; border: 1px solid var(--gold); z-index: 6001; display: none; flex-direction: column; pointer-events: auto !important; }
         
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; }
-        footer { position: fixed; bottom: 0; width: 100%; padding: 10px; color: #444; font-size: 0.6rem; letter-spacing: 5px; background: rgba(0,0,0,0.9); z-index: 5; pointer-events: none; }
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        footer { position: fixed; bottom: 0; width: 100%; padding: 10px; color: #333; font-size: 0.6rem; letter-spacing: 5px; z-index: 5; pointer-events: none; }
     </style>
 </head>
-<body>
-    <div id="loader"><h2 style="color:var(--gold); font-family:'Orbitron';">SISTEMA TERRENCE M ACTIVADO</h2></div>
+<body onclick="triggerGlitch()">
+    <div id="loader"><h2 style="color:var(--gold); font-family:'Orbitron'; letter-spacing:5px; animation: pulse 2s infinite;">TERRENCE M SYSTEM</h2></div>
+    <div class="glitch-overlay" id="glitch"></div>
     <div class="perimeter-scan"><div class="scan-line-v"></div></div>
     <div id="custom-cursor"></div><div id="cursor-dot"></div>
     <div id="particles-js"></div><div class="bg-mesh"></div>
@@ -52,32 +55,32 @@
     <audio id="bg-audio" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
 
     <nav>
-        <a href="/">HOME</a>
-        <a href="/servicios">UNIDADES</a>
-        <a href="/proyectos">NODOS</a>
-        <a href="/about">IMPERIO</a>
-        <a href="/pagos">PAGOS</a>
+        <a href="/" onmouseenter="expandCursor()" onmouseleave="shrinkCursor()">HOME</a>
+        <a href="/servicios" onmouseenter="expandCursor()" onmouseleave="shrinkCursor()">UNIDADES</a>
+        <a href="/proyectos" onmouseenter="expandCursor()" onmouseleave="shrinkCursor()">NODOS</a>
+        <a href="/about" onmouseenter="expandCursor()" onmouseleave="shrinkCursor()">IMPERIO</a>
+        <a href="/pagos" onmouseenter="expandCursor()" onmouseleave="shrinkCursor()">PAGOS</a>
     </nav>
 
     <div id="music-control">
-        <button onclick="toggleMusic()" class="btn-divine" id="music-btn" style="padding: 5px 15px; font-size: 9px; min-width: 100px;">AUDIO: OFF</button>
+        <button onclick="toggleMusic()" class="btn-divine" id="music-btn" style="padding: 5px 15px; font-size: 9px;">AUDIO: OFF</button>
     </div>
 
     <div class="container">{% block content %}{% endblock %}</div>
 
     <div id="chat-trigger" onclick="toggleChat()">🤖</div>
     <div id="chatbot-ui">
-        <div style="background:var(--gold); color:#000; padding:10px; font-family:'Orbitron'; font-size:0.7rem;">TERRENCE IA CORE</div>
-        <div id="chat-messages" style="flex:1; padding:15px; overflow-y:auto; color:#00ff00; font-family:'Courier New'; font-size:0.8rem;"></div>
-        <input type="text" id="chat-input" placeholder="Comando..." onkeypress="handleChat(event)" style="background:#111; border:none; border-top:1px solid var(--gold); color:#fff; padding:12px; outline:none; width: 100%; box-sizing: border-box;">
+        <div style="background:var(--gold); color:#000; padding:10px; font-family:'Orbitron'; font-size:0.7rem;">IA TERMINAL</div>
+        <div id="chat-messages" style="flex:1; padding:15px; overflow-y:auto; color:#00ff00; font-family:monospace; font-size:0.8rem;">> SYSTEM READY...</div>
+        <input type="text" id="chat-input" placeholder="ACCESS COMMAND..." onkeypress="handleChat(event)" style="background:#111; border:none; border-top:1px solid var(--gold); color:#fff; padding:12px; outline:none; width:100%; box-sizing:border-box;">
     </div>
 
-    <footer>PROTOCOLO TERRENCE.M - NIVEL SUPER DIOS v5.5</footer>
+    <footer>ESTADO: OMNIPRESENTE | v6.0</footer>
 
     <script>
         window.onload = () => { 
-            setTimeout(() => { document.getElementById('loader').style.display='none'; }, 800);
-            particlesJS("particles-js", { "particles": { "number": { "value": 70 }, "color": { "value": "#d4af37" }, "opacity": 0.4, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.5 } } });
+            setTimeout(() => { document.getElementById('loader').style.display='none'; }, 1000);
+            particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": "#d4af37" }, "opacity": 0.3, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.5 } } });
         };
         
         document.addEventListener('mousemove', (e) => {
@@ -86,6 +89,15 @@
             document.getElementById('cursor-dot').style.left = e.clientX + 'px';
             document.getElementById('cursor-dot').style.top = e.clientY + 'px';
         });
+
+        function triggerGlitch() {
+            const g = document.getElementById('glitch');
+            g.style.display = 'block';
+            setTimeout(() => { g.style.display = 'none'; }, 50);
+        }
+
+        function expandCursor() { document.getElementById('custom-cursor').style.width = '50px'; document.getElementById('custom-cursor').style.height = '50px'; }
+        function shrinkCursor() { document.getElementById('custom-cursor').style.width = '30px'; document.getElementById('custom-cursor').style.height = '30px'; }
 
         const audio = document.getElementById('bg-audio');
         function toggleMusic() {
@@ -99,9 +111,8 @@
             if (e.key === 'Enter') {
                 const input = document.getElementById('chat-input');
                 const msgs = document.getElementById('chat-messages');
-                if (!input.value.trim()) return;
-                msgs.innerHTML += `<p style="color:var(--gold)">> Tú: ${input.value}</p>`;
-                setTimeout(() => { msgs.innerHTML += `<p>> IA: Recibido. Procesando nivel Terrence M.</p>`; msgs.scrollTop = msgs.scrollHeight; }, 600);
+                msgs.innerHTML += `<p style="color:var(--gold)">> CMD: ${input.value}</p>`;
+                setTimeout(() => { msgs.innerHTML += `<p>> ANALYZING SUGGESTION...</p>`; msgs.scrollTop = msgs.scrollHeight; }, 400);
                 input.value = "";
             }
         }
