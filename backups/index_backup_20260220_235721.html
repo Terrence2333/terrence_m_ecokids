@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block content %}
+<canvas id="noise-canvas" style="position: fixed; inset: 0; z-index: 20000; pointer-events: none; opacity: 0; transition: opacity 0.1s;"></canvas>
+<div id="boot-screen" style="position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Orbitron', sans-serif; color: #d4af37;">
+    <div id="loader-ring" style="width: 120px; height: 120px; border: 2px solid #ff4500; border-radius: 50%; animation: spin 0.5s linear infinite;"></div>
+    <p style="letter-spacing: 10px; margin-top: 20px; font-size: 0.7rem;">ESTABLECIENDO ENLACE CON RENDER...</p>
+</div>
+<div id="main-interface" style="padding: 50px; opacity: 0; visibility: hidden; transition: opacity 1s;">
+    <h1 style="color: #d4af37; font-family: 'Orbitron'; font-weight: 900;">TERRENCE M - LIVE SYSTEM</h1>
+    <div style="background: rgba(255,69,0,0.1); border: 1px solid #ff4500; padding: 25px; color: #fff; font-family: monospace;">
+        <p>[ SISTEMA OPERATIVO EN LÍNEA ]</p>
+        <p>> PROTOCOLO DE PÁNICO: [ESC] ACTIVO</p>
+        <p>> RADAR SÍSMICO: CALIBRADO</p>
+    </div>
+</div>
+<script>
+    window.addEventListener('keydown', (e) => { 
+        if (e.key === "Escape") {
+            document.getElementById('noise-canvas').style.opacity = "1";
+            setTimeout(() => { location.reload(); }, 500);
+        }
+    });
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('main-interface').style.visibility = 'visible';
+            document.getElementById('main-interface').style.opacity = '1';
+        }, 1500);
+    });
+</script>
+{% endblock %}
+{% extends "base.html" %}
+{% block content %}
+<canvas id="noise-canvas" style="position: fixed; inset: 0; z-index: 20000; pointer-events: none; opacity: 0; transition: opacity 0.1s;"></canvas>
+
+<div id="boot-screen" style="position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Orbitron', sans-serif; color: #d4af37;">
+    <div id="loader-ring" style="width: 140px; height: 140px; border: 1px solid #111; border-top: 5px solid #ff4500; border-radius: 50%; animation: spin 0.4s linear infinite;"></div>
+    <p style="letter-spacing: 10px; margin-top: 25px; font-size: 0.7rem;">SISTEMA TERRENCE.M OS : CARGANDO NÚCLEO...</p>
+</div>
+
+<div id="master-bg" style="position: fixed; inset: 0; z-index: -1; background: #000; overflow: hidden;">
+    <canvas id="main-canvas" style="position: absolute; inset: 0;"></canvas>
+</div>
+
+<div id="main-interface" style="display: flex; justify-content: space-between; padding: 40px 5%; height: 85vh; position: relative; z-index: 1; opacity: 0; visibility: hidden; transition: opacity 1.5s;">
+    
+    <div style="width: 320px;">
+        <div id="core-circle" style="position: relative; width: 260px; height: 260px; border: 4px solid #d4af37; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); box-shadow: 0 0 30px rgba(212,175,55,0.2);">
+            <div style="position: absolute; inset: -15px; border: 1px dashed rgba(255,69,0,0.4); border-radius: 50%; animation: spin 50s linear infinite;"></div>
+            <h1 style="font-size: 2.3rem; font-weight: 900; color: #d4af37; text-shadow: 0 0 20px #d4af37; margin: 0;">TERRENCE M</h1>
+        </div>
+        <div style="margin-top: 40px; background: rgba(0,0,0,0.9); border-left: 10px solid #ff4500; padding: 25px; border: 1px solid #222;">
+            <p style="color:#ff4500; font-weight: 900; font-size: 0.7rem; margin: 0;">[ SISTEMA_STATUS ]</p>
+            <div id="conqueror-rank" style="font-family: 'Orbitron'; color: #fff; margin-top: 5px;">VIGILANCIA ACTIVA</div>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 20px;">
+        <div id="visitor-display" style="background: rgba(10,10,10,0.95); border: 2px solid #ff4500; padding: 15px 35px; border-radius: 3px; position: relative; transition: all 0.3s ease;">
+            <small style="color: #ff4500; display: block; font-size: 0.55rem; letter-spacing: 3px; font-weight: bold;">TRAFFIC_MONITOR</small>
+            <span id="visit-count" style="color: #fff; font-family: 'Orbitron'; font-size: 1.8rem; font-weight: 900;">0000</span>
+        </div>
+        
+        <div id="traffic-bars" style="display: flex; align-items: flex-end; gap: 4px; height: 50px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #333; width: 150px; justify-content: center;">
+            <div class="bar" style="width: 10px; background: #0f0; height: 20%;"></div>
+            <div class="bar" style="width: 10px; background: #0f0; height: 50%;"></div>
+            <div class="bar" style="width: 10px; background: #0f0; height: 80%;"></div>
+            <div class="bar" style="width: 10px; background: #0f0; height: 40%;"></div>
+            <div class="bar" style="width: 10px; background: #0f0; height: 60%;"></div>
+        </div>
+
+        <div style="border:2px solid #ff4500; padding:10px; background:#000; width: 280px;">
+            <video id="webcam" autoplay playsinline muted style="width:100%; height:180px; object-fit:cover; filter: sepia(1) contrast(1.2);"></video>
+        </div>
+    </div>
+</div>
+
+<div id="chat-container" style="position:fixed; bottom:30px; right:30px; width:400px; background:rgba(0,0,0,0.95); border:2px solid #ff4500; z-index:1000; visibility: hidden; box-shadow: 0 0 20px rgba(0,0,0,1);">
+    <div style="background:#ff4500; color:#000; padding:12px; font-weight:900; font-size:0.8rem; display:flex; justify-content:space-between;">
+        <span>TERMINAL_DE_MANDO</span>
+        <span id="system-clock">00:00:00</span>
+    </div>
+    <div id="chat-box" style="height:200px; overflow-y:auto; padding:15px; font-size:0.75rem; color:#fff; font-family: monospace; background: rgba(0,0,0,0.5);"></div>
+    <canvas id="seismograph" style="width: 100%; height: 50px; background: #050505; border-top: 1px solid #222;"></canvas>
+    <div style="display:flex; border-top:2px solid #ff4500;">
+        <input type="text" id="user-input" placeholder="ORDEN SÍSMICA..." style="flex:1; background:#000; border:none; color:#fff; padding:15px; outline:none; font-family: monospace;">
+        <button onclick="sendMessage()" style="background:#ff4500; border:none; padding:0 25px; cursor:pointer; font-weight:900;">EXE</button>
+    </div>
+</div>
+
+<style>
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .bar { transition: height 0.6s ease, background 0.3s; }
+    #chat-box::-webkit-scrollbar { width: 5px; }
+    #chat-box::-webkit-scrollbar-thumb { background: #ff4500; }
+</style>
+
+<script>
+    // --- LÓGICA DE FONDO Y GLOBO ---
+    const canvas = document.getElementById('main-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let globeRot = 0;
+    let heatPoints = [{x: window.innerWidth/2, y: window.innerHeight/2, r: 400}];
+
+    function drawBackground() {
+        ctx.fillStyle = "black"; ctx.fillRect(0,0,canvas.width, canvas.height);
+        heatPoints.forEach(p => {
+            const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+            grad.addColorStop(0, "rgba(255, 69, 0, 0.3)");
+            grad.addColorStop(1, "transparent");
+            ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+        });
+        const cX = canvas.width/2, cY = canvas.height/2, r = 300;
+        ctx.strokeStyle = "rgba(212,175,55,0.15)";
+        for(let i=0; i<18; i++) {
+            ctx.beginPath();
+            ctx.ellipse(cX, cY, Math.abs(r * Math.sin(globeRot + i)), r, 0, 0, Math.PI*2);
+            ctx.stroke();
+        }
+        globeRot += 0.002;
+        requestAnimationFrame(drawBackground);
+    }
+    drawBackground();
+
+    // --- LÓGICA DE SISMÓGRAFO ---
+    const sCanvas = document.getElementById('seismograph');
+    const sCtx = sCanvas.getContext('2d');
+    let xS = 0;
+    function drawSeismo() {
+        sCtx.fillStyle = "rgba(5,5,5,0.1)"; sCtx.fillRect(0,0,sCanvas.width, sCanvas.height);
+        sCtx.strokeStyle = "#ff4500"; sCtx.beginPath(); sCtx.moveTo(xS, 25);
+        let amp = 20; let yS = 25 + (Math.random() * amp - amp/2);
+        sCtx.lineTo(xS + 2, yS); sCtx.stroke(); xS += 2;
+        if(xS > sCanvas.width) { xS = 0; sCtx.clearRect(0,0,sCanvas.width, sCanvas.height); }
+        requestAnimationFrame(drawSeismo);
+    }
+    drawSeismo();
+
+    // --- SEGURIDAD Y TRÁFICO ---
+    function updateTraffic() {
+        let visits = parseInt(localStorage.getItem('tm_visits') || "4500") + 1;
+        localStorage.setItem('tm_visits', visits);
+        document.getElementById('visit-count').innerText = visits.toString().padStart(4, '0');
+        const box = document.getElementById('visitor-display');
+        box.style.borderColor = "#ff0000"; box.style.boxShadow = "0 0 30px #ff0000";
+        document.querySelectorAll('.bar').forEach(b => {
+            let h = Math.floor(Math.random()*90)+10; b.style.height = h+"%";
+            b.style.background = h > 70 ? "#ff0000" : "#0f0";
+        });
+        setTimeout(() => { box.style.borderColor = "#ff4500"; box.style.boxShadow = "none"; }, 600);
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if(e.key === "Escape") {
+            document.getElementById('noise-canvas').style.opacity = "1";
+            location.reload();
+        }
+    });
+
+    // --- CHAT ---
+    function sendMessage() {
+        const input = document.getElementById('user-input');
+        const box = document.getElementById('chat-box');
+        if(!input.value) return;
+        box.innerHTML += `<p style="color:#666; margin: 5px 0;">> ${input.value}</p>`;
+        if(input.value.toLowerCase().includes("conquistar")) {
+            heatPoints.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: 200});
+            box.innerHTML += `<p style="color:#ff4500">[SISTEMA]: Nueva zona anexada.</p>`;
+        }
+        input.value = ""; box.scrollTop = box.scrollHeight;
+    }
+
+    // --- INICIO ---
+    window.addEventListener('DOMContentLoaded', () => {
+        setInterval(() => { document.getElementById('system-clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+        setTimeout(() => {
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('main-interface').style.visibility = 'visible';
+            document.getElementById('main-interface').style.opacity = '1';
+            document.getElementById('chat-container').style.visibility = 'visible';
+            updateTraffic();
+        }, 1500);
+    });
+</script>
+{% endblock %}
