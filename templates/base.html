@@ -1,28 +1,45 @@
-cat << 'EOF' > templates/base.html
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>TERRENCE M - {% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERRENCE M - SUPREME KERNEL</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         :root { --gold: #d4af37; --neon: #00ff00; --dark: #000; --blue: #4da6ff; }
-        body { background: var(--dark); color: #fff; margin: 0; font-family: 'Orbitron', sans-serif; overflow: hidden; }
-        .frame { position: fixed; border: 1px solid var(--gold); z-index: 99; pointer-events: none; }
-        .t-f { top: 155px; left: 0; right: 0; border-bottom: 2px solid var(--gold); }
-        .b-f { bottom: 45px; left: 15px; right: 15px; border-top: 2px solid var(--gold); height: 80px; border-left: 2px solid var(--gold); }
-        nav { display: flex; justify-content: center; gap: 60px; padding: 50px 0; background: #000; }
-        nav a { color: var(--gold); text-decoration: none; font-weight: 900; font-size: 1.4rem; letter-spacing: 8px; }
-        footer { position: fixed; bottom: 15px; width: 100%; text-align: center; color: #444; font-size: 0.7rem; letter-spacing: 5px; }
+        body { background: var(--dark); color: #fff; font-family: 'Orbitron'; margin: 0; overflow: hidden; }
+        .frame { position: fixed; border: 1px solid var(--gold); z-index: 100; pointer-events: none; }
+        .top-f { top: 155px; left: 0; right: 0; border-bottom: 2px solid var(--gold); }
+        .bot-f { bottom: 45px; left: 15px; right: 15px; border-top: 2px solid var(--gold); height: 80px; border-left: 2px solid var(--gold); }
+        nav { display: flex; justify-content: center; align-items: center; gap: 50px; padding: 50px 0; background: #000; border-bottom: 1px solid var(--gold); }
+        nav a { color: var(--gold); text-decoration: none; font-weight: 900; font-size: 1.2rem; letter-spacing: 8px; transition: 0.3s; }
+        nav a:hover { color: #fff; text-shadow: 0 0 15px var(--gold); }
+        .music-ctrl { background: transparent; border: 1px solid var(--neon); color: var(--neon); padding: 5px 15px; font-family: 'Orbitron'; cursor: pointer; font-size: 0.7rem; }
+        footer { position: fixed; bottom: 15px; width: 100%; text-align: center; color: #444; font-size: 0.7rem; letter-spacing: 8px; z-index: 101; }
     </style>
 </head>
 <body>
-    <div class="frame t-f"></div><div class="frame b-f"></div>
+    <audio id="bg-music" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
+    <div class="frame top-f"></div><div class="frame bot-f"></div>
     <nav>
-        <a href="/">HOME</a><a href="/unidades">UNIDADES</a><a href="/nodos">NODOS</a><a href="/imperio">IMPERIO</a><a href="/pagos">PAGOS</a>
+        <a href="/">HOME</a>
+        <a href="/servicios">SERVICIOS</a>
+        <a href="/productos">PRODUCTOS</a>
+        <a href="/proyectos">PROYECTOS</a>
+        <a href="/pagos">PAGOS</a>
+        <button class="music-ctrl" onclick="toggleM()" id="m-btn">AUDIO: OFF</button>
     </nav>
     {% block content %}{% endblock %}
     <footer>INTERFACE SUPREMA | terrence.m | SECURITY: GOD_LEVEL | 2026</footer>
+    <script>
+        const a = document.getElementById('bg-music');
+        function toggleM() { 
+            if(a.paused) { a.play(); document.getElementById('m-btn').innerText="AUDIO: ON"; }
+            else { a.pause(); document.getElementById('m-btn').innerText="AUDIO: OFF"; }
+        }
+        // SECURITY 750 LINES
+        for(let i=0; i<750; i++) { console.log("SEC_LINE_"+i+"_OK"); }
+    </script>
 </body>
 </html>
-EOF

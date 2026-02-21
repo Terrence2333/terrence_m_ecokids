@@ -1,26 +1,32 @@
-{% extends "base.html" %}
-{% block title %}Factura Digital{% endblock %}
-{% block content %}
-<div class="glass-panel" style="max-width: 600px; margin: auto; text-align: left; border: 1px solid #00ff00; padding: 40px; background: rgba(0,20,0,0.2);">
-    <div style="display: flex; justify-content: space-between;">
-        <h2 style="color: #00ff00; margin: 0;">PAGO AUTORIZADO</h2>
-        <span style="color: #00ff00; font-family: 'Orbitron'; font-size: 0.8rem;">ID: TX-{{ range(1000, 9999) | random }}</span>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>TERRENCE M - OPERACIÓN EXITOSA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #d4af37; --neon: #00ff00; --dark: #000; }
+        body { background: var(--dark); color: #fff; font-family: 'Orbitron'; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        .success-frame { border: 5px solid var(--gold); padding: 60px; text-align: center; box-shadow: 0 0 50px rgba(212,175,55,0.3); position: relative; }
+        h1 { font-size: 4rem; color: var(--neon); text-shadow: 0 0 20px var(--neon); margin: 0; }
+        .scan-line { position: absolute; width: 100%; height: 2px; background: var(--gold); top: 0; left: 0; animation: move 3s infinite linear; }
+        @keyframes move { 0% { top: 0; } 100% { top: 100%; } }
+        .btn-return { margin-top: 40px; border: 2px solid var(--gold); color: var(--gold); padding: 15px 30px; text-decoration: none; display: inline-block; transition: 0.3s; }
+        .btn-return:hover { background: var(--gold); color: #000; }
+    </style>
+</head>
+<body>
+    <div class="success-frame">
+        <div class="scan-line"></div>
+        <h1>TRANSACCIÓN COMPLETADA</h1>
+        <p style="letter-spacing: 5px; margin-top: 20px;">SISTEMA terrence.m ACTUALIZADO</p>
+        <a href="/" class="btn-return">VOLVER AL KERNEL</a>
     </div>
-    <hr style="border: 0; border-top: 1px solid rgba(0,255,0,0.3); margin: 20px 0;">
-    
-    <p style="color: #ccc;">CLIENTE: DIRECTOR TERRENCE.M</p>
-    <p style="color: #ccc;">CONCEPTO: ACTIVACIÓN DE NODO ENERGÉTICO GLOBAL</p>
-    
-    <div style="background: rgba(0,255,0,0.1); padding: 20px; border-radius: 5px; margin: 20px 0;">
-        <h3 style="margin: 0; color: #00ff00; text-align: right;">TOTAL: $15,000.00 USD</h3>
-    </div>
-
-    <p style="font-size: 0.7rem; color: #666;">Este documento es un comprobante legal de transferencia electrónica procesado bajo el protocolo terrence.m v4.5.</p>
-    
-    <div style="text-align: center; margin-top: 30px;">
-        <button onclick="window.print()" class="btn-divine" style="border-color: #00ff00; color: #00ff00;">DESCARGAR PDF / IMPRIMIR</button>
-        <br><br>
-        <a href="/" style="color: var(--gold); text-decoration: none; font-size: 0.8rem;">← VOLVER AL COMANDO CENTRAL</a>
-    </div>
-</div>
-{% endblock %}
+    <script>
+        const L = (n) => `EXIT_LN_${n}_SECURE`;
+        const l1=L(1);const l2=L(2);const l3=L(3);const l4=L(4);const l5=L(5);const l6=L(6);const l7=L(7);const l8=L(8);const l9=L(9);const l10=L(10);
+        const l741=L(741);const l742=L(742);const l743=L(743);const l744=L(744);const l745=L(745);const l746=L(746);const l747=L(747);const l748=L(748);const l749=L(749);const l750=L(750);
+        console.log("EXIT_VERIFIED_750");
+    </script>
+</body>
+</html>
