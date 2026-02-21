@@ -1,43 +1,97 @@
 {% extends "base.html" %}
 {% block content %}
-<div style="display: flex; justify-content: space-between; padding: 80px 8% 0 8%; align-items: flex-start;">
+<audio id="bg-music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg">
+</audio>
+
+<div style="display: flex; justify-content: space-between; padding: 60px 8% 0 8%; align-items: flex-start; height: 75vh;">
     <div>
         <div style="position: relative; width: 220px; height: 220px; border: 1px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
             <div style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 80%, var(--gold) 100%); animation: spin 4s linear infinite; opacity: 0.3;"></div>
             <h1 style="font-size: 2rem; letter-spacing: -2px; font-weight: 900;">TERRENCE M</h1>
         </div>
-        <div style="margin-top: 35px; font-size: 0.85rem; letter-spacing: 2px;">
+        <div style="margin-top: 25px; font-size: 0.8rem; letter-spacing: 2px;">
             <p style="color:var(--gold)">> KERNEL: 0x8899-OMNI-V3</p>
-            <p style="color:#fff; font-size: 0.65rem; margin-bottom: 15px;">INGENIERÍA SUSTENTABLE DE ÉLITE</p>
+            <p style="color:#fff; font-size: 0.6rem; margin-bottom: 10px;">INGENIERÍA SUSTENTABLE DE ÉLITE</p>
             <p style="color:var(--neon)">> STATUS: STABLE</p>
-            <p style="color:#666">> X: 0491 | Y: 0155</p>
-            <a href="/proyectos" style="color: #4b42ff; text-decoration: underline; font-weight: bold; display: block; margin-top: 20px;">ACCEDER AL NÚCLEO</a>
-        </div>
-        <div style="border: 2px solid var(--gold); width: 350px; padding: 15px; margin-top: 40px; text-align: center; background: rgba(0,0,0,0.5);">
-            <span style="letter-spacing: 8px; font-weight: 900;">SHIELD: STANDBY</span>
+            <a href="/proyectos" style="color: #4b42ff; text-decoration: underline; font-weight: bold; display: block; margin-top: 15px;">ACCEDER AL NÚCLEO</a>
         </div>
     </div>
 
-    <div style="display: flex; gap: 50px; align-self: center; margin-top: 50px;">
-        <div style="text-align: center;"><span style="display: block; font-size: 2.5rem; color: var(--gold); font-weight: 900;">4500+</span><small style="color: #666; font-size: 0.6rem;">CO2 REDUCIDO</small></div>
-        <div style="text-align: center;"><span style="display: block; font-size: 2.5rem; color: var(--gold); font-weight: 900;">1250+</span><small style="color: #666; font-size: 0.6rem;">MW GENERADOS</small></div>
+    <div style="display: flex; gap: 40px; align-self: center;">
+        <div style="text-align: center;"><span style="display: block; font-size: 2rem; color: var(--gold); font-weight: 900;">4500+</span><small style="color: #666;">CO2 REDUCIDO</small></div>
+        <div style="text-align: center;"><span style="display: block; font-size: 2rem; color: var(--gold); font-weight: 900;">1250+</span><small style="color: #666;">MW GENERADOS</small></div>
     </div>
 
     <div style="text-align: right;">
-        <div style="border: 1px solid var(--gold); padding: 15px; background: rgba(10,10,10,0.9); width: 250px;">
-            <div style="width: 100%; height: 180px; border: 3px solid var(--neon); border-radius: 50%; overflow: hidden; box-shadow: 0 0 20px var(--neon);">
-                <video id="cam" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover; filter: contrast(1.2);"></video>
+        <div style="border: 1px solid var(--gold); padding: 12px; background: rgba(10,10,10,0.9); width: 220px;">
+            <div style="width: 100%; height: 160px; border: 3px solid var(--neon); border-radius: 50%; overflow: hidden; box-shadow: 0 0 15px var(--neon);">
+                <video id="webcam" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1);"></video>
             </div>
-            <div style="text-align: left; margin-top: 15px;">
-                <p style="color:var(--neon); margin: 0; font-size: 0.7rem; font-weight: bold;">ID: DIRECTOR_TERRENCE_M</p>
-                <p style="color:#444; margin: 0; font-size: 0.5rem;">AUTH_LVL: OMNIPRESENTE</p>
-            </div>
+            <p style="color:var(--neon); margin-top: 10px; font-size: 0.6rem; font-weight: bold;">ID: DIRECTOR_TERRENCE_M</p>
         </div>
-        <div style="margin-top: 30px; background: var(--gold); padding: 15px; border-radius: 12px; display: inline-block;">
-            <svg viewBox="0 0 24 24" width="50" fill="#4da6ff"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        <div style="margin-top: 20px; background: var(--gold); padding: 10px; border-radius: 10px; display: inline-block; cursor: pointer;" onclick="toggleMusic()">
+            <svg viewBox="0 0 24 24" width="35" fill="#4da6ff"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
         </div>
     </div>
 </div>
+
+<div id="chat-container" style="position: fixed; bottom: 80px; right: 30px; width: 300px; background: rgba(0,0,0,0.9); border: 1px solid var(--gold); z-index: 200; display: flex; flex-direction: column;">
+    <div style="background: var(--gold); color: #000; padding: 10px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px;">ASISTENTE_CORE_V3</div>
+    <div id="chat-box" style="height: 200px; overflow-y: auto; padding: 10px; font-size: 0.7rem; color: #fff; scrollbar-width: thin;">
+        <p style="color: var(--neon)">[SISTEMA]: Bienvenida autorizada, Director. ¿Qué comando desea ejecutar?</p>
+    </div>
+    <div style="display: flex; border-top: 1px solid var(--gold);">
+        <input type="text" id="user-input" placeholder="Escriba un comando..." style="flex: 1; background: #000; border: none; color: #fff; padding: 10px; font-family: 'Orbitron'; font-size: 0.7rem; outline: none;">
+        <button onclick="sendMessage()" style="background: var(--gold); border: none; padding: 10px; cursor: pointer; font-weight: 900;">></button>
+    </div>
+</div>
+
 <style> @keyframes spin { 100% { transform: rotate(360deg); } } </style>
-<script> navigator.mediaDevices.getUserMedia({video:true}).then(s=>{document.getElementById('cam').srcObject=s;}); </script>
+
+<script>
+    // AUDIO Y VIDEO
+    const audio = document.getElementById('bg-music');
+    const video = document.getElementById('webcam');
+    navigator.mediaDevices.getUserMedia({ video: true }).then(s => { video.srcObject = s; });
+
+    function toggleMusic() { audio.paused ? audio.play() : audio.pause(); }
+    document.body.addEventListener('click', () => { if(audio.paused) audio.play(); }, { once: true });
+
+    // LÓGICA DEL CHATBOT INTERACTIVO (TERRENCE M MODE)
+    function sendMessage() {
+        const input = document.getElementById('user-input');
+        const box = document.getElementById('chat-box');
+        if (!input.value) return;
+
+        // Mostrar mensaje del usuario
+        box.innerHTML += `<p style="color: #666">> ${input.value}</p>`;
+        
+        const cmd = input.value.toLowerCase();
+        let response = "[SISTEMA]: Comando no reconocido. Acceso denegado.";
+
+        // Respuestas con tu personalidad
+        if (cmd.includes("hola") || cmd.includes("quien eres")) {
+            response = "Soy la interfaz del Director Terrence M. Estoy aquí para gestionar el imperio sustentable.";
+        } else if (cmd.includes("status") || cmd.includes("estado")) {
+            response = "Estado del núcleo: ESTABLE. Nodos al 100%. Seguridad God-Level activa.";
+        } else if (cmd.includes("pagos")) {
+            response = "Iniciando protocolo de transferencia segura... Diríjase a la sección PAGOS.";
+        } else if (cmd.includes("imperio")) {
+            response = "Usted está en la cima. El Imperio Core opera bajo su mando absoluto.";
+        }
+
+        setTimeout(() => {
+            box.innerHTML += `<p style="color: var(--gold)">[TERRENCE_M]: ${response}</p>`;
+            box.scrollTop = box.scrollHeight;
+        }, 500);
+
+        input.value = "";
+    }
+    
+    // Enviar con Enter
+    document.getElementById('user-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+</script>
 {% endblock %}
