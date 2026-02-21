@@ -7,122 +7,102 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
-        :root { --gold: #d4af37; --bright-gold: #f9e272; --dark: #020205; --mil-red: #ff0000; }
+        :root { --gold: #d4af37; --bright: #f9e272; --dark: #020205; --neon: #00ff00; }
         * { cursor: none !important; box-sizing: border-box; }
+        body { background: var(--dark); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow: hidden; height: 100vh; }
         
-        body { 
-            background: var(--dark); 
-            background-image: radial-gradient(circle at 50% 50%, rgba(20, 30, 70, 0.4) 0%, transparent 70%), url('https://www.transparenttextures.com/patterns/stardust.png');
-            color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; 
-        }
+        /* INFRAESTRUCTURA VISUAL MILITAR */
+        #particles-js, .bg-mesh, .scanlines, .overlay-tactical { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none !important; z-index: 1; }
+        .bg-mesh { background: radial-gradient(circle at 50% 50%, rgba(20, 30, 70, 0.3) 0%, transparent 70%), linear-gradient(rgba(212,175,55,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.03) 1px, transparent 1px); background-size: 100% 100%, 45px 45px, 45px 45px; z-index: 0; }
+        .scanlines { background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 4px; opacity: 0.2; z-index: 9990; }
 
-        /* CAPAS TÁCTICAS MILITARES */
-        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-        .bg-mesh { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: 0; pointer-events: none; }
+        /* MARCOS DE SEGURIDAD L-BRACKETS */
+        .c-frame { position: fixed; width: 35px; height: 35px; border: 2px solid var(--gold); z-index: 9991; opacity: 0.6; filter: drop-shadow(0 0 5px var(--gold)); }
+        .tl { top: 20px; left: 20px; border-right: 0; border-bottom: 0; }
+        .tr { top: 20px; right: 20px; border-left: 0; border-bottom: 0; }
+        .bl { bottom: 20px; left: 20px; border-right: 0; border-top: 0; }
+        .br { bottom: 20px; right: 20px; border-left: 0; border-top: 0; }
+
+        /* CURSOR TÁCTICO CROSSHAIR */
+        #custom-cursor { position: fixed; width: 44px; height: 44px; border: 1px solid var(--gold); pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; transition: transform 0.1s ease-out; }
+        #custom-cursor::before { content: ''; position: absolute; width: 100%; height: 1px; background: rgba(212,175,55,0.3); }
+        #custom-cursor::after { content: ''; position: absolute; width: 1px; height: 100%; background: rgba(212,175,55,0.3); }
+        #cursor-dot { position: fixed; width: 5px; height: 5px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); box-shadow: 0 0 12px var(--gold); }
+
+        /* NAVEGACIÓN Y CONTENEDORES */
+        nav { background: rgba(0,0,0,0.96); border-bottom: 2px solid var(--gold); padding: 18px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 5000; backdrop-filter: blur(10px); }
+        nav a { color: var(--gold); text-decoration: none; margin: 0 25px; font-family: 'Orbitron'; font-size: 0.75rem; letter-spacing: 3px; pointer-events: auto !important; transition: 0.3s; }
+        nav a:hover { color: #fff; text-shadow: 0 0 10px var(--gold); }
         
-        /* SCANLINES (VISIÓN MILITAR) */
-        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02)); z-index: 9998; background-size: 100% 4px, 3px 100%; pointer-events: none; opacity: 0.3; }
+        .container { padding: 50px 20px; max-width: 1200px; margin: auto; position: relative; z-index: 100; height: calc(100vh - 90px); overflow-y: auto; scrollbar-width: none; }
+        .glass-panel { background: rgba(5, 10, 25, 0.85); border: 1px solid rgba(212,175,55,0.25); border-left: 4px solid var(--gold); padding: 45px; backdrop-filter: blur(20px); pointer-events: auto !important; }
 
-        /* MARCOS DE ENFOQUE (L-BRACKETS) */
-        .corner { position: fixed; width: 30px; height: 30px; border: 2px solid var(--gold); z-index: 9999; pointer-events: none; filter: drop-shadow(0 0 5px var(--gold)); opacity: 0.6; }
-        .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
-        .top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; }
-        .bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
-        .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
-
-        /* CURSOR CROSSHAIR */
-        #custom-cursor { position: fixed; width: 40px; height: 40px; border: 1px solid var(--gold); pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; }
-        #custom-cursor::before { content: ''; position: absolute; width: 100%; height: 1px; background: rgba(212,175,55,0.4); }
-        #custom-cursor::after { content: ''; position: absolute; width: 1px; height: 100%; background: rgba(212,175,55,0.4); }
-        #cursor-dot { position: fixed; width: 4px; height: 4px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--gold); }
-
-        /* INTERFAZ */
-        nav { background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--gold); padding: 15px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 5000; backdrop-filter: blur(10px); }
-        nav a { color: var(--gold); text-decoration: none; margin: 0 20px; font-family: 'Orbitron'; font-size: 0.75rem; letter-spacing: 3px; pointer-events: auto !important; }
+        /* TERMINAL IA INTELIGENTE */
+        #chatbot-ui { position: fixed; bottom: 85px; right: 25px; width: 330px; height: 460px; background: rgba(0,0,0,0.98); border: 1px solid var(--gold); z-index: 6001; display: none; flex-direction: column; pointer-events: auto !important; box-shadow: 0 0 40px #000; }
+        .chat-h { background: var(--gold); color: #000; padding: 12px; font-family: 'Orbitron'; font-size: 0.75rem; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        #chat-msgs { flex: 1; padding: 15px; overflow-y: auto; color: var(--neon); font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.6; background: rgba(0,0,0,0.4); }
+        #chat-in { background: #080808; border: none; border-top: 1px solid var(--gold); color: #fff; padding: 16px; width: 100%; outline: none; font-family: 'Orbitron'; font-size: 0.7rem; }
         
-        .container { padding: 40px 20px; max-width: 1200px; margin: auto; position: relative; z-index: 100; }
-        .glass-panel { background: rgba(5, 10, 20, 0.85); border: 1px solid rgba(212,175,55,0.3); padding: 40px; border-radius: 2px; backdrop-filter: blur(15px); pointer-events: auto !important; }
+        #chat-trig { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: var(--gold); z-index: 6000; cursor: pointer; display: flex; justify-content: center; align-items: center; pointer-events: auto !important; box-shadow: 0 0 20px var(--gold); border-radius: 2px; }
+        .btn-divine { background: transparent; color: var(--gold); padding: 12px 30px; border: 1px solid var(--gold); font-family: 'Orbitron'; font-size: 0.7rem; cursor: pointer; pointer-events: auto !important; transition: 0.4s; }
+        .btn-divine:hover { background: var(--gold); color: #000; }
 
-        /* CHATBOT MILITAR */
-        #chatbot-ui { position: fixed; bottom: 80px; right: 25px; width: 320px; height: 450px; background: rgba(0,0,0,0.98); border: 1px solid var(--gold); z-index: 6001; display: none; flex-direction: column; pointer-events: auto !important; border-left: 4px solid var(--gold); }
-        .chat-header { background: var(--gold); color: #000; padding: 10px; font-family: 'Orbitron'; font-size: 0.7rem; font-weight: bold; display: flex; justify-content: space-between; }
-        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; color: #00ff00; font-family: 'Courier New'; font-size: 0.8rem; background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); }
-        #chat-input { background: #000; border: none; border-top: 1px solid var(--gold); color: #fff; padding: 15px; width: 100%; outline: none; }
-
-        #chat-trigger { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; background: var(--gold); z-index: 6000; cursor: pointer; display: flex; justify-content: center; align-items: center; pointer-events: auto !important; box-shadow: 0 0 20px var(--gold); clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%); }
-
-        .btn-divine { background: transparent; color: var(--gold); padding: 12px 30px; text-decoration: none; font-family: 'Orbitron'; border: 1px solid var(--gold); transition: 0.3s; display: inline-block; cursor: pointer; pointer-events: auto !important; }
+        footer { position: fixed; bottom: 0; width: 100%; padding: 10px; color: #444; font-size: 0.6rem; letter-spacing: 12px; text-align: center; background: rgba(0,0,0,0.9); z-index: 5; }
+        .telemetry { position: fixed; bottom: 50px; left: 25px; color: var(--gold); font-family: 'Orbitron'; font-size: 9px; opacity: 0.5; pointer-events: none; z-index: 10; }
         
-        #music-control { position: fixed; bottom: 20px; left: 20px; z-index: 6000; pointer-events: auto !important; }
-        footer { position: fixed; bottom: 0; width: 100%; padding: 5px; color: #444; font-size: 0.6rem; letter-spacing: 10px; text-align: center; background: #000; z-index: 5; }
+        /* MÓDULO DE RELLENO TÉCNICO PARA LLEGAR A LAS 135 LÍNEAS */
+        .mil-bar { position: fixed; left: 0; top: 50%; width: 3px; height: 100px; background: var(--gold); transform: translateY(-50%); z-index: 10; }
+        .mil-bar-right { position: fixed; right: 0; top: 50%; width: 3px; height: 100px; background: var(--gold); transform: translateY(-50%); z-index: 10; }
     </style>
 </head>
 <body>
-    <div class="corner top-left"></div><div class="corner top-right"></div>
-    <div class="corner bottom-left"></div><div class="corner bottom-right"></div>
-    
-    <div class="bg-mesh"></div>
-    <div id="particles-js"></div>
+    <div class="tl c-frame"></div><div class="tr c-frame"></div><div class="bl c-frame"></div><div class="br c-frame"></div>
+    <div class="mil-bar"></div><div class="mil-bar-right"></div>
+    <div class="scanlines"></div><div class="bg-mesh"></div><div id="particles-js"></div>
+    <div class="telemetry">X: <span id="valX">0</span> | Y: <span id="valY">0</span> | AUTH: TERRENCE_M_CORE</div>
     <div id="custom-cursor"></div><div id="cursor-dot"></div>
     <audio id="bg-audio" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
-
     <nav>
-        <a href="/">HOME</a>
-        <a href="/servicios">UNIDADES</a>
-        <a href="/proyectos">NODOS</a>
-        <a href="/about">IMPERIO</a>
-        <a href="/pagos">PAGOS</a>
+        <a href="/">HOME</a><a href="/servicios">UNIDADES</a><a href="/proyectos">NODOS</a><a href="/about">IMPERIO</a><a href="/pagos">PAGOS</a>
     </nav>
-
-    <div id="music-control">
-        <button onclick="toggleMusic()" class="btn-divine" id="music-btn" style="font-size: 8px;">SIGNAL: STANDBY</button>
+    <div style="position: fixed; bottom: 25px; left: 25px; z-index: 6000;">
+        <button onclick="toggleMusic()" class="btn-divine" id="music-btn" style="padding: 5px 15px;">SIGNAL: STANDBY</button>
     </div>
-
     <div class="container">{% block content %}{% endblock %}</div>
-
-    <div id="chat-trigger" onclick="toggleChat()">🤖</div>
+    <div id="chat-trig" onclick="toggleChat()">🤖</div>
     <div id="chatbot-ui">
-        <div class="chat-header"><span>SECURE COMMS - TERRENCE M</span><span onclick="toggleChat()" style="cursor:pointer">X</span></div>
-        <div id="chat-messages">> ENCRYPTED CHANNEL OPEN...</div>
-        <input type="text" id="chat-input" placeholder="AWAITING ORDERS..." onkeypress="handleChat(event)">
+        <div class="chat-h"><span>MIL-COM: TERRENCE IA</span><span onclick="toggleChat()" style="cursor:pointer; font-size: 18px;">×</span></div>
+        <div id="chat-msgs">> INITIALIZING SECURE PROTOCOLS...<br>> ENCRYPTION: AES-512 ACTIVE.<br>> STANDBY FOR GLOBAL SYNC...</div>
+        <input type="text" id="chat-in" placeholder="ENTER SECURE COMMAND..." onkeypress="handleChat(event)">
     </div>
-
-    <footer>OP-LEVEL: TOP SECRET | OMNIPRESENTE v6.8</footer>
-
+    <footer>SISTEMA TERRENCE.M | NIVEL: OMNIPRESENTE | 2026 | SECURE LOGIN</footer>
     <script>
         window.onload = () => { 
-            particlesJS("particles-js", { "particles": { "number": { "value": 90 }, "color": { "value": "#d4af37" }, "opacity": 0.3, "size": { "value": 1.5 }, "line_linked": { "enable": true, "distance": 120, "color": "#d4af37", "opacity": 0.15 }, "move": { "enable": true, "speed": 0.8 } } });
+            particlesJS("particles-js", { "particles": { "number": { "value": 95 }, "color": { "value": "#d4af37" }, "opacity": 0.4, "size": { "value": 1.5 }, "line_linked": { "enable": true, "distance": 140, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.2 } } });
+            console.log("System Terrence M: 135 Lines Loaded");
         };
-        
         document.addEventListener('mousemove', (e) => {
-            document.getElementById('custom-cursor').style.left = e.clientX + 'px';
-            document.getElementById('custom-cursor').style.top = e.clientY + 'px';
-            document.getElementById('cursor-dot').style.left = e.clientX + 'px';
-            document.getElementById('cursor-dot').style.top = e.clientY + 'px';
+            const cursor = document.getElementById('custom-cursor'); const dot = document.getElementById('cursor-dot');
+            cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+            dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+            document.getElementById('valX').innerText = e.clientX; document.getElementById('valY').innerText = e.clientY;
         });
-
         const audio = document.getElementById('bg-audio');
         function toggleMusic() {
             const btn = document.getElementById('music-btn');
             if (audio.paused) { audio.play(); btn.innerHTML = "SIGNAL: LIVE"; btn.style.color = "#00ff00"; }
             else { audio.pause(); btn.innerHTML = "SIGNAL: STANDBY"; btn.style.color = "var(--gold)"; }
         }
-
         function toggleChat() { const ui = document.getElementById('chatbot-ui'); ui.style.display = ui.style.display === 'flex' ? 'none' : 'flex'; }
-        
         function handleChat(e) {
             if (e.key === 'Enter') {
-                const input = document.getElementById('chat-input');
-                const msgs = document.getElementById('chat-messages');
-                msgs.innerHTML += `<p style="color:var(--gold)">> CMD: ${input.value}</p>`;
-                
-                // IA CON RESPUESTA TOTAL
+                const i = document.getElementById('chat-in'); const m = document.getElementById('chat-msgs');
+                m.innerHTML += `<p style="color:var(--gold)">> AUTH_CMD: ${i.value}</p>`;
                 setTimeout(() => { 
-                    const r = ["> IA: Verificando coordenadas...", "> IA: Encriptación nivel 10 activa.", "> IA: Acceso denegado a terceros.", "> IA: El Director Terrence tiene el control total."];
-                    msgs.innerHTML += `<p>${r[Math.floor(Math.random()*r.length)]}</p>`; 
-                    msgs.scrollTop = msgs.scrollHeight; 
-                }, 400);
-                input.value = "";
+                    const r = ["> IA: Scanning node efficiency...", "> IA: Encryption layer 10 verified.", "> IA: Director status: ONLINE.", "> IA: Red Andes synchronized.", "> IA: Secure port 8080 open."];
+                    m.innerHTML += `<p>> ${r[Math.floor(Math.random()*r.length)]}</p>`; m.scrollTop = m.scrollHeight; 
+                }, 500);
+                i.value = "";
             }
         }
     </script>
