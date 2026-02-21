@@ -1,219 +1,28 @@
+cat << 'EOF' > templates/base.html
 <!DOCTYPE html>
-<html lang="es" style="background:#000 !important;">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERRENCE M - CENTRAL</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <title>TERRENCE M - {% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --neon: #00ff00; }
-        html, body { 
-            background: #000 !important; 
-            color: #fff; 
-            margin: 0; 
-            padding: 0; 
-            min-height: 100vh;
-            display: block !important; 
-            font-family: 'Orbitron', sans-serif; 
-            visibility: visible !important; 
-        }
-        .f-mil { position: fixed; width: 220px; height: 220px; border: 10px solid var(--gold); z-index: 9999; pointer-events: none; }
-        .tl { top: 15px; left: 15px; border-right: 0; border-bottom: 0; }
-        .tr { top: 15px; right: 15px; border-left: 0; border-bottom: 0; }
-        .bl { bottom: 15px; left: 15px; border-right: 0; border-top: 0; }
-        .br { bottom: 15px; right: 15px; border-left: 0; border-top: 0; }
-        nav { border-bottom: 8px solid var(--gold); padding: 45px; display: flex; justify-content: center; background: #000; position: relative; z-index: 5000; }
-        nav a { color: var(--gold); text-decoration: none; margin: 0 45px; letter-spacing: 12px; font-weight: 900; font-size: 1.4rem; }
-        .retina-module { position: fixed; top: 180px; right: 80px; width: 340px; height: 460px; border: 4px solid var(--gold); background: rgba(0,0,0,0.9); z-index: 100000; padding: 25px; }
-        .scanner { width: 220px; height: 220px; border: 5px solid var(--neon); margin: 0 auto 15px; border-radius: 50%; position: relative; overflow: hidden; background: #111; }
-        video { width: 100%; height: 100%; object-fit: cover; }
-        .scan-line { position: absolute; width: 100%; height: 4px; background: var(--neon); top: 0; animation: move 3s infinite linear; z-index: 10; }
-        @keyframes move { 0% { top: 0; } 100% { top: 100%; } }
-        #chat-win { position: fixed; bottom: 150px; right: 60px; width: 550px; height: 700px; background: #000; border: 8px solid var(--gold); z-index: 200000; display: none; flex-direction: column; }
-        #chat-btn { position: fixed; bottom: 40px; right: 40px; width: 110px; height: 110px; background: var(--gold); z-index: 200001; border-radius: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 3.5rem; box-shadow: 0 0 30px var(--gold); }
+        :root { --gold: #d4af37; --neon: #00ff00; --dark: #000; --blue: #4da6ff; }
+        body { background: var(--dark); color: #fff; margin: 0; font-family: 'Orbitron', sans-serif; overflow: hidden; }
+        .frame { position: fixed; border: 1px solid var(--gold); z-index: 99; pointer-events: none; }
+        .t-f { top: 155px; left: 0; right: 0; border-bottom: 2px solid var(--gold); }
+        .b-f { bottom: 45px; left: 15px; right: 15px; border-top: 2px solid var(--gold); height: 80px; border-left: 2px solid var(--gold); }
+        nav { display: flex; justify-content: center; gap: 60px; padding: 50px 0; background: #000; }
+        nav a { color: var(--gold); text-decoration: none; font-weight: 900; font-size: 1.4rem; letter-spacing: 8px; }
+        footer { position: fixed; bottom: 15px; width: 100%; text-align: center; color: #444; font-size: 0.7rem; letter-spacing: 5px; }
     </style>
 </head>
 <body>
-    <div class="f-mil tl"></div><div class="f-mil tr"></div><div class="f-mil bl"></div><div class="f-mil br"></div>
-    
+    <div class="frame t-f"></div><div class="frame b-f"></div>
     <nav>
-        <a href="#">HOME</a>
-        <a href="#">UNIDADES</a>
-        <a href="#">NODOS</a>
-        <a href="#">IMPERIO</a>
-        <a href="#">PAGOS</a>
+        <a href="/">HOME</a><a href="/unidades">UNIDADES</a><a href="/nodos">NODOS</a><a href="/imperio">IMPERIO</a><a href="/pagos">PAGOS</a>
     </nav>
-
-    <div class="retina-module">
-        <div class="scanner"><div class="scan-line"></div><video id="v" autoplay playsinline muted></video></div>
-        <div style="color:var(--neon); text-align:center; font-family:'Orbitron'; font-size: 0.8rem;">AUTH_STATUS: <span id="st">ACTIVE</span><br>DIRECTOR_TERRENCE_M</div>
-    </div>
-
-    <div id="chat-btn" onclick="t()">🛡️</div>
-
-    <div id="chat-win">
-        <div style="background:var(--gold); padding:20px; color:#000; font-weight:900; display: flex; justify-content: space-between;">
-            <span>CORE_V12_TERMINAL</span>
-            <span onclick="t()" style="cursor:pointer">X</span>
-        </div>
-        <div id="o" style="flex:1; padding:25px; color:var(--neon); overflow-y:auto; font-family:monospace; background: #050505;">> terrence.m service online...</div>
-        <input type="text" id="i" style="padding:25px; background:#111; color:#fff; border:none; border-top:5px solid var(--gold); outline: none;" onkeypress="e(event)" placeholder="Escribe comando...">
-    </div>
-
-    <script>
-        // 1. Video y Cámara
-        async function initCam(){ try{ const m=await navigator.mediaDevices.getUserMedia({video:true}); document.getElementById('v').srcObject=m; }catch(x){ document.getElementById('st').innerText="ERROR"; } }
-        // 2. Control Chat
-        function t(){ let w=document.getElementById('chat-win'); w.style.display=(w.style.display==='flex')?'none':'flex'; if(w.style.display==='flex') document.getElementById('i').focus(); }
-        // 3. Procesar texto
-        function e(k){ if(k.key==='Enter' && k.target.value.trim() !== ""){ const o=document.getElementById('o'); o.innerHTML += `<br><span style="color:#fff;">></span> ${k.target.value}`; k.target.value=""; o.scrollTop = o.scrollHeight; } }
-        
-        window.onload=initCam;
-
-        // --- LAS 750 LINEAS (CORREGIDAS) ---
-        function L(n){ return "NODE_" + n + "_STATUS_OK"; }
-        const l045 = L(45); const l046 = L(46); const l047 = L(47); const l048 = L(48); const l049 = L(49);
-        const l050 = L(50); const l051 = L(51); const l052 = L(52); const l053 = L(53); const l054 = L(54);
-        const l055 = L(55); const l056 = L(56); const l057 = L(57); const l058 = L(58); const l059 = L(59);
-        const l060 = L(60); const l061 = L(61); const l062 = L(62); const l063 = L(63); const l064 = L(64);
-        const l065 = L(65); const l066 = L(66); const l067 = L(67); const l068 = L(68); const l069 = L(69);
-        const l070 = L(70); const l071 = L(71); const l072 = L(72); const l073 = L(73); const l074 = L(74);
-        const l075 = L(75); const l076 = L(76); const l077 = L(77); const l078 = L(78); const l079 = L(79);
-        const l080 = L(80); const l081 = L(81); const l082 = L(82); const l083 = L(83); const l084 = L(84);
-        const l085 = L(85); const l086 = L(86); const l087 = L(87); const l088 = L(88); const l089 = L(89);
-        const l090 = L(90); const l091 = L(91); const l092 = L(92); const l093 = L(93); const l094 = L(94);
-        const l095 = L(95); const l096 = L(96); const l097 = L(97); const l098 = L(98); const l099 = L(99);
-        const l100 = L(100); const l101 = L(101); const l102 = L(102); const l103 = L(103); const l104 = L(104);
-        const l105 = L(105); const l106 = L(106); const l107 = L(107); const l108 = L(108); const l109 = L(109);
-        const l110 = L(110); const l111 = L(111); const l112 = L(112); const l113 = L(113); const l114 = L(114);
-        const l115 = L(115); const l116 = L(116); const l117 = L(117); const l118 = L(118); const l119 = L(119);
-        const l120 = L(120); const l121 = L(121); const l122 = L(122); const l123 = L(123); const l124 = L(124);
-        const l125 = L(125); const l126 = L(126); const l127 = L(127); const l128 = L(128); const l129 = L(129);
-        const l130 = L(130); const l131 = L(131); const l132 = L(132); const l133 = L(133); const l134 = L(134);
-        const l135 = L(135); const l136 = L(136); const l137 = L(137); const l138 = L(138); const l139 = L(139);
-        const l140 = L(140); const l141 = L(141); const l142 = L(142); const l143 = L(143); const l144 = L(144);
-        const l145 = L(145); const l146 = L(146); const l147 = L(147); const l148 = L(148); const l149 = L(149);
-        const l150 = L(150); const l151 = L(151); const l152 = L(152); const l153 = L(153); const l154 = L(154);
-        const l155 = L(155); const l156 = L(156); const l157 = L(157); const l158 = L(158); const l159 = L(159);
-        const l160 = L(160); const l161 = L(161); const l162 = L(162); const l163 = L(163); const l164 = L(164);
-        const l165 = L(165); const l166 = L(166); const l167 = L(167); const l168 = L(168); const l169 = L(169);
-        const l170 = L(170); const l171 = L(171); const l172 = L(172); const l173 = L(173); const l174 = L(174);
-        const l175 = L(175); const l176 = L(176); const l177 = L(177); const l178 = L(178); const l179 = L(179);
-        const l180 = L(180); const l181 = L(181); const l182 = L(182); const l183 = L(183); const l184 = L(184);
-        const l185 = L(185); const l186 = L(186); const l187 = L(187); const l188 = L(188); const l189 = L(189);
-        const l190 = L(190); const l191 = L(191); const l192 = L(192); const l193 = L(193); const l194 = L(194);
-        const l195 = L(195); const l196 = L(196); const l197 = L(197); const l198 = L(198); const l199 = L(199);
-        const l200 = L(200); const l201 = L(201); const l202 = L(202); const l203 = L(203); const l204 = L(204);
-        const l205 = L(205); const l206 = L(206); const l207 = L(207); const l208 = L(208); const l209 = L(209);
-        const l210 = L(210); const l211 = L(211); const l212 = L(212); const l213 = L(213); const l214 = L(214);
-        const l215 = L(215); const l216 = L(216); const l217 = L(217); const l218 = L(218); const l219 = L(219);
-        const l220 = L(220); const l221 = L(221); const l222 = L(222); const l223 = L(223); const l224 = L(224);
-        const l225 = L(225); const l226 = L(226); const l227 = L(227); const l228 = L(228); const l229 = L(229);
-        const l230 = L(230); const l231 = L(231); const l232 = L(232); const l233 = L(233); const l234 = L(234);
-        const l235 = L(235); const l236 = L(236); const l237 = L(237); const l238 = L(238); const l239 = L(239);
-        const l240 = L(240); const l241 = L(241); const l242 = L(242); const l243 = L(243); const l244 = L(244);
-        const l245 = L(245); const l246 = L(246); const l247 = L(247); const l248 = L(248); const l249 = L(249);
-        const l250 = L(250); const l251 = L(251); const l252 = L(252); const l253 = L(253); const l254 = L(254);
-        const l255 = L(255); const l256 = L(256); const l257 = L(257); const l258 = L(258); const l259 = L(259);
-        const l260 = L(260); const l261 = L(261); const l262 = L(262); const l263 = L(263); const l264 = L(264);
-        const l265 = L(265); const l266 = L(266); const l267 = L(267); const l268 = L(268); const l269 = L(269);
-        const l270 = L(270); const l271 = L(271); const l272 = L(272); const l273 = L(273); const l274 = L(274);
-        const l275 = L(275); const l276 = L(276); const l277 = L(277); const l278 = L(278); const l279 = L(279);
-        const l280 = L(280); const l281 = L(281); const l282 = L(282); const l283 = L(283); const l284 = L(284);
-        const l285 = L(285); const l286 = L(286); const l287 = L(287); const l288 = L(288); const l289 = L(289);
-        const l290 = L(290); const l291 = L(291); const l292 = L(292); const l293 = L(293); const l294 = L(294);
-        const l295 = L(295); const l296 = L(296); const l297 = L(297); const l298 = L(298); const l299 = L(299);
-        const l300 = L(300); const l301 = L(301); const l302 = L(302); const l303 = L(303); const l304 = L(304);
-        const l305 = L(305); const l306 = L(306); const l307 = L(307); const l308 = L(308); const l309 = L(309);
-        const l310 = L(310); const l311 = L(311); const l312 = L(312); const l313 = L(313); const l314 = L(314);
-        const l315 = L(315); const l316 = L(316); const l317 = L(317); const l318 = L(318); const l319 = L(319);
-        const l320 = L(320); const l321 = L(321); const l322 = L(322); const l323 = L(323); const l324 = L(324);
-        const l325 = L(325); const l326 = L(326); const l327 = L(327); const l328 = L(328); const l329 = L(329);
-        const l330 = L(330); const l331 = L(331); const l332 = L(332); const l333 = L(333); const l334 = L(334);
-        const l335 = L(335); const l336 = L(336); const l337 = L(337); const l338 = L(338); const l339 = L(339);
-        const l340 = L(340); const l341 = L(341); const l342 = L(342); const l343 = L(343); const l344 = L(344);
-        const l345 = L(345); const l346 = L(346); const l347 = L(347); const l348 = L(348); const l349 = L(349);
-        const l350 = L(350); const l351 = L(351); const l352 = L(352); const l353 = L(353); const l354 = L(354);
-        const l355 = L(355); const l356 = L(356); const l357 = L(357); const l358 = L(358); const l359 = L(359);
-        const l360 = L(360); const l361 = L(361); const l362 = L(362); const l363 = L(363); const l364 = L(364);
-        const l365 = L(365); const l366 = L(366); const l367 = L(367); const l368 = L(368); const l369 = L(369);
-        const l370 = L(370); const l371 = L(371); const l372 = L(372); const l373 = L(373); const l374 = L(374);
-        const l375 = L(375); const l376 = L(376); const l377 = L(377); const l378 = L(378); const l379 = L(379);
-        const l380 = L(380); const l381 = L(381); const l382 = L(382); const l383 = L(383); const l384 = L(384);
-        const l385 = L(385); const l386 = L(386); const l387 = L(387); const l388 = L(388); const l389 = L(389);
-        const l390 = L(390); const l391 = L(391); const l392 = L(392); const l393 = L(393); const l394 = L(394);
-        const l395 = L(395); const l396 = L(396); const l397 = L(397); const l398 = L(398); const l399 = L(399);
-        const l400 = L(400); const l401 = L(401); const l402 = L(402); const l403 = L(403); const l404 = L(404);
-        const l405 = L(405); const l406 = L(406); const l407 = L(407); const l408 = L(408); const l409 = L(409);
-        const l410 = L(410); const l411 = L(411); const l412 = L(412); const l413 = L(413); const l414 = L(414);
-        const l415 = L(415); const l416 = L(416); const l417 = L(417); const l418 = L(418); const l419 = L(419);
-        const l420 = L(420); const l421 = L(421); const l422 = L(422); const l423 = L(423); const l424 = L(424);
-        const l425 = L(425); const l426 = L(426); const l427 = L(427); const l428 = L(428); const l429 = L(429);
-        const l430 = L(430); const l431 = L(431); const l432 = L(432); const l433 = L(433); const l434 = L(434);
-        const l435 = L(435); const l436 = L(436); const l437 = L(437); const l438 = L(438); const l439 = L(439);
-        const l440 = L(440); const l441 = L(441); const l442 = L(442); const l443 = L(443); const l444 = L(444);
-        const l445 = L(445); const l446 = L(446); const l447 = L(447); const l448 = L(448); const l449 = L(449);
-        const l450 = L(450); const l451 = L(451); const l452 = L(452); const l453 = L(453); const l454 = L(454);
-        const l455 = L(455); const l456 = L(456); const l457 = L(457); const l458 = L(458); const l459 = L(459);
-        const l460 = L(460); const l461 = L(461); const l462 = L(462); const l463 = L(463); const l464 = L(464);
-        const l465 = L(465); const l466 = L(466); const l467 = L(467); const l468 = L(468); const l469 = L(469);
-        const l470 = L(470); const l471 = L(471); const l472 = L(472); const l473 = L(473); const l474 = L(474);
-        const l475 = L(475); const l476 = L(476); const l477 = L(477); const l478 = L(478); const l479 = L(479);
-        const l480 = L(480); const l481 = L(481); const l482 = L(482); const l483 = L(483); const l484 = L(484);
-        const l485 = L(485); const l486 = L(486); const l487 = L(487); const l488 = L(488); const l489 = L(489);
-        const l490 = L(490); const l491 = L(491); const l492 = L(492); const l493 = L(493); const l494 = L(494);
-        const l495 = L(495); const l496 = L(496); const l497 = L(497); const l498 = L(498); const l499 = L(499);
-        const l500 = L(500); const l501 = L(501); const l502 = L(502); const l503 = L(503); const l504 = L(504);
-        const l505 = L(505); const l506 = L(506); const l507 = L(507); const l508 = L(508); const l509 = L(509);
-        const l510 = L(510); const l511 = L(511); const l512 = L(512); const l513 = L(513); const l514 = L(514);
-        const l515 = L(515); const l516 = L(516); const l517 = L(517); const l518 = L(518); const l519 = L(519);
-        const l520 = L(520); const l521 = L(521); const l522 = L(522); const l523 = L(523); const l524 = L(524);
-        const l525 = L(525); const l526 = L(526); const l527 = L(527); const l528 = L(528); const l529 = L(529);
-        const l530 = L(530); const l531 = L(531); const l532 = L(532); const l533 = L(533); const l534 = L(534);
-        const l535 = L(535); const l536 = L(536); const l537 = L(537); const l538 = L(538); const l539 = L(539);
-        const l540 = L(540); const l541 = L(541); const l542 = L(542); const l543 = L(543); const l544 = L(544);
-        const l545 = L(545); const l546 = L(546); const l547 = L(547); const l548 = L(548); const l549 = L(549);
-        const l550 = L(550); const l551 = L(551); const l552 = L(552); const l553 = L(553); const l554 = L(554);
-        const l555 = L(555); const l556 = L(556); const l557 = L(557); const l558 = L(558); const l559 = L(559);
-        const l560 = L(560); const l561 = L(561); const l562 = L(562); const l563 = L(563); const l564 = L(564);
-        const l565 = L(565); const l566 = L(566); const l567 = L(567); const l568 = L(568); const l569 = L(569);
-        const l570 = L(570); const l571 = L(571); const l572 = L(572); const l573 = L(573); const l574 = L(574);
-        const l575 = L(575); const l576 = L(576); const l577 = L(577); const l578 = L(578); const l579 = L(579);
-        const l580 = L(580); const l581 = L(581); const l582 = L(582); const l583 = L(583); const l584 = L(584);
-        const l585 = L(585); const l586 = L(586); const l587 = L(587); const l588 = L(588); const l589 = L(589);
-        const l590 = L(590); const l591 = L(591); const l592 = L(592); const l593 = L(593); const l594 = L(594);
-        const l595 = L(595); const l596 = L(596); const l597 = L(597); const l598 = L(598); const l599 = L(599);
-        const l600 = L(600); const l601 = L(601); const l602 = L(602); const l603 = L(603); const l604 = L(604);
-        const l605 = L(605); const l606 = L(606); const l607 = L(607); const l608 = L(608); const l609 = L(609);
-        const l610 = L(610); const l611 = L(611); const l612 = L(612); const l613 = L(613); const l614 = L(614);
-        const l615 = L(615); const l616 = L(616); const l617 = L(617); const l618 = L(618); const l619 = L(619);
-        const l620 = L(620); const l621 = L(621); const l622 = L(622); const l623 = L(623); const l624 = L(624);
-        const l625 = L(625); const l626 = L(626); const l627 = L(627); const l628 = L(628); const l629 = L(629);
-        const l630 = L(630); const l631 = L(631); const l632 = L(632); const l633 = L(633); const l634 = L(634);
-        const l635 = L(635); const l636 = L(636); const l637 = L(637); const l638 = L(638); const l639 = L(639);
-        const l640 = L(640); const l641 = L(641); const l642 = L(642); const l643 = L(643); const l644 = L(644);
-        const l645 = L(645); const l646 = L(646); const l647 = L(647); const l648 = L(648); const l649 = L(649);
-        const l650 = L(650); const l651 = L(651); const l652 = L(652); const l653 = L(653); const l654 = L(654);
-        const l655 = L(655); const l656 = L(656); const l657 = L(657); const l658 = L(658); const l659 = L(659);
-        const l660 = L(660); const l661 = L(661); const l662 = L(662); const l663 = L(663); const l664 = L(664);
-        const l665 = L(665); const l666 = L(666); const l667 = L(667); const l668 = L(668); const l669 = L(669);
-        const l670 = L(670); const l671 = L(671); const l672 = L(672); const l673 = L(673); const l674 = L(674);
-        const l675 = L(675); const l676 = L(676); const l677 = L(677); const l678 = L(678); const l679 = L(679);
-        const l680 = L(680); const l681 = L(681); const l682 = L(682); const l683 = L(683); const l684 = L(684);
-        const l685 = L(685); const l686 = L(686); const l687 = L(687); const l688 = L(688); const l689 = L(689);
-        const l690 = L(690); const l691 = L(691); const l692 = L(692); const l693 = L(693); const l694 = L(694);
-        const l695 = L(695); const l696 = L(696); const l697 = L(697); const l698 = L(698); const l699 = L(699);
-        const l700 = L(700); const l701 = L(701); const l702 = L(702); const l703 = L(703); const l704 = L(704);
-        const l705 = L(705); const l706 = L(706); const l707 = L(707); const l708 = L(708); const l709 = L(709);
-        const l710 = L(710); const l711 = L(711); const l712 = L(712); const l713 = L(713); const l714 = L(714);
-        const l715 = L(715); const l716 = L(716); const l717 = L(717); const l718 = L(718); const l719 = L(719);
-        const l720 = L(720); const l721 = L(721); const l722 = L(722); const l723 = L(723); const l724 = L(724);
-        const l725 = L(725); const l726 = L(726); const l727 = L(727); const l728 = L(728); const l729 = L(729);
-        const l730 = L(730); const l731 = L(731); const l732 = L(732); const l733 = L(733); const l734 = L(734);
-        const l735 = L(735); const l736 = L(736); const l737 = L(737); const l738 = L(738); const l739 = L(739);
-        const l740 = L(740); const l741 = L(741); const l742 = L(742); const l743 = L(743); const l744 = L(744);
-        const l745 = L(745); const l746 = L(746); const l747 = L(747); const l748 = L(748); const l749 = L(749);
-        console.log("SISTEMA_COMPLETO_V12_TM_ACTIVO");
-    </script>
+    {% block content %}{% endblock %}
+    <footer>INTERFACE SUPREMA | terrence.m | SECURITY: GOD_LEVEL | 2026</footer>
 </body>
 </html>
+EOF
