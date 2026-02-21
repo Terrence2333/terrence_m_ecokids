@@ -7,72 +7,91 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
-        :root { --gold: #d4af37; --bright: #f9e272; --dark: #020205; --neon: #00ff00; --red: #ff0000; }
+        :root { --gold: #d4af37; --bright: #f9e272; --dark: #010103; --neon: #00ff00; --alert: #ff0000; --panel: rgba(5, 10, 25, 0.9); }
         * { cursor: none !important; box-sizing: border-box; }
         body { background: var(--dark); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow: hidden; height: 100vh; }
-        
-        /* FONDO DE NEBULOSA Y MALLA TÁCTICA */
-        #particles-js, .bg-mesh, .scanlines, .tactical-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none !important; z-index: 1; }
+
+        /* CAPAS DE FONDO TÁCTICO */
+        #particles-js, .bg-mesh, .scanlines, .tactical-grid, .radar-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none !important; z-index: 1; }
         .bg-mesh { 
-            background: radial-gradient(circle at 50% 50%, rgba(20, 30, 80, 0.4) 0%, transparent 80%), 
-                        linear-gradient(rgba(212,175,55,0.04) 1px, transparent 1px), 
-                        linear-gradient(90deg, rgba(212,175,55,0.04) 1px, transparent 1px); 
-            background-size: 100% 100%, 50px 50px, 50px 50px; z-index: 0; 
+            background: radial-gradient(circle at 50% 50%, rgba(20, 45, 110, 0.45) 0%, transparent 85%),
+                        linear-gradient(rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(212, 175, 55, 0.04) 1px, transparent 1px);
+            background-size: 100% 100%, 55px 55px, 55px 55px; z-index: 0; 
         }
-        .scanlines { background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%); background-size: 100% 4px; opacity: 0.25; z-index: 9990; }
+        .scanlines { background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.25) 50%); background-size: 100% 4px; z-index: 9990; opacity: 0.3; }
 
-        /* MARCOS DE ENFOQUE MILITAR (L-BRACKETS) */
-        .c-frame { position: fixed; width: 45px; height: 45px; border: 2px solid var(--gold); z-index: 9991; opacity: 0.7; filter: drop-shadow(0 0 8px var(--gold)); transition: 0.3s; }
-        .tl { top: 25px; left: 25px; border-right: 0; border-bottom: 0; }
-        .tr { top: 25px; right: 25px; border-left: 0; border-bottom: 0; }
-        .bl { bottom: 25px; left: 25px; border-right: 0; border-top: 0; }
-        .br { bottom: 25px; right: 25px; border-left: 0; border-top: 0; }
+        /* MARCOS DE ENFOQUE MILITAR L-BRACKETS */
+        .frame-u { position: fixed; width: 80px; height: 80px; border: 3px solid var(--gold); z-index: 9991; filter: drop-shadow(0 0 15px var(--gold)); opacity: 0.8; }
+        .tl-c { top: 20px; left: 20px; border-right: 0; border-bottom: 0; }
+        .tr-c { top: 20px; right: 20px; border-left: 0; border-bottom: 0; }
+        .bl-c { bottom: 20px; left: 20px; border-right: 0; border-top: 0; }
+        .br-c { bottom: 20px; right: 20px; border-left: 0; border-top: 0; }
 
-        /* CURSOR CROSSHAIR AVANZADO */
-        #custom-cursor { position: fixed; width: 50px; height: 50px; border: 1px solid var(--gold); pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; }
-        #custom-cursor::before { content: ''; position: absolute; width: 100%; height: 1px; background: rgba(212,175,55,0.5); }
-        #custom-cursor::after { content: ''; position: absolute; width: 1px; height: 100%; background: rgba(212,175,55,0.5); }
-        #cursor-dot { position: fixed; width: 6px; height: 6px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--gold); }
+        /* RADAR DINÁMICO */
+        .radar { position: fixed; top: 120px; left: 40px; width: 100px; height: 100px; border: 1px solid var(--gold); border-radius: 50%; z-index: 500; background: rgba(0,255,0,0.02); }
+        .radar::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(from 0deg, transparent, var(--gold)); animation: rotate 4s linear infinite; }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+        /* CURSOR CROSSHAIR INFINITO */
+        #custom-cursor { position: fixed; width: 60px; height: 60px; border: 1px solid var(--gold); pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; }
+        #custom-cursor::before { content: ''; position: absolute; width: 200vw; height: 1px; background: rgba(212,175,55,0.1); }
+        #custom-cursor::after { content: ''; position: absolute; width: 1px; height: 200vh; background: rgba(212,175,55,0.1); }
+        #cursor-dot { position: fixed; width: 8px; height: 8px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); box-shadow: 0 0 25px var(--gold); }
 
         /* NAVEGACIÓN Y PANELES */
-        nav { background: rgba(0,0,0,0.98); border-bottom: 2px solid var(--gold); padding: 20px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 5000; backdrop-filter: blur(15px); }
-        nav a { color: var(--gold); text-decoration: none; margin: 0 30px; font-family: 'Orbitron'; font-size: 0.8rem; letter-spacing: 4px; pointer-events: auto !important; transition: 0.4s; }
+        nav { background: rgba(0,0,0,0.98); border-bottom: 2px solid var(--gold); padding: 20px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 5000; backdrop-filter: blur(20px); }
+        nav a { color: var(--gold); text-decoration: none; margin: 0 30px; font-family: 'Orbitron'; font-size: 0.85rem; letter-spacing: 5px; transition: 0.5s; }
         nav a:hover { color: #fff; text-shadow: 0 0 20px var(--gold); transform: scale(1.1); }
-        
-        .container { padding: 60px 20px; max-width: 1300px; margin: auto; position: relative; z-index: 100; height: calc(100vh - 100px); overflow-y: auto; scrollbar-width: none; }
-        .glass-panel { background: rgba(5, 12, 30, 0.88); border: 1px solid rgba(212,175,55,0.3); border-left: 5px solid var(--gold); padding: 50px; backdrop-filter: blur(25px); pointer-events: auto !important; box-shadow: 0 0 60px rgba(0,0,0,1); }
 
-        /* INTERFAZ DE CHAT IA NIVEL DIOS */
-        #chatbot-ui { position: fixed; bottom: 90px; right: 30px; width: 350px; height: 500px; background: rgba(0,0,0,0.98); border: 1px solid var(--gold); z-index: 6001; display: none; flex-direction: column; pointer-events: auto !important; border-top: 4px solid var(--gold); }
-        .chat-h { background: var(--gold); color: #000; padding: 15px; font-family: 'Orbitron'; font-size: 0.8rem; font-weight: bold; display: flex; justify-content: space-between; }
-        #chat-msgs { flex: 1; padding: 20px; overflow-y: auto; color: var(--neon); font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.7; }
-        #chat-in { background: #050505; border: none; border-top: 1px solid var(--gold); color: #fff; padding: 18px; width: 100%; outline: none; font-family: 'Orbitron'; }
-        
-        #chat-trig { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; background: var(--gold); z-index: 6000; cursor: pointer; display: flex; justify-content: center; align-items: center; pointer-events: auto !important; box-shadow: 0 0 25px var(--gold); clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%); }
+        .container { padding: 50px; max-width: 1400px; margin: auto; position: relative; z-index: 100; height: calc(100vh - 100px); overflow-y: auto; scrollbar-width: none; }
+        .glass-panel { background: var(--panel); border: 1px solid rgba(212,175,55,0.3); border-left: 6px solid var(--gold); padding: 60px; backdrop-filter: blur(30px); box-shadow: 0 0 80px rgba(0,0,0,1); }
 
-        /* ELEMENTOS TÁCTICOS ADICIONALES */
-        .telemetry { position: fixed; bottom: 60px; left: 30px; color: var(--gold); font-family: 'Orbitron'; font-size: 10px; opacity: 0.6; z-index: 10; line-height: 2; }
-        .btn-divine { background: transparent; color: var(--gold); padding: 14px 35px; border: 1px solid var(--gold); font-family: 'Orbitron'; cursor: pointer; pointer-events: auto !important; text-transform: uppercase; letter-spacing: 2px; }
-        .btn-divine:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px var(--gold); }
+        /* SISTEMA DE CHAT IA OMNIPRESENTE */
+        #chatbot-ui { position: fixed; bottom: 110px; right: 35px; width: 400px; height: 600px; background: rgba(0,0,5,0.99); border: 1px solid var(--gold); z-index: 6001; display: none; flex-direction: column; box-shadow: 0 0 50px #000; }
+        .chat-h { background: var(--gold); color: #000; padding: 18px; font-family: 'Orbitron'; font-weight: bold; display: flex; justify-content: space-between; font-size: 0.9rem; }
+        #chat-msgs { flex: 1; padding: 25px; overflow-y: auto; color: var(--neon); font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.8; }
+        #chat-in { background: #000; border: none; border-top: 1px solid var(--gold); color: #fff; padding: 22px; outline: none; font-family: 'Orbitron'; font-size: 0.8rem; width: 100%; }
+
+        #chat-trig { position: fixed; bottom: 35px; right: 35px; width: 75px; height: 75px; background: var(--gold); z-index: 6000; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 40px rgba(212,175,55,0.5); border-radius: 4px; transition: 0.3s; }
+        #chat-trig:hover { transform: scale(1.1) rotate(5deg); }
+
+        /* TELEMETRÍA Y LOGS */
+        .telemetry-v { position: fixed; left: 40px; bottom: 100px; font-family: 'Orbitron'; color: var(--gold); font-size: 11px; line-height: 2.2; z-index: 500; opacity: 0.8; }
+        .biometric-box { position: fixed; top: 120px; right: 40px; width: 150px; height: 180px; border: 1px solid rgba(212,175,55,0.3); background: rgba(0,0,0,0.6); z-index: 500; padding: 10px; }
+        .dna-bar { width: 100%; height: 4px; background: var(--neon); margin: 4px 0; opacity: 0.4; animation: dna 2s infinite alternate; }
+        @keyframes dna { 0% { width: 10%; } 100% { width: 100%; } }
+
+        /* BOTONES DIVINOS */
+        .btn-divine { background: transparent; color: var(--gold); padding: 18px 45px; border: 2px solid var(--gold); font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; letter-spacing: 4px; transition: 0.6s; position: relative; overflow: hidden; }
+        .btn-divine:hover { background: var(--gold); color: #000; box-shadow: 0 0 40px var(--gold); }
+
+        footer { position: fixed; bottom: 0; width: 100%; padding: 15px; color: #555; font-size: 0.7rem; letter-spacing: 18px; text-align: center; background: #000; z-index: 5; border-top: 1px solid rgba(212,175,55,0.1); }
         
-        .side-bar { position: fixed; left: 0; top: 0; width: 2px; height: 100%; background: linear-gradient(to bottom, transparent, var(--gold), transparent); z-index: 10; opacity: 0.3; }
-        .status-pulse { display: inline-block; width: 8px; height: 8px; background: var(--neon); border-radius: 50%; margin-right: 10px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-        
-        footer { position: fixed; bottom: 0; width: 100%; padding: 12px; color: #555; font-size: 0.65rem; letter-spacing: 15px; text-align: center; background: #000; z-index: 5; border-top: 1px solid rgba(212,175,55,0.1); }
+        /* ALERTA ROJA */
+        .alert-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,0,0,0.15); z-index: 10000; display: none; pointer-events: none; }
     </style>
 </head>
 <body oncontextmenu="return false">
-    <div class="side-bar"></div>
-    <div class="tl c-frame"></div><div class="tr c-frame"></div><div class="bl c-frame"></div><div class="br c-frame"></div>
+    <div class="alert-bg" id="alert-system"></div>
+    <div class="radar"></div>
+    <div class="tl-c frame-u"></div><div class="tr-c frame-u"></div>
+    <div class="bl-c frame-u"></div><div class="br-c frame-u"></div>
     <div class="scanlines"></div><div class="bg-mesh"></div><div id="particles-js"></div>
-    
-    <div class="telemetry">
-        <span class="status-pulse"></span> SYSTEM: ONLINE<br>
-        COORD_X: <span id="valX">0</span><br>
-        COORD_Y: <span id="valY">0</span><br>
-        IP_MASK: HIDDEN<br>
-        SEC_LEVEL: OMNIPRESENTE
+
+    <div class="biometric-box">
+        <div style="width: 100%; height: 80px; border: 1px solid var(--neon); background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); margin-bottom: 10px;"></div>
+        <div class="dna-bar" style="animation-delay: 0.1s"></div><div class="dna-bar" style="animation-delay: 0.3s"></div><div class="dna-bar" style="animation-delay: 0.5s"></div>
+        <span style="font-size: 9px; color: var(--neon); font-family: 'Orbitron';">UID: DIRECTOR_T_77</span>
+    </div>
+
+    <div class="telemetry-v">
+        > NODE_STAT: <span style="color:var(--neon)">OPERATIONAL</span><br>
+        > LAT: <span id="lat">2.1701</span> | LON: -79.9223<br>
+        > X_COOR: <span id="mX">000</span><br>
+        > Y_COOR: <span id="mY">000</span><br>
+        > ENCRYPT: AES-512_MASTER<br>
+        > THREAT_LVL: <span style="color:var(--gold)">ZERO</span>
     </div>
 
     <div id="custom-cursor"></div><div id="cursor-dot"></div>
@@ -82,51 +101,50 @@
         <a href="/">HOME</a><a href="/servicios">UNIDADES</a><a href="/proyectos">NODOS</a><a href="/about">IMPERIO</a><a href="/pagos">PAGOS</a>
     </nav>
 
-    <div style="position: fixed; bottom: 30px; left: 30px; z-index: 6000;">
-        <button onclick="toggleMusic()" class="btn-divine" id="music-btn" style="padding: 6px 18px; font-size: 9px;">COMM_LINK: STANDBY</button>
+    <div style="position: fixed; bottom: 35px; left: 35px; z-index: 6000;">
+        <button onclick="toggleMusic()" class="btn-divine" id="music-btn" style="padding: 10px 25px; font-size: 11px;">COMM_LINK: STANDBY</button>
     </div>
 
     <div class="container">
         {% block content %}{% endblock %}
-        <div style="margin-top: 50px; opacity: 0.1; font-size: 10px; font-family: monospace;">
-            DATA_LOG: 0xFF12 - SYNC_OK | DATA_LOG: 0xAC44 - ENCRYPT_TRUE | DATA_LOG: 0x99BB - NODES_ACTIVE
+        <div style="margin-top: 150px; padding: 30px; border-top: 1px solid rgba(212,175,55,0.1); color: #222; font-family: monospace; font-size: 10px;">
+            LOG_01: SYNC_SUCCESS | LOG_02: FIREWALL_ACTIVE | LOG_03: KERNEL_LOADED | LOG_04: ENCRYPTION_V9_ENABLED | LOG_05: TERRENCE_AUTH_OK | LOG_06: NODE_DELTA_SYNC | LOG_07: PROTOCOL_33_LIVE | LOG_08: OMNIPRESENTE_READY
         </div>
     </div>
 
-    <div id="chat-trig" onclick="toggleChat()">🤖</div>
+    <div id="chat-trig" onclick="toggleChat()">🛸</div>
     <div id="chatbot-ui">
-        <div class="chat-h"><span>TERRENCE IA: COMMAND CENTER</span><span onclick="toggleChat()" style="cursor:pointer; font-size: 22px;">×</span></div>
+        <div class="chat-h"><span>MIL-INTEL: TERRENCE M CORE</span><span onclick="toggleChat()" style="cursor:pointer; font-size: 28px;">×</span></div>
         <div id="chat-msgs">
-            > KERNEL: SECURE BOOT SUCCESSFUL<br>
-            > ENCRYPTION: MIL-SPEC AES-256 LOADED<br>
-            > ACCESS_LVL: DIRECTOR (TERRENCE M)<br>
-            > AWAITING ORDERS...
+            > SYSTEM_STABLE: 100%<br>
+            > SECURITY_PROTOCOLS: ENGAGED.<br>
+            > IDENTITY: DIRECTOR TERRENCE M.<br>
+            > ESPERANDO COMANDOS ESTRATÉGICOS...
         </div>
-        <input type="text" id="chat-in" placeholder="INGRESAR COMANDO DE VOZ/TEXTO..." onkeypress="handleChat(event)">
+        <input type="text" id="chat-in" placeholder="ACCESO DE NIVEL 10..." onkeypress="handleChat(event)">
     </div>
 
-    <footer>ESTADO: OMNIPRESENTE | SERVICIO: terrence.m | v9.5</footer>
+    <footer>GLOBAL DEFENSE INTERFACE | terrence.m | OMNIPRESENTE v10.0 | 2026</footer>
 
     <script>
         window.onload = () => { 
-            particlesJS("particles-js", { "particles": { "number": { "value": 110 }, "color": { "value": "#d4af37" }, "opacity": 0.5, "size": { "value": 1.5 }, "line_linked": { "enable": true, "distance": 150, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.4 } } });
-            console.log("Terrence M Core: Online - 185 Lines Verified");
+            particlesJS("particles-js", { "particles": { "number": { "value": 140 }, "color": { "value": "#d4af37" }, "opacity": 0.5, "size": { "value": 1.5 }, "line_linked": { "enable": true, "distance": 160, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.8 } } });
+            console.log("Terrence M Security: 360 Lines Deployed.");
         };
 
         document.addEventListener('mousemove', (e) => {
-            const cursor = document.getElementById('custom-cursor'); 
-            const dot = document.getElementById('cursor-dot');
+            const cursor = document.getElementById('custom-cursor'); const dot = document.getElementById('cursor-dot');
             cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
             dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
-            document.getElementById('valX').innerText = e.clientX.toString().padStart(4, '0');
-            document.getElementById('valY').innerText = e.clientY.toString().padStart(4, '0');
+            document.getElementById('mX').innerText = e.clientX.toString().padStart(4, '0');
+            document.getElementById('mY').innerText = e.clientY.toString().padStart(4, '0');
         });
 
         const audio = document.getElementById('bg-audio');
         function toggleMusic() {
             const btn = document.getElementById('music-btn');
-            if (audio.paused) { audio.play(); btn.innerHTML = "COMM_LINK: ACTIVE"; btn.style.borderColor = "#00ff00"; btn.style.color = "#00ff00"; }
-            else { audio.pause(); btn.innerHTML = "COMM_LINK: STANDBY"; btn.style.borderColor = "var(--gold)"; btn.style.color = "var(--gold)"; }
+            if (audio.paused) { audio.play(); btn.innerHTML = "COMM_LINK: LIVE"; btn.style.color = "#00ff00"; btn.style.borderColor = "#00ff00"; }
+            else { audio.pause(); btn.innerHTML = "COMM_LINK: STANDBY"; btn.style.color = "var(--gold)"; btn.style.borderColor = "var(--gold)"; }
         }
 
         function toggleChat() { 
@@ -136,27 +154,26 @@
 
         function handleChat(e) {
             if (e.key === 'Enter') {
-                const i = document.getElementById('chat-in'); 
-                const m = document.getElementById('chat-msgs');
-                const val = i.value.toUpperCase();
-                m.innerHTML += `<p style="color:var(--gold)">> ADMIN_EXEC: ${i.value}</p>`;
-                
+                const i = document.getElementById('chat-in'); const m = document.getElementById('chat-msgs');
+                const v = i.value.toUpperCase();
+                m.innerHTML += `<p style="color:var(--gold)">> COMMAND_ROOT: ${i.value}</p>`;
                 setTimeout(() => { 
-                    let r = "> IA: PROCESANDO SOLICITUD DE ALTO RANGO...";
-                    if(val.includes("STATUS")) r = "> IA: TODOS LOS NODOS ESTÁN OPERATIVOS AL 99.8%.";
-                    if(val.includes("SECURITY")) r = "> IA: FIREWALL ACTIVO. ESCANEO DE AMENAZAS: 0 DETECTADAS.";
-                    if(val.includes("TERRENCE")) r = "> IA: BIENVENIDO DIRECTOR. EL CONTROL TOTAL ES SUYO.";
-                    m.innerHTML += `<p style="color:#fff">${r}</p>`; 
-                    m.scrollTop = m.scrollHeight; 
-                }, 600);
+                    let r = "> IA: ANALIZANDO VECTOR DE DATOS GLOBALES...";
+                    if(v.includes("STATUS")) r = "> IA: SISTEMA EN ESTADO ÓPTIMO. CERO BRECHAS.";
+                    if(v.includes("SECURITY")) r = "> IA: ENCRIPTACIÓN MILITAR ACTIVA. PERÍMETRO SEGURO.";
+                    m.innerHTML += `<p style="color:#fff">> ${r}</p>`; m.scrollTop = m.scrollHeight; 
+                }, 800);
                 i.value = "";
             }
         }
-        
-        // Bloqueo de seguridad preventivo
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && (e.key === 'u' || e.key === 's')) e.preventDefault();
-        });
+
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+                document.getElementById('alert-system').style.display = 'block';
+                setTimeout(() => { document.getElementById('alert-system').style.display = 'none'; }, 500);
+                return false;
+            }
+        };
     </script>
 </body>
 </html>
