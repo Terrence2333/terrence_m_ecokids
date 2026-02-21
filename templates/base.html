@@ -8,46 +8,55 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
         :root { --gold: #d4af37; --bright-gold: #f9e272; --dark: #050505; }
+        
+        /* IMPORTANTE: El cursor real desaparece para usar el láser */
         * { cursor: none !important; }
+        
         body { background: var(--dark); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; }
         
+        /* Capas decorativas que NO bloquean clics */
+        .perimeter-scan, #particles-js, .bg-mesh, .scan-line-v {
+            pointer-events: none !important;
+        }
+
         /* Preloader */
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
         .loader-ring { width: 100px; height: 100px; border: 2px solid transparent; border-top: 2px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* Escáner de Perímetro Nivel Dios */
-        .perimeter-scan { position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid rgba(212,175,55,0.1); pointer-events: none; z-index: 9998; box-shadow: inset 0 0 100px rgba(0,0,0,0.5); }
+        /* Escáner de Perímetro */
+        .perimeter-scan { position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid rgba(212,175,55,0.1); z-index: 9998; }
         .scan-line-v { position: absolute; width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, var(--gold), transparent); left: 50%; animation: scan-v 10s infinite linear; }
         @keyframes scan-v { 0% { left: 0%; } 100% { left: 100%; } }
 
         /* Cursor Láser */
-        #custom-cursor { position: fixed; width: 25px; height: 25px; border: 1px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: transform 0.1s ease; }
-        #cursor-dot { position: fixed; width: 4px; height: 4px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); box-shadow: 0 0 10px var(--gold); }
+        #custom-cursor { position: fixed; width: 25px; height: 25px; border: 1px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: transform 0.05s ease-out; }
+        #cursor-dot { position: fixed; width: 5px; height: 5px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--gold); }
 
-        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .bg-mesh { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px); background-size: 60px 60px; z-index: 0; }
 
+        /* Navegación */
         nav { background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--gold); padding: 15px; display: flex; justify-content: center; position: sticky; top: 0; z-index: 1000; }
-        nav a { color: var(--gold); text-decoration: none; margin: 0 20px; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 2px; transition: 0.3s; }
+        nav a { color: var(--gold); text-decoration: none; margin: 0 20px; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 2px; transition: 0.3s; pointer-events: auto; }
         nav a:hover { color: var(--bright-gold); text-shadow: 0 0 15px var(--gold); }
 
         .container { padding: 80px 20px; max-width: 1100px; margin: auto; text-align: center; position: relative; z-index: 10; }
         .glass-panel { background: rgba(10, 10, 10, 0.85); border: 1px solid rgba(212,175,55,0.3); padding: 50px; border-radius: 5px; backdrop-filter: blur(20px); box-shadow: 0 0 50px #000; }
 
-        .btn-divine { background: transparent; color: var(--gold); padding: 15px 35px; text-decoration: none; font-family: 'Orbitron', sans-serif; border: 2px solid var(--gold); clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); transition: 0.3s; display: inline-block; cursor: pointer; }
+        .btn-divine { background: transparent; color: var(--gold); padding: 15px 35px; text-decoration: none; font-family: 'Orbitron', sans-serif; border: 2px solid var(--gold); clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); transition: 0.3s; display: inline-block; cursor: pointer; pointer-events: auto; }
         .btn-divine:hover { background: var(--gold); color: #000; box-shadow: 0 0 30px var(--gold); }
 
         /* Controles Música */
-        #music-control { position: fixed; bottom: 80px; right: 20px; z-index: 5002; }
+        #music-control { position: fixed; bottom: 80px; right: 20px; z-index: 5002; pointer-events: auto; }
 
         /* Chatbot */
-        #chatbot-ui { position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; background: rgba(5,5,5,0.98); border: 1px solid var(--gold); border-radius: 10px; z-index: 5000; display: none; flex-direction: column; box-shadow: 0 0 30px #000; }
+        #chatbot-ui { position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; background: rgba(5,5,5,0.98); border: 1px solid var(--gold); border-radius: 10px; z-index: 5000; display: none; flex-direction: column; box-shadow: 0 0 30px #000; pointer-events: auto; }
         #chat-messages { flex: 1; padding: 15px; overflow-y: auto; color: #00ff00; font-family: 'Courier New'; font-size: 0.85rem; }
         #chat-input { background: #111; border: none; border-top: 1px solid var(--gold); color: #fff; padding: 12px; outline: none; }
-        #chat-trigger { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold); border-radius: 50%; z-index: 5001; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; box-shadow: 0 0 20px var(--gold); }
+        #chat-trigger { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--gold); border-radius: 50%; z-index: 5001; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; box-shadow: 0 0 20px var(--gold); pointer-events: auto; }
 
-        footer { position: fixed; bottom: 0; width: 100%; padding: 15px; color: #444; font-size: 0.6rem; letter-spacing: 5px; background: rgba(0,0,0,0.9); z-index: 5; }
+        footer { position: fixed; bottom: 0; width: 100%; padding: 15px; color: #444; font-size: 0.6rem; letter-spacing: 5px; background: rgba(0,0,0,0.9); z-index: 5; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -60,11 +69,11 @@
     <audio id="click-sound"><source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg"></audio>
 
     <nav>
-        <a href="/">HOME</a>
-        <a href="/servicios">UNIDADES</a>
-        <a href="/proyectos">NODOS</a>
-        <a href="/about">IMPERIO</a>
-        <a href="/pagos">PAGOS</a>
+        <a href="/" onmouseover="playClick()">HOME</a>
+        <a href="/servicios" onmouseover="playClick()">UNIDADES</a>
+        <a href="/proyectos" onmouseover="playClick()">NODOS</a>
+        <a href="/about" onmouseover="playClick()">IMPERIO</a>
+        <a href="/pagos" onmouseover="playClick()">PAGOS</a>
     </nav>
 
     <div id="music-control">
@@ -86,6 +95,7 @@
 
     <script>
         window.onload = () => { setTimeout(() => { document.getElementById('loader').style.display='none'; }, 1000); };
+        
         particlesJS("particles-js", { "particles": { "number": { "value": 70 }, "color": { "value": "#d4af37" }, "opacity": 0.4, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#d4af37", "opacity": 0.2 }, "move": { "enable": true, "speed": 1.5 } } });
         
         const cursor = document.getElementById('custom-cursor');
@@ -95,7 +105,6 @@
             dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
         });
 
-        // LÓGICA DE MÚSICA
         const audio = document.getElementById('bg-audio');
         const clickSfx = document.getElementById('click-sound');
         let audioOn = false;
@@ -104,10 +113,10 @@
             const btn = document.getElementById('music-btn');
             if (audio.paused) { 
                 audio.play(); audioOn = true; 
-                btn.innerHTML = "AUDIO: ON"; btn.style.color = "#00ff00"; btn.style.boxShadow = "0 0 20px #00ff00";
+                btn.innerHTML = "AUDIO: ON"; btn.style.color = "#00ff00";
             } else { 
                 audio.pause(); audioOn = false; 
-                btn.innerHTML = "AUDIO: OFF"; btn.style.color = "var(--gold)"; btn.style.boxShadow = "none";
+                btn.innerHTML = "AUDIO: OFF"; btn.style.color = "var(--gold)";
             }
         }
         function playClick() { if(audioOn) { clickSfx.currentTime = 0; clickSfx.volume = 0.2; clickSfx.play(); } }
@@ -119,9 +128,8 @@
                 const msgs = document.getElementById('chat-messages');
                 if (!input.value.trim()) return;
                 msgs.innerHTML += `<p style="color:var(--gold)">> Tú: ${input.value}</p>`;
-                let res = "> IA: Protocolo de excelencia activado. El Director Terrence ha recibido el mensaje.";
-                if(input.value.toLowerCase().includes("hola")) res = "> IA: Saludos, Director Terrence. El sistema está al 100% de potencia.";
-                setTimeout(() => { msgs.innerHTML += `<p>${res}</p>`; msgs.scrollTop = msgs.scrollHeight; }, 800);
+                let res = "> IA: Protocolo de excelencia activado.";
+                setTimeout(() => { msgs.innerHTML += `<p>${res}</p>`; msgs.scrollTop = msgs.scrollHeight; }, 600);
                 input.value = "";
             }
         }
