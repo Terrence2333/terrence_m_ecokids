@@ -1,15 +1,31 @@
 {% extends "base.html" %}
-{% block title %}Proyectos{% endblock %}
+{% block title %}Nodos Globales{% endblock %}
 {% block content %}
-<h1>OPERACIONES GLOBALES</h1>
-<div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; margin-top: 50px;">
-    <div class="glass-panel" style="width: 300px;">
-        <h2 style="color: #d4af37;">PROYECTO ALPHA</h2>
-        <p>Planta Desalinizadora de Energía Mareomotriz en Dubai.</p>
-    </div>
-    <div class="glass-panel" style="width: 300px;">
-        <h2 style="color: #d4af37;">NEXUS-7</h2>
-        <p>Red de micro-redes inteligentes para ciudades inteligentes.</p>
+<div class="glass-panel">
+    <h1 style="letter-spacing: 10px; text-shadow: 0 0 20px var(--gold);">RED GLOBAL DE OPERACIONES</h1>
+    <p style="color: #666;">HAGA CLIC EN UN NODO PARA SINCRONIZAR</p>
+    
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; margin-top: 40px;">
+        <div class="node-box" onclick="syncNode(this, 'DUBAI')" style="border: 1px solid var(--gold); padding: 20px; margin: 10px; cursor: pointer; transition: 0.3s; width: 200px;">
+            <h3>NODO DUBAI</h3>
+            <p>EFICIENCIA: 99%</p>
+        </div>
+        <div class="node-box" onclick="syncNode(this, 'ANDES')" style="border: 1px solid var(--gold); padding: 20px; margin: 10px; cursor: pointer; transition: 0.3s; width: 200px;">
+            <h3>NODO ANDES</h3>
+            <p>EFICIENCIA: 94%</p>
+        </div>
     </div>
 </div>
+
+<script>
+    function syncNode(el, name) {
+        el.style.background = "var(--gold)";
+        el.style.color = "#000";
+        alert("SINCRONIZANDO CON " + name + "...");
+        setTimeout(() => { 
+            el.style.background = "transparent"; 
+            el.style.color = "#fff";
+        }, 1000);
+    }
+</script>
 {% endblock %}
