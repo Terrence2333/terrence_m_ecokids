@@ -1,3 +1,25 @@
+#!/bin/bash
+# SCRIPT DE DESPLIEGUE TERRENCE.M OS - PANIC EDITION
+
+beep_siren() {
+    echo -e "\a"
+    sleep 0.1
+    echo -e "\a"
+}
+
+echo -e "\033[31m[!] INSTALANDO PROTOCOLO DE PÁNICO 'ESC'...\033[0m"
+beep_siren
+
+mkdir -p templates static backups logs
+touch logs/intruders.log logs/system_load.log
+
+# Backup
+if [ -f "templates/index.html" ]; then
+    cp templates/index.html backups/index_backup_$(date +"%Y%m%d_%H%M%S").html
+fi
+
+# Inyectar Interfaz con Listener de Teclado
+cat << 'INDEX' > templates/index.html
 {% extends "base.html" %}
 {% block content %}
 <canvas id="noise-canvas" style="position: fixed; inset: 0; z-index: 20000; pointer-events: none; opacity: 0; transition: opacity 0.1s;"></canvas>
@@ -69,3 +91,11 @@
     });
 </script>
 {% endblock %}
+INDEX
+
+chmod 644 templates/index.html
+chmod +x deploy.sh
+echo -e "\033[33m-----------------------------------------------\033[0m"
+echo -e "\033[31mPANIC BUTTON (ESC) ACTIVADO - SISTEMA LISTO\033[0m"
+echo -e "\033[33m-----------------------------------------------\033[0m"
+beep_siren

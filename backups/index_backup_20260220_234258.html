@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="boot-screen" style="position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Orbitron', sans-serif; color: #d4af37;">
+    <div id="loader-ring" style="width: 140px; height: 140px; border: 1px solid #111; border-top: 5px solid #ff4500; border-radius: 50%; animation: spin 0.4s linear infinite; box-shadow: 0 0 100px rgba(255,69,0,0.3);"></div>
+    <div id="boot-log" style="width: 650px; height: 180px; font-size: 0.6rem; color: #ff4500; overflow: hidden; margin-top: 40px; border: 1px solid rgba(255,69,0,0.2); padding: 20px; background: rgba(5,5,5,0.95); font-family: monospace;"></div>
+    <p style="font-size: 0.55rem; letter-spacing: 20px; margin-top: 25px; color: #d4af37;">RADAR_SYNC : <span id="percent">0</span>%</p>
+</div>
+
+<div id="achievement-popup" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); border: 2px solid #ff4500; color: #fff; padding: 20px 40px; z-index: 11000; display: none; font-family: 'Orbitron'; box-shadow: 0 0 50px #ff4500; text-align: center;">
+    <small style="color: #ff4500; font-size: 0.6rem; letter-spacing: 3px;">[ LOGRO DETECTADO ]</small>
+    <div id="achievement-text" style="font-weight: 900; color: #d4af37; margin-top: 5px;"></div>
+</div>
+
+<div id="master-bg" style="position: fixed; inset: 0; z-index: -1; background: #000; overflow: hidden;">
+    <canvas id="main-canvas" style="position: absolute; inset: 0;"></canvas>
+</div>
+
+<div id="main-interface" style="display: flex; justify-content: space-between; padding: 40px 5%; align-items: flex-start; height: 85vh; position: relative; z-index: 1; opacity: 0; visibility: hidden; transition: opacity 2s;">
+    <div style="width: 320px;">
+        <div id="core-circle" style="position: relative; width: 260px; height: 260px; border: 4px solid #d4af37; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.95);">
+            <div style="position: absolute; inset: -15px; border: 1px dashed rgba(255,69,0,0.4); border-radius: 50%; animation: spin 50s linear infinite;"></div>
+            <h1 style="font-size: 2.3rem; font-weight: 900; color: #d4af37; text-shadow: 0 0 20px #d4af37;">TERRENCE M</h1>
+        </div>
+        <div style="margin-top: 40px; background: rgba(0,0,0,0.9); border-left: 10px solid #ff4500; padding: 25px; border: 1px solid #222;">
+            <p style="color:#ff4500; font-weight: 900; font-size: 0.8rem;">[ RADAR_RANK ]</p>
+            <div id="conqueror-rank" style="font-family: 'Orbitron'; color: #fff;">MONITORIZANDO...</div>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 40px; flex: 1;">
+        <div style="border: 1px solid #ff4500; background: rgba(0,0,0,0.9); padding: 35px; text-align: center; min-width: 220px;">
+            <span style="font-size: 3.8rem; color: #ff4500; font-weight: 900;">4500+</span><br>
+            <small style="color: #d4af37; letter-spacing: 5px;">SEISMIC_PULSE</small>
+        </div>
+    </div>
+
+    <div style="text-align: right; width: 320px;">
+        <div style="border:2px solid #ff4500; padding:15px; background:#000;">
+            <div style="width:100%; height:230px; border:1px solid #00ff00; position:relative; overflow:hidden;">
+                <video id="webcam" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover;"></video>
+                <div style="position:absolute; top:0; width:100%; height:2px; background:#ff4500; animation:scanLine 2s infinite linear;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="chat-container" style="position:fixed; bottom:80px; right:30px; width:430px; background:rgba(0,0,0,0.98); border:2px solid #ff4500; z-index:1000; visibility: hidden;">
+    <div style="background:#ff4500; color:#000; padding:18px; font-weight:900; display:flex; justify-content:space-between;">
+        <span>RADAR_OS_TM</span>
+        <span id="system-clock">00:00:00</span>
+    </div>
+    <div id="chat-box" style="height:220px; overflow-y:auto; padding:20px; font-size:0.75rem; color:#fff; font-family: monospace;"></div>
+    <canvas id="seismograph" style="width: 100%; height: 50px; background: #000; border-top: 1px solid #333;"></canvas>
+    <div style="display:flex; border-top:2px solid #ff4500;">
+        <input type="text" id="user-input" placeholder="ORDEN SÍSMICA..." style="flex:1; background:#000; border:none; color:#fff; padding:20px; outline:none;">
+        <button onclick="sendMessage()" style="background:#ff4500; border:none; padding:15px 35px; cursor:pointer; font-weight:900;">EXE</button>
+    </div>
+</div>
+
+<style>
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes scanLine { 0% { top: 0; } 100% { top: 100%; } }
+</style>
+
+<script>
+    const canvas = document.getElementById('main-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const sCanvas = document.getElementById('seismograph');
+    const sCtx = sCanvas.getContext('2d');
+    let globeRot = 0, seismicActive = false, achievements = 0;
+    let heatPoints = [{x: window.innerWidth/2, y: window.innerHeight/2, r: 400}];
+    const ranks = ["SENSOR", "OPERADOR", "COMANDANTE", "SISMÓGRAFO_DIOS"];
+
+    // SINTETIZADOR DE RADAR
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playRadarPing(freq = 150, duration = 0.5) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function draw() {
+        ctx.fillStyle = "black"; ctx.fillRect(0,0,canvas.width, canvas.height);
+        heatPoints.forEach(p => {
+            const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+            grad.addColorStop(0, "rgba(255, 69, 0, 0.4)");
+            grad.addColorStop(1, "transparent");
+            ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+        });
+        const cX = canvas.width/2, cY = canvas.height/2 + 50, r = 320;
+        ctx.strokeStyle = "rgba(212,175,55,0.2)";
+        for(let i=0; i<18; i++) {
+            ctx.beginPath(); ctx.ellipse(cX, cY, Math.abs(r * Math.sin(globeRot + i)), r, 0, 0, Math.PI*2); ctx.stroke();
+        }
+        globeRot += 0.003; requestAnimationFrame(draw);
+    }
+    draw();
+
+    let xS = 0;
+    function drawSeismograph() {
+        sCtx.fillStyle = "rgba(0,0,0,0.1)"; sCtx.fillRect(0, 0, sCanvas.width, sCanvas.height);
+        sCtx.strokeStyle = "#ff4500"; sCtx.lineWidth = 2;
+        sCtx.beginPath(); sCtx.moveTo(xS, sCanvas.height / 2);
+        let amp = seismicActive ? 25 : 2;
+        let yS = (sCanvas.height / 2) + Math.random() * amp - (amp/2);
+        sCtx.lineTo(xS + 5, yS); sCtx.stroke(); xS += 5;
+        if (xS > sCanvas.width) { xS = 0; sCtx.clearRect(0,0,sCanvas.width, sCanvas.height); }
+        requestAnimationFrame(drawSeismograph);
+    }
+    drawSeismograph();
+
+    function unlockAchievement(name) {
+        achievements++;
+        document.getElementById('conqueror-rank').innerText = ranks[Math.min(achievements, 3)];
+        const pop = document.getElementById('achievement-popup');
+        document.getElementById('achievement-text').innerText = name;
+        pop.style.display = 'block';
+        playRadarPing(440, 0.8); // Ping agudo de logro
+        setTimeout(() => pop.style.display = 'none', 5000);
+    }
+
+    function sendMessage() {
+        const i = document.getElementById('user-input');
+        const b = document.getElementById('chat-box');
+        if(!i.value) return;
+        b.innerHTML += `<p style="color:#aaa"># root@radar: ${i.value}</p>`;
+        const val = i.value.toLowerCase();
+        let r = "Escaneo completado.";
+        if(val.includes("conquistar")) {
+            r = "ÁREA ANEXADA. ENVIANDO PULSO.";
+            playRadarPing(100, 1.5); // Ping profundo de conquista
+            unlockAchievement("EXPANSIÓN_RADAR");
+            heatPoints.push({x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight, r: 300});
+        }
+        setTimeout(() => { b.innerHTML += `<p style="color:#ff4500">[IA]: ${r}</p>`; b.scrollTop = b.scrollHeight; }, 500);
+        i.value = "";
+    }
+
+    const logMsgs = ["RADAR_INIT...", "PULSE_GEN: OK", "READY."];
+    let mIdx = 0;
+    function runBoot() {
+        if (mIdx < logMsgs.length) {
+            document.getElementById('boot-log').innerHTML += `<p>> ${logMsgs[mIdx]}</p>`;
+            mIdx++; document.getElementById('percent').innerText = mIdx * 33;
+            setTimeout(runBoot, 600);
+        } else {
+            document.getElementById('boot-screen').style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById('boot-screen').style.display = 'none';
+                document.getElementById('main-interface').style.visibility = 'visible';
+                document.getElementById('main-interface').style.opacity = '1';
+                document.getElementById('chat-container').style.visibility = 'visible';
+            }, 1000);
+        }
+    }
+    window.addEventListener('DOMContentLoaded', () => { setTimeout(runBoot, 400); });
+    setInterval(() => { document.getElementById('system-clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+</script>
+{% endblock %}
