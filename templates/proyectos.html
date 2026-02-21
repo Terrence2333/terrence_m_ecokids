@@ -1,12 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-<div style="padding: 100px 10%;">
-    <h2 style="color:var(--gold); border-bottom: 2px solid var(--gold); display: inline-block;">NODOS_DEL_IMPERIO_ESTADISTICAS</h2>
-    <div style="margin-top:40px; height: 300px; border: 1px solid #333; position: relative; background: repeating-linear-gradient(0deg, #0a0a0a, #0a0a0a 2px, #111 2px, #111 4px);">
-        <div style="position:absolute; bottom:0; left:10%; width:50px; height:80%; background:var(--gold); box-shadow: 0 0 20px var(--gold);"></div>
-        <div style="position:absolute; bottom:0; left:30%; width:50px; height:60%; background:var(--gold); box-shadow: 0 0 20px var(--gold);"></div>
-        <div style="position:absolute; bottom:0; left:50%; width:50px; height:90%; background:var(--neon); box-shadow: 0 0 20px var(--neon);"></div>
-        <p style="position:absolute; top:20px; right:20px; color:var(--neon)">DATOS_EN_TIEMPO_REAL: SINCRONIZADOS</p>
+<div style="padding: 100px 8%;">
+    <h2 style="color: var(--gold); letter-spacing: 10px; border-left: 5px solid var(--gold); padding-left: 20px;">ESTADO DE NODOS ENERGÉTICOS</h2>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 50px;">
+        <div style="border: 1px solid rgba(212,175,55,0.3); padding: 30px; background: rgba(10,10,10,0.8);">
+            <p style="color: var(--neon); font-size: 0.7rem;">[ FLUJO DE RED ALFA ]</p>
+            <div style="height: 200px; display: flex; align-items: flex-end; gap: 10px; margin-top: 20px;">
+                <div class="bar" style="height: 80%;"></div>
+                <div class="bar" style="height: 40%;"></div>
+                <div class="bar" style="height: 95%;"></div>
+                <div class="bar" style="height: 60%;"></div>
+                <div class="bar" style="height: 85%;"></div>
+            </div>
+        </div>
+
+        <div style="border: 1px solid rgba(212,175,55,0.3); padding: 30px; background: #000; font-family: monospace; color: var(--neon); font-size: 0.8rem; overflow-y: hidden;">
+            <p>> SYNCING WITH RENDER SERVER...</p>
+            <p>> INJECTING KERNEL_750_SECURITY...</p>
+            <p>> NODES_ACTIVE: 100%</p>
+            <p>> TERRENCE_M_AUTH: GRANTED</p>
+            <div id="console-log"></div>
+        </div>
     </div>
 </div>
+
+<style>
+    .bar { width: 100%; background: var(--gold); box-shadow: 0 0 15px var(--gold); animation: pulseBar 2s infinite alternate; }
+    @keyframes pulseBar {
+        0% { opacity: 0.5; filter: brightness(0.8); }
+        100% { opacity: 1; filter: brightness(1.5); }
+    }
+</style>
+
+<script>
+    const log = document.getElementById('console-log');
+    setInterval(() => {
+        const p = document.createElement('p');
+        p.innerText = `> DATA_PACKET_${Math.floor(Math.random()*9000)}: RECEIVED`;
+        log.prepend(p);
+        if(log.children.length > 5) log.lastChild.remove();
+    }, 1000);
+</script>
 {% endblock %}
