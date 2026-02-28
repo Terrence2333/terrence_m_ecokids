@@ -1,23 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
-<canvas id="noise-canvas" style="position: fixed; inset: 0; z-index: 20000; pointer-events: none; opacity: 0; transition: opacity 0.1s;"></canvas>
+<canvas id="noise-canvas" style="position: fixed; inset: 0; z-index: 20000; pointer-events: none; opacity: 0; transition: opacity 0.1s; background: repeating-radial-gradient(#000 0 0.0001%,#fff 0 0.0002%) 50% 0/2500px 2500px;"></canvas>
+
 <div id="boot-screen" style="position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Orbitron', sans-serif; color: #d4af37;">
-    <div id="loader-ring" style="width: 120px; height: 120px; border: 2px solid #ff4500; border-radius: 50%; animation: spin 0.5s linear infinite;"></div>
-    <p style="letter-spacing: 10px; margin-top: 20px; font-size: 0.7rem;">ESTABLECIENDO ENLACE CON RENDER...</p>
+    <div id="loader-ring" style="width: 120px; height: 120px; border: 2px solid #ff4500; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+    <p style="letter-spacing: 10px; margin-top: 20px; font-size: 0.7rem; color: #ff4500;">ESTABLECIENDO ENLACE CON RENDER...</p>
 </div>
-<div id="main-interface" style="padding: 50px; opacity: 0; visibility: hidden; transition: opacity 1s;">
-    <h1 style="color: #d4af37; font-family: 'Orbitron'; font-weight: 900;">TERRENCE M - LIVE SYSTEM</h1>
-    <div style="background: rgba(255,69,0,0.1); border: 1px solid #ff4500; padding: 25px; color: #fff; font-family: monospace;">
-        <p>[ SISTEMA OPERATIVO EN LÍNEA ]</p>
-        <p>> PROTOCOLO DE PÁNICO: [ESC] ACTIVO</p>
-        <p>> RADAR SÍSMICO: CALIBRADO</p>
+
+<div id="main-interface" style="padding: 100px 8%; opacity: 0; visibility: hidden; transition: opacity 1s;">
+    <h1 style="color: #d4af37; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 5px; border-left: 5px solid #ff4500; padding-left: 20px;">SISTEMA CENTRAL - terrence.m</h1>
+    
+    <div style="background: rgba(255,69,0,0.05); border: 1px solid rgba(212,175,55,0.3); padding: 30px; margin-top: 30px; color: #fff; font-family: 'Share Tech Mono', monospace;">
+        <p style="color: #ff4500;">[ STATUS: OPERATIVO ]</p>
+        <p>> NÚCLEO: ACTIVO</p>
+        <p>> PROTOCOLO: [ESC] PARA REINICIO</p>
+        <hr style="border: 0; border-top: 1px solid rgba(212,175,55,0.2); margin: 20px 0;">
+        
+        <div style="margin-top: 40px; padding: 20px; background: rgba(212,175,55,0.1); border-radius: 10px; text-align: center;">
+            <h3 style="color: #d4af37; font-family: 'Orbitron'; font-size: 0.8rem;">DOCUMENTACIÓN TÉCNICA Y CÓDIGO FUENTE</h3>
+            <p style="font-size: 0.8rem; margin-bottom: 20px;">Acceda al repositorio oficial de este proyecto en GitHub:</p>
+            <a href="https://github.com/terrence2333/terrence_m_ecokids" target="_blank" style="display: inline-block; padding: 12px 30px; background: #ff4500; color: #fff; text-decoration: none; font-family: 'Orbitron'; font-size: 0.7rem; border-radius: 5px; box-shadow: 0 0 15px rgba(255,69,0,0.5); transition: 0.3s;">VER TRABAJO EN GITHUB</a>
+        </div>
     </div>
 </div>
+
+<style>
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+
 <script>
     window.addEventListener('keydown', (e) => { 
         if (e.key === "Escape") {
-            document.getElementById('noise-canvas').style.opacity = "1";
-            setTimeout(() => { location.reload(); }, 500);
+            document.getElementById('noise-canvas').style.opacity = "0.2";
+            setTimeout(() => { location.reload(); }, 300);
         }
     });
     window.addEventListener('DOMContentLoaded', () => {
