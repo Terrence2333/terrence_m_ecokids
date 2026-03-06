@@ -6,6 +6,9 @@ from form import ProductoForm
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'terrence_m_secret'
 
+with app.app_context():
+    init_db()
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -35,5 +38,4 @@ def productos():
     return render_template('producto_form.html', form=form)
 
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
