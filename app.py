@@ -1,11 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response
 from sqlalchemy import create_engine, Column, Integer, String, Float, func
 from sqlalchemy.orm import sessionmaker, declarative_base
+import pdfkit
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'terrence_m_elite_v12'
 
-# Base de Datos Evolucionada
 engine = create_engine('sqlite:///terrence_m_v12.db')
 Base = declarative_base()
 SessionLocal = sessionmaker(bind=engine)
@@ -24,7 +24,6 @@ with app.app_context():
 def index():
     db = SessionLocal()
     productos = db.query(Producto).all()
-    # Cálculos de nivel superior para el Dashboard
     total_items = db.query(Producto).count()
     stock_total = db.query(func.sum(Producto.cantidad)).scalar() or 0
     valor_total = db.query(func.sum(Producto.precio * Producto.cantidad)).scalar() or 0
@@ -53,6 +52,21 @@ def api_datos():
         "labels": [p.nombre for p in productos],
         "values": [p.cantidad for p in productos]
     })
+
+@app.route('/descargar_reporte')
+def descargar_reporte():
+    db = SessionLocal()
+    productos = db.query(Producto).all()
+    html = render_template('reporte_pdf.html', productos=productos)
+    options = {'enable-local-file-access': None}
+    # En Render usamos wkhtmltopdf preinstalado
+    pdf = pdfkit.from_string(html, False, options=options)
+    db.close()
+    
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=Reporte_Inventario_TerrenceM.pdf'
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
