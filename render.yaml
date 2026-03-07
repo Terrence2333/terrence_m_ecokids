@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: terrence-m-ecokids
-    runtime: python
-    env: python@3.11
-    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
