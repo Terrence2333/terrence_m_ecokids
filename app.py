@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.orm import sessionmaker, declarative_base
+import csv, json, os
 
 app = Flask(__name__)
 engine = create_engine('sqlite:///inventario/data/inventario.db')
@@ -19,14 +20,14 @@ def index():
     s = Session(); prods = s.query(Producto).all(); s.close()
     return render_template('index.html', productos=prods)
 
-@app.route('/productos')
-def productos():
-    s = Session(); prods = s.query(Producto).all(); s.close()
-    return render_template('productos.html', productos=prods)
-
-@app.route('/datos')
-def datos():
-    return render_template('datos.html')
+@app.route('/guardar', methods=['POST'])
+def guardar():
+    n, c, p = request.form['nombre'], int(request.form['cantidad']), float(request.form['precio'])
+    s = Session(); s.add(Producto(nombre=n, cantidad=c, precio=p)); s.commit(); s.close()
+    # Persistencia en archivos (Requisito semana 12)
+    with open('inventario/data/datos.txt', 'a') as f: f.write(f"{n},{c},{p}\n")
+    with open('inventario/data/datos.csv', 'a', newline='') as f: csv.writer(f).writerow([n, c, p])
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
