@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response
+from flask import Flask, render_template, request, redirect, url_for, make_response
 from sqlalchemy import create_engine, Column, Integer, String, Float, func
 from sqlalchemy.orm import sessionmaker, declarative_base
 import pdfkit
@@ -43,30 +43,17 @@ def guardar():
     db.close()
     return redirect(url_for('index'))
 
-@app.route('/api/datos')
-def api_datos():
-    db = SessionLocal()
-    productos = db.query(Producto).all()
-    db.close()
-    return jsonify({
-        "labels": [p.nombre for p in productos],
-        "values": [p.cantidad for p in productos]
-    })
-
 @app.route('/descargar_reporte')
 def descargar_reporte():
     db = SessionLocal()
     productos = db.query(Producto).all()
     html = render_template('reporte_pdf.html', productos=productos)
-    options = {'enable-local-file-access': None}
-    # En Render usamos wkhtmltopdf preinstalado
-    pdf = pdfkit.from_string(html, False, options=options)
+    pdf = pdfkit.from_string(html, False)
     db.close()
-    
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'attachment; filename=Reporte_Inventario_TerrenceM.pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=Reporte_Inventario.pdf'
     return response
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
