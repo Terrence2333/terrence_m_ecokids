@@ -6,14 +6,28 @@
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
         .container { margin-top: 50px; background: #1e293b; padding: 30px; border-radius: 20px; }
-        .btn-pdf { background: #0ea5e9; color: white; padding: 10px 20px; text-decoration: none; border-radius: 10px; display: inline-block; margin-top: 20px; }
+        .card { background: #334155; padding: 20px; border-radius: 15px; margin-bottom: 20px; display: inline-block; margin-right: 10px; }
+        .btn-pdf { background: #0ea5e9; color: white; padding: 10px 20px; text-decoration: none; border-radius: 10px; display: inline-block; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; color: white; }
+        th, td { padding: 15px; border-bottom: 1px solid #475569; text-align: left; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Dashboard Terrence.M</h1>
-        <p>Sistema de gestión operativo y optimizado.</p>
+        <div class="card">Total Productos: {{ total }}</div>
+        <div class="card">Stock Total: {{ stock }}</div>
+        <div class="card">Valor Inventario: ${{ valor }}</div>
+        <br>
         <a href="/descargar_reporte" class="btn-pdf">📥 Descargar Reporte PDF</a>
+        <table>
+            <thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th></tr></thead>
+            <tbody>
+                {% for p in productos %}
+                <tr><td>{{ p.nombre }}</td><td>{{ p.cantidad }}</td><td>${{ p.precio }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
