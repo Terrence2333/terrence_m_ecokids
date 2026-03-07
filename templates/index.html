@@ -1,6 +1,19 @@
-{% extends "base.html" %}
-{% block content %}
-<h1>Bienvenido a terrence.m</h1>
-            <a href="/descargar_reporte" class="btn btn-outline-info px-4">📥 Descargar Reporte PDF</a>
-<p>Sistema de gestión operativo.</p>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Terrence.M | Sistema Élite</title>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
+        .container { margin-top: 50px; background: #1e293b; padding: 30px; border-radius: 20px; }
+        .btn-pdf { background: #0ea5e9; color: white; padding: 10px 20px; text-decoration: none; border-radius: 10px; display: inline-block; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard Terrence.M</h1>
+        <p>Sistema de gestión operativo y optimizado.</p>
+        <a href="/descargar_reporte" class="btn-pdf">📥 Descargar Reporte PDF</a>
+    </div>
+</body>
+</html>
