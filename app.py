@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for, make_response
 from sqlalchemy import create_engine, Column, Integer, String, Float, func
 from sqlalchemy.orm import sessionmaker, declarative_base
+import pdfkit
 
 app = Flask(__name__)
 engine = create_engine('sqlite:///terrence_m_v12.db')
@@ -14,8 +15,7 @@ class Producto(Base):
     precio = Column(Float)
     cantidad = Column(Integer)
 
-with app.app_context():
-    Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
 @app.route('/')
 def index():
@@ -27,5 +27,22 @@ def index():
     db.close()
     return render_template('index.html', productos=productos, total=total, stock=stock, valor=valor)
 
+@app.route('/guardar', methods=['POST'])
+def guardar():
+    db = SessionLocal()
+    nuevo = Producto(nombre=request.form['nombre'], precio=float(request.form['precio']), cantidad=int(request.form['cantidad']))
+    db.add(nuevo); db.commit(); db.close()
+    return redirect(url_for('index'))
+
+@app.route('/descargar_reporte')
+def descargar_reporte():
+    db = SessionLocal(); productos = db.query(Producto).all(); db.close()
+    html = render_template('reporte_pdf.html', productos=productos)
+    pdf = pdfkit.from_string(html, False)
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=Reporte_Elite.pdf'
+    return response
+
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
