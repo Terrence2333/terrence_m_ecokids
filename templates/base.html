@@ -1,8 +1,20 @@
 <!DOCTYPE html>
-<html>
-<head><title>terrence.m - Sistema</title></head>
-<body>
-    <nav><ul><li><a href="/">Inicio</a></li></ul></nav>
-    {% block content %}{% endblock %}
+<html lang="es">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Terrence.M | Sistema Elite</title>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">Terrence.M Élite</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/">Dashboard</a>
+                <a class="nav-link" href="/productos">Productos</a>
+                <a class="nav-link" href="/datos">Persistencia</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">{% block content %}{% endblock %}</div>
 </body>
 </html>
